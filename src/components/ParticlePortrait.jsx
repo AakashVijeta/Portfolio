@@ -67,7 +67,7 @@ const ParticlePortrait = () => {
       const pixels = imageData.data;
 
       const lines = [];
-      const rowGap = size <= 280 ? 5 : 6;
+      const rowGap = size <= 280 ? 4 : 5;
 
       for (let y = 0; y < canvasHeight; y += rowGap) {
         let x = 0;
@@ -96,7 +96,7 @@ const ParticlePortrait = () => {
               vx: 0,
               vy: 0,
               length: lineLength,
-              baseAlpha: 0.5 + brightness * 0.5,
+              baseAlpha: 0.65 + brightness * 0.35,
               currentAlpha: 0,
               delay: Math.random() * 0.3,
             });
@@ -162,8 +162,12 @@ const ParticlePortrait = () => {
         p.x += p.vx;
         p.y += p.vy;
 
-        ctx.strokeStyle = `rgba(100, 255, 218, ${p.currentAlpha})`;
-        ctx.lineWidth = size <= 280 ? 1.5 : 2;
+        const isLight =
+          document.documentElement.getAttribute("data-theme") === "light";
+        ctx.strokeStyle = isLight
+          ? `rgba(26, 26, 24, ${p.currentAlpha})`
+          : `rgba(255, 255, 255, ${p.currentAlpha})`;
+        ctx.lineWidth = size <= 280 ? 1.5 : 2.25;
         ctx.beginPath();
         ctx.moveTo(p.x, p.y);
         ctx.lineTo(p.x + p.length, p.y);

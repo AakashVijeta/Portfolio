@@ -1,5 +1,6 @@
 import "../styles/About.css";
 import FadeInSection from "./FadeInSection";
+import RevealTitle from "./RevealTitle";
 
 const techStack = [
   "Python",
@@ -13,19 +14,19 @@ const techStack = [
 export default function About() {
   const one = (
     <p>
-      I’m a developer focused on building intelligent systems and strengthening
+      I’m a developer focused on building intelligent systems and deepening
       the mathematics behind them. I’m currently pursuing a B.Sc. in Data
-      Science & Artificial Intelligence from{" "}
-      <a href="https://www.iitg.ac.in/">IIT Guwahati</a>, where I’m developing a
-      strong foundation in machine learning, statistics, and software
+      Science & Artificial Intelligence at{" "}
+      <a href="https://www.iitg.ac.in/">IIT Guwahati</a>, where I’m building a
+      strong foundation across machine learning, statistics, and software
       engineering.
     </p>
   );
 
   const two = (
     <p>
-      Outside of work, I’m nerdy about tech gadgets, love binging anime, and
-      play way too many battle royale games.
+      Outside of work, I’m drawn to well-designed tech, good anime, and the
+      occasional battle royale.
     </p>
   );
 
@@ -33,7 +34,7 @@ export default function About() {
     <div id="about">
       <FadeInSection>
         <div className="section-header">
-          <span className="section-title">/ about me</span>
+          <RevealTitle as="span" className="section-title">/ about me</RevealTitle>
         </div>
 
         <div className="about-content">

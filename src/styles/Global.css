@@ -1,13 +1,33 @@
 :root {
-  --dark-navy: #020c1b;
-  --navy: #0a192f;
-  --light-navy: #112240;
-  --lightest-navy: #233554;
-  --navy-shadow: rgba(2, 12, 27, 0.7);
-  --slate: #8892b0;
-  --light-slate: #a8b2d1;
-  --lightest-slate: #ccd6f6;
-  --white: #e6f1ff;
-  --green-bright: #64ffda;
-  --green-tint: rgba(100, 255, 218, 0.1);
+  --dark-navy: #030303;
+  --navy: #0c0c0b;
+  --light-navy: #141413;
+  --lightest-navy: #1c1c1c;
+  --navy-shadow: rgba(0, 0, 0, 0.7);
+  --slate: #93938f;
+  --light-slate: #b8b8b4;
+  --lightest-slate: #ededE8;
+  --white: #ffffff;
+  --green-bright: #a3a3a3;
+  --green-tint: rgba(163, 163, 163, 0.1);
+  --accent: #a3a3a3;
+  --accent-soft: rgba(163, 163, 163, 0.12);
+  --accent-glow: rgba(163, 163, 163, 0.4);
+}
+
+:root[data-theme="light"] {
+  --dark-navy: #e8e4da;
+  --navy: #f0ede5;
+  --light-navy: #e5e1d6;
+  --lightest-navy: #d6d1c2;
+  --navy-shadow: rgba(0, 0, 0, 0.15);
+  --slate: #6a6a66;
+  --light-slate: #3d3d3a;
+  --lightest-slate: #1a1a18;
+  --white: #0c0c0b;
+  --green-bright: #6a6a66;
+  --green-tint: rgba(106, 106, 102, 0.12);
+  --accent: #6a6a66;
+  --accent-soft: rgba(106, 106, 102, 0.1);
+  --accent-glow: rgba(106, 106, 102, 0.35);
 }

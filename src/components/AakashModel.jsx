@@ -106,7 +106,7 @@ class ThreeJSAnimation extends Component {
     // ── Background sphere ──────────────────────────────────────────────────
     const sphere = new THREE.Mesh(
       new THREE.SphereGeometry(16, 46, 46),
-      new THREE.MeshBasicMaterial({ color: 0x64ffda })
+      new THREE.MeshBasicMaterial({ color: 0xffffff })
     );
     sphere.position.set(-0.25, -2.5, -30);
     scene.add(sphere);

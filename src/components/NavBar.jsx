@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
@@ -7,8 +8,17 @@ import GitHubIcon from "@mui/icons-material/GitHub";
 import "../styles/NavBar.css";
 
 const NavBar = () => {
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 80);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
-    <Navbar fixed="top">
+    <Navbar fixed="top" className={scrolled ? "is-scrolled" : ""}>
       <Container>
         <Navbar.Brand href="#" id="brand">Aakash Vijeta</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />

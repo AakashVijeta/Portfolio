@@ -1,0 +1,47 @@
+.theme-toggle {
+  position: fixed;
+  top: 20px;
+  right: 24px;
+  z-index: 9999;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--lightest-navy);
+  background: var(--navy);
+  color: var(--lightest-slate);
+  font-family: "Courier New", Menlo, monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+}
+
+.theme-toggle:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.theme-toggle-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 8px var(--accent-glow);
+  transition: transform 0.3s ease;
+}
+
+.theme-toggle-dot.light {
+  transform: scale(0.6);
+}
+
+@media (max-width: 600px) {
+  .theme-toggle {
+    top: 14px;
+    right: 14px;
+    padding: 6px 10px;
+    font-size: 10px;
+  }
+}

@@ -29,15 +29,15 @@ function Intro() {
 
         <FadeInSection delay="200ms">
           <div className="intro-desc">
-            I'm am a wannabe AI engineer with a passion for building
-            things that make a difference. I have experience in web development,
-            machine learning, and data science. I'm currently looking for
-            opportunities to grow and learn.
+            I build intelligent systems at the intersection of machine learning,
+            software engineering, and applied mathematics. Currently studying
+            Data Science & AI at IIT Guwahati and open to roles where I can
+            ship meaningful work.
           </div>
 
           <a href="mailto:aakashvijeta2@gmail.com" className="intro-contact">
             <EmailRoundedIcon />
-            {" Say hi!"}
+            {" Get in touch"}
           </a>
         </FadeInSection>
       </div>

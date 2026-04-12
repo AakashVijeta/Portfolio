@@ -7,9 +7,9 @@ const Credits = () => {
       <footer id="credits">
         <div className="ending-credits">
           <span>
-            Built and designed by <strong>Aakash Vijeta</strong>.
+            Designed and built by <strong>Aakash Vijeta</strong>.
           </span>
-          <span>© {new Date().getFullYear()} All rights reserved.</span>
+          <span>© {new Date().getFullYear()}</span>
         </div>
       </footer>
     </FadeInSection>
