@@ -46,8 +46,8 @@ html {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: var(--white);
-  box-shadow: 0 0 8px var(--white);
+  background: var(--accent);
+  box-shadow: 0 0 8px var(--accent-glow);
   animation: chromePulse 2.4s ease-in-out infinite;
 }
 
@@ -66,9 +66,10 @@ html {
 }
 
 .fade-in-section {
+  width: 100%;
   opacity: 0;
   transform: translateY(40px);
-  transition: 
+  transition:
     opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
     transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -94,9 +95,10 @@ html {
 .App {
   font-family: "NTR";
   background-color: var(--navy);
-  display: flex;
   width: 100%;
+  min-width: 100%;
   min-height: 100vh;
+  position: relative;
 }
 
 .App-logo {
@@ -111,8 +113,6 @@ a {
 
 #content {
   width: 100%;
-  flex: 1;
-  min-width: 0;
 }
 
 .rs-steps-horizontal .rs-steps-item-content {

@@ -9,7 +9,10 @@ const Preloader = () => {
 
   useEffect(() => {
     if (stage === "done") return;
-    const t1 = setTimeout(() => setStage("exit"), 1600);
+    const t1 = setTimeout(() => {
+      setStage("exit");
+      window.dispatchEvent(new Event("preloader:done"));
+    }, 1600);
     const t2 = setTimeout(() => {
       setStage("done");
       sessionStorage.setItem("preloaded", "1");

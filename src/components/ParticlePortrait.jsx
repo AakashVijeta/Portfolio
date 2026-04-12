@@ -67,7 +67,7 @@ const ParticlePortrait = () => {
       const pixels = imageData.data;
 
       const lines = [];
-      const rowGap = size <= 280 ? 4 : 5;
+      const rowGap = size <= 240 ? 6 : size <= 280 ? 5 : 5;
 
       for (let y = 0; y < canvasHeight; y += rowGap) {
         let x = 0;
@@ -114,15 +114,17 @@ const ParticlePortrait = () => {
     };
 
     const draw = () => {
-      animationId = requestAnimationFrame(draw);
-
       ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 
-      if (!imageLoadedRef.current) return;
+      if (!imageLoadedRef.current) {
+        animationId = requestAnimationFrame(draw);
+        return;
+      }
 
       const lines = linesRef.current;
       const mouse = mouseRef.current;
       const elapsed = (performance.now() - startTimeRef.current) / 1000;
+      let maxMotion = 0;
 
       lines.forEach((p) => {
         const particleTime = elapsed - p.delay;
@@ -162,6 +164,9 @@ const ParticlePortrait = () => {
         p.x += p.vx;
         p.y += p.vy;
 
+        const motion = Math.abs(p.vx) + Math.abs(p.vy);
+        if (motion > maxMotion) maxMotion = motion;
+
         ctx.strokeStyle = `rgba(255, 255, 255, ${p.currentAlpha})`;
         ctx.lineWidth = size <= 280 ? 1.5 : 2.25;
         ctx.beginPath();
@@ -169,6 +174,19 @@ const ParticlePortrait = () => {
         ctx.lineTo(p.x + p.length, p.y);
         ctx.stroke();
       });
+
+      const settled = elapsed > 3 && !mouse.active && maxMotion < 0.05;
+      if (settled) {
+        animationId = null;
+      } else {
+        animationId = requestAnimationFrame(draw);
+      }
+    };
+
+    const wake = () => {
+      if (animationId == null) {
+        animationId = requestAnimationFrame(draw);
+      }
     };
 
     const handleMouseMove = (e) => {
@@ -176,6 +194,7 @@ const ParticlePortrait = () => {
       mouseRef.current.x = e.clientX - rect.left;
       mouseRef.current.y = e.clientY - rect.top;
       mouseRef.current.active = true;
+      wake();
     };
 
     const handleTouchMove = (e) => {
@@ -184,6 +203,7 @@ const ParticlePortrait = () => {
       mouseRef.current.x = touch.clientX - rect.left;
       mouseRef.current.y = touch.clientY - rect.top;
       mouseRef.current.active = true;
+      wake();
     };
 
     const handleLeave = () => {

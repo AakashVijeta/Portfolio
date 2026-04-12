@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import "../styles/Intro.css";
 import Typist from "react-typist-component";
 import EmailRoundedIcon from "@mui/icons-material/EmailRounded";
@@ -6,11 +6,16 @@ import FadeInSection from "./FadeInSection";
 import ParticlePortrait from "./ParticlePortrait";
 
 function Intro() {
-  const [activeKey, setActiveKey] = useState("1");
+  const [ready, setReady] = useState(() =>
+    typeof window !== "undefined" && !!sessionStorage.getItem("preloaded")
+  );
 
-  const handleSelect = useCallback((eventKey) => {
-    setActiveKey(eventKey);
-  }, []);
+  useEffect(() => {
+    if (ready) return;
+    const handler = () => setReady(true);
+    window.addEventListener("preloader:done", handler);
+    return () => window.removeEventListener("preloader:done", handler);
+  }, [ready]);
 
   return (
     <div id="intro">
@@ -19,13 +24,17 @@ function Intro() {
       </div>
 
       <div className="intro-block">
-        <Typist typingDelay={120} cursor={<span className="cursor">|</span>}>
-          <span className="intro-title">
-            {"hi, "}
-            <span className="intro-name">{"aakash"}</span>
-            {" here."}
-          </span>
-        </Typist>
+        {ready ? (
+          <Typist typingDelay={120} cursor={<span className="cursor">|</span>}>
+            <span className="intro-title">
+              {"hi, "}
+              <span className="intro-name">{"aakash"}</span>
+              {" here."}
+            </span>
+          </Typist>
+        ) : (
+          <span className="intro-title" aria-hidden="true">&nbsp;</span>
+        )}
 
         <FadeInSection delay="200ms">
           <div className="intro-desc">

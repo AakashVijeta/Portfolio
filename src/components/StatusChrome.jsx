@@ -23,7 +23,7 @@ const StatusChrome = () => {
         AAKASH VIJETA / PORTFOLIO · 2026
       </div>
       <div className="chrome chrome-bl">
-        LOC · 13.08°N 80.27°E
+        LOC · 26.93°N 80.95°E
       </div>
       <div className="chrome chrome-br">
         {time} IST

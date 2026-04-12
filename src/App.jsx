@@ -17,7 +17,7 @@ function App() {
       <StatusChrome />
       <NavBar />
       <div id="content">
-        <Intro />\
+        <Intro />
         <Projects />
         <About />
         <Credits />
