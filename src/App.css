@@ -10,6 +10,22 @@ html {
     overflow-x: hidden;
     max-width: 100vw;
   }
+
+  /* iOS Safari: blend + noise shader at full viewport tanks scroll FPS */
+  .grain {
+    display: none;
+  }
+
+  /* fade-in sections: fire sooner and use cheaper GPU-promoted transforms */
+  .fade-in-section {
+    transform: translate3d(0, 24px, 0);
+    transition-duration: 0.5s;
+    will-change: opacity, transform;
+  }
+
+  .fade-in-section.is-visible {
+    transform: translate3d(0, 0, 0);
+  }
 }
 
 .grain {

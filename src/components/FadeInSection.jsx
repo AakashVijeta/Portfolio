@@ -14,7 +14,7 @@ export default function FadeInSection({ children, delay = "0ms" }) {
           observer.unobserve(entry.target); // stop observing after reveal
         }
       },
-      { threshold: 0.1 }
+      { threshold: 0.01, rootMargin: "0px 0px -5% 0px" }
     );
 
     observer.observe(domRef.current);
