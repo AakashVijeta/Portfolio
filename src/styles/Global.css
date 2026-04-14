@@ -1,3 +1,60 @@
+/* Default theme: CRT scanlines + faint terminal character grid */
+.App {
+  background-color: var(--navy);
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      transparent 0px,
+      transparent 3px,
+      rgba(0, 230, 118, 0.022) 3px,
+      rgba(0, 230, 118, 0.022) 4px
+    ),
+    linear-gradient(rgba(0, 230, 118, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 230, 118, 0.025) 1px, transparent 1px);
+  background-size: 100% 4px, 22px 22px, 22px 22px;
+}
+
+.App::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(
+      ellipse at center,
+      transparent 40%,
+      rgba(0, 0, 0, 0.35) 100%
+    );
+}
+
+/* Smooth hover micro-transitions on all links and buttons.
+   Doesn't add hover effects — only smooths whatever is already defined. */
+a,
+button {
+  transition:
+    color 0.22s cubic-bezier(0.4, 0, 0.2, 1),
+    background-color 0.22s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 0.22s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.22s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.22s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  a,
+  button {
+    transition: none;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
 :root {
   --dark-navy: #030303;
   --navy: #0c0c0b;
@@ -8,13 +65,343 @@
   --light-slate: #b8b8b4;
   --lightest-slate: #ededE8;
   --white: #ffffff;
-  --green-bright: #ff5b3c;
-  --green-tint: rgba(255, 120, 73, 0.12);
-  --accent: #ff5b3c;
-  --accent-soft: rgba(255, 120, 73, 0.12);
-  --accent-glow: rgba(255, 120, 73, 0.4);
-  --accent-warm: #ff5b3c;
-  --accent-warm-soft: rgba(255, 120, 73, 0.12);
-  --accent-warm-glow: rgba(255, 120, 73, 0.4);
+  --green-bright: #00e676;
+  --green-tint: rgba(0, 230, 118, 0.12);
+  --accent: #00e676;
+  --accent-soft: rgba(0, 230, 118, 0.12);
+  --accent-glow: rgba(0, 230, 118, 0.4);
+  --accent-warm: #00e676;
+  --accent-warm-soft: rgba(0, 230, 118, 0.12);
+  --accent-warm-glow: rgba(0, 230, 118, 0.4);
+}
+
+/* F1 race-mode palette — Ferrari red on carbon black */
+[data-theme="f1"] {
+  --dark-navy: #000000;
+  --navy: #07070a;
+  --light-navy: #14090c;
+  --lightest-navy: #1f1014;
+  --navy-shadow: rgba(0, 0, 0, 0.8);
+  --slate: #8a8a94;
+  --light-slate: #c4c4cc;
+  --lightest-slate: #ffffff;
+  --white: #ffffff;
+  --green-bright: #e10600;
+  --green-tint: rgba(225, 6, 0, 0.12);
+  --accent: #e10600;
+  --accent-soft: rgba(225, 6, 0, 0.12);
+  --accent-glow: rgba(225, 6, 0, 0.5);
+  --accent-warm: #e10600;
+  --accent-warm-soft: rgba(225, 6, 0, 0.12);
+  --accent-warm-glow: rgba(225, 6, 0, 0.45);
+}
+
+/* ================================================================
+   F1 — Start-line race lights (hidden in default theme)
+   ================================================================ */
+.race-lights {
+  display: none;
+}
+
+[data-theme="f1"] .navbar > .container {
+  position: relative;
+}
+
+[data-theme="f1"] .race-lights {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  padding: 6px 12px;
+  background: linear-gradient(180deg, #0b0406 0%, #140608 100%);
+  border: 1px solid rgba(225, 6, 0, 0.35);
+  border-radius: 5px;
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.6) inset,
+    0 3px 16px -6px rgba(225, 6, 0, 0.35);
+  pointer-events: none;
+}
+
+[data-theme="f1"] .race-lights-pillar {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+[data-theme="f1"] .race-lights-lamp {
+  width: 9px;
+  height: 9px;
+}
+
+.race-lights-pillar {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.race-lights-lamp {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #2a0506;
+  box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.8);
+  animation: raceLightsSequence 7s ease-in-out infinite;
+  animation-delay: calc(var(--i) * 0.55s);
+}
+
+@keyframes raceLightsSequence {
+  0%, 100%    { background-color: #2a0506; box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.8); }
+  5%, 55%     { background-color: #ff1a1a; box-shadow: 0 0 8px rgba(255, 26, 26, 0.7), 0 0 14px rgba(225, 6, 0, 0.4); }
+  60%, 95%    { background-color: #2a0506; box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.8); }
+}
+
+@media (max-width: 600px) {
+  [data-theme="f1"] .race-lights {
+    transform: translateX(-50%) scale(0.8);
+    top: 8px;
+  }
+}
+
+/* ================================================================
+   F1 — Section dividers as faint checkered strips
+   ================================================================ */
+[data-theme="f1"] .section-header::after {
+  background: transparent;
+  background-image:
+    linear-gradient(45deg, #fff 25%, transparent 25%),
+    linear-gradient(-45deg, #fff 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #fff 75%),
+    linear-gradient(-45deg, transparent 75%, #fff 75%);
+  background-size: 5px 5px;
+  background-position: 0 0, 0 2.5px, 2.5px -2.5px, -2.5px 0;
+  height: 5px;
+  opacity: 0.55;
+  mask-image: linear-gradient(to right, #000, transparent);
+  -webkit-mask-image: linear-gradient(to right, #000, transparent);
+}
+
+[data-theme="f1"] .project-detail-section-header::after {
+  background: transparent;
+  background-image:
+    linear-gradient(45deg, #fff 25%, transparent 25%),
+    linear-gradient(-45deg, #fff 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #fff 75%),
+    linear-gradient(-45deg, transparent 75%, #fff 75%);
+  background-size: 4px 4px;
+  background-position: 0 0, 0 2px, 2px -2px, -2px 0;
+  height: 4px;
+  opacity: 0.5;
+  mask-image: linear-gradient(to right, #000, transparent);
+  -webkit-mask-image: linear-gradient(to right, #000, transparent);
+}
+
+/* ================================================================
+   F1 — Section number becomes a grid-position style badge
+   ================================================================ */
+[data-theme="f1"] .project-detail-section-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  background-color: var(--accent);
+  color: #fff;
+  border-radius: 3px;
+  font-size: 12px;
+  font-weight: 700;
+  box-shadow: 0 0 10px -2px var(--accent-glow);
+}
+
+/* ================================================================
+   F1 — Subtle racing stripe accent on spotlight cards
+   ================================================================ */
+[data-theme="f1"] .spotlight-row {
+  position: relative;
+}
+
+[data-theme="f1"] .spotlight-row::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 20%;
+  bottom: 20%;
+  width: 2px;
+  background: linear-gradient(
+    180deg,
+    var(--accent) 0%,
+    var(--accent) 60%,
+    transparent 100%
+  );
+  opacity: 0.4;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+
+[data-theme="f1"] .spotlight-row:hover::before {
+  opacity: 0.85;
+}
+
+[data-theme="f1"] .spotlight-list > *:nth-child(even) .spotlight-row::before {
+  left: auto;
+  right: 0;
+}
+
+/* ================================================================
+   F1 — Tech tags take a monospace racing-number vibe
+   ================================================================ */
+[data-theme="f1"] .project-detail-tech li,
+[data-theme="f1"] .spotlight-tech li,
+[data-theme="f1"] .spotlight-tag,
+[data-theme="f1"] .project-detail-tag {
+  font-family: "SF Mono", Consolas, Menlo, monospace;
+  letter-spacing: 1px;
+}
+
+/* ================================================================
+   F1 — Chrome dot becomes a rev-limiter pulse (dot only — no text changes)
+   ================================================================ */
+[data-theme="f1"] .chrome-dot {
+  box-shadow:
+    0 0 8px var(--accent),
+    0 0 16px var(--accent-glow);
+  animation: revLimiter 1.2s ease-in-out infinite;
+}
+
+@keyframes revLimiter {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50%      { transform: scale(1.2); opacity: 0.55; }
+}
+
+/* ================================================================
+   F1 — Feature bullets → play-triangle
+   ================================================================ */
+[data-theme="f1"] .project-detail-features li::before {
+  content: "▶";
+  font-size: 11px;
+  top: 4px;
+}
+
+/* ================================================================
+   F1 — Navbar: warm the pill container to the race palette
+   ================================================================ */
+[data-theme="f1"] .navbar.is-scrolled > .container {
+  border-color: rgba(225, 6, 0, 0.25);
+  box-shadow: 0 0 20px -10px var(--accent-glow);
+}
+
+/* ================================================================
+   F1 — Section title: swap leading "/" for an alloy-wheel tire
+   ================================================================ */
+[data-theme="f1"] .section-title .reveal-word:first-child {
+  display: none;
+}
+
+[data-theme="f1"] .section-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25em;
+}
+
+[data-theme="f1"] .section-title::before {
+  content: "";
+  display: block;
+  flex-shrink: 0;
+  width: 3em;
+  height: 2.35em;
+  background-image: url("/assets/tyre.svg");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  filter: brightness(4.5) drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5));
+}
+
+/* ================================================================
+   F1 — Architecture block gets a faint carbon-weave texture
+   ================================================================ */
+[data-theme="f1"] .project-detail-architecture {
+  background-image:
+    repeating-linear-gradient(
+      45deg,
+      rgba(255, 255, 255, 0.02) 0 2px,
+      transparent 2px 4px
+    );
+  border-left-color: var(--accent);
+}
+
+/* ================================================================
+   F1 — Preloader: staging lights sequence + red word reveal
+   ================================================================ */
+.preloader-lights {
+  display: none;
+}
+
+[data-theme="f1"] .preloader {
+  background: radial-gradient(ellipse at center, #0a0204 0%, #000 80%);
+}
+
+[data-theme="f1"] .preloader-word {
+  color: var(--lightest-slate);
+  text-shadow: 0 0 18px rgba(225, 6, 0, 0.35);
+}
+
+[data-theme="f1"] .preloader-bar {
+  display: none;
+}
+
+[data-theme="f1"] .preloader-lights {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 22px;
+  background: linear-gradient(180deg, #0b0406 0%, #140608 100%);
+  border: 1px solid rgba(225, 6, 0, 0.4);
+  border-radius: 8px;
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.6) inset,
+    0 6px 30px -8px rgba(225, 6, 0, 0.5);
+}
+
+[data-theme="f1"] .preloader-lights-pillar {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+[data-theme="f1"] .preloader-lights-lamp {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background-color: #2a0506;
+  box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.85);
+  animation: preloaderRaceLights 2.1s ease-in-out forwards;
+  animation-delay: calc(var(--i) * 0.22s + 0.2s);
+}
+
+@keyframes preloaderRaceLights {
+  0%   { background-color: #2a0506; box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.85); }
+  25%, 75% {
+    background-color: #ff1a1a;
+    box-shadow:
+      0 0 12px rgba(255, 26, 26, 0.85),
+      0 0 22px rgba(225, 6, 0, 0.55);
+  }
+  100% { background-color: #2a0506; box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.85); }
+}
+
+/* ================================================================
+   F1 — Page background: subtle checkered-flag vignette
+   ================================================================ */
+[data-theme="f1"] .App {
+  background-color: var(--navy);
+  background-image:
+    linear-gradient(45deg, rgba(255, 255, 255, 0.018) 25%, transparent 25%),
+    linear-gradient(-45deg, rgba(255, 255, 255, 0.018) 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, rgba(255, 255, 255, 0.018) 75%),
+    linear-gradient(-45deg, transparent 75%, rgba(255, 255, 255, 0.018) 75%);
+  background-size: 28px 28px;
+  background-position: 0 0, 0 14px, 14px -14px, -14px 0;
 }
 

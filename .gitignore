@@ -1,3 +1,16 @@
+# Dependencies
+node_modules
+
+# Build output
+dist
+dist-ssr
+*.local
+
+# Environment
+.env
+.env.*
+!.env.example
+
 # Logs
 logs
 *.log
@@ -7,20 +20,35 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
-*.local
+# OS / system
+.DS_Store
+Thumbs.db
 
-# Editor directories and files
+# Editor / IDE
 .vscode/*
 !.vscode/extensions.json
 .idea
-.DS_Store
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
 
+# Deployment
 .vercel
+
+# Claude Code / AI tooling
+.claude/
+CLAUDE.md
+
+# Graphify knowledge graph (local-only artifacts)
+graphify-out/
+D:aakashgraphify-out/
+.graphify_*
+.graphify_*.json
+.graphifyignore
+
+# Python cache (from graphify scripts)
+__pycache__/
+*.py[cod]
+*$py.class

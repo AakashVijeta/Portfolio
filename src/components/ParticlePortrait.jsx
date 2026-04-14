@@ -1,5 +1,11 @@
 import { useRef, useEffect, useState } from "react";
 
+const readTheme = () =>
+  typeof document !== "undefined" &&
+  document.documentElement.getAttribute("data-theme") === "f1"
+    ? "f1"
+    : "default";
+
 const ParticlePortrait = () => {
   const canvasRef = useRef(null);
   const mouseRef = useRef({ x: -1000, y: -1000, active: false });
@@ -7,11 +13,11 @@ const ParticlePortrait = () => {
   const imageLoadedRef = useRef(false);
   const startTimeRef = useRef(null);
   const [size, setSize] = useState(500);
+  const [theme, setTheme] = useState(readTheme);
 
   useEffect(() => {
     const updateSize = () => {
       const width = window.innerWidth;
-
       if (width <= 480) {
         setSize(Math.min(220, width - 40));
       } else if (width <= 768) {
@@ -27,6 +33,15 @@ const ParticlePortrait = () => {
   }, []);
 
   useEffect(() => {
+    const observer = new MutationObserver(() => setTheme(readTheme()));
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["data-theme"],
+    });
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
@@ -36,6 +51,7 @@ const ParticlePortrait = () => {
     canvas.width = canvasWidth;
     canvas.height = canvasHeight;
 
+    const isF1 = theme === "f1";
     let animationId;
 
     const img = new Image();
@@ -67,7 +83,9 @@ const ParticlePortrait = () => {
       const pixels = imageData.data;
 
       const lines = [];
-      const rowGap = size <= 240 ? 6 : size <= 280 ? 5 : 5;
+      const rowGap = size <= 240 ? (isF1 ? 6 : 7) : size <= 280 ? (isF1 ? 5 : 6) : (isF1 ? 5 : 6);
+      const fontSize = size <= 280 ? 7 : 9;
+      const charStep = Math.round(fontSize * 0.65) + 1;
 
       for (let y = 0; y < canvasHeight; y += rowGap) {
         let x = 0;
@@ -81,29 +99,43 @@ const ParticlePortrait = () => {
             const b = pixels[i + 2];
             const brightness = (r + g + b) / (3 * 255);
 
-            const lineLength = Math.floor(
-              3 + brightness * (size <= 280 ? 8 : 15)
-            );
-
             const scatterX = (Math.random() - 0.5) * 300;
             const scatterY = (Math.random() - 0.5) * 300;
 
-            lines.push({
-              x: x + scatterX,
-              y: y + scatterY,
-              targetX: x,
-              targetY: y,
-              vx: 0,
-              vy: 0,
-              length: lineLength,
-              baseAlpha: 0.65 + brightness * 0.35,
-              currentAlpha: 0,
-              delay: Math.random() * 0.3,
-            });
-
-            x += lineLength + 3;
+            if (isF1) {
+              const lineLength = Math.floor(
+                3 + brightness * (size <= 280 ? 8 : 15)
+              );
+              lines.push({
+                x: x + scatterX,
+                y: y + scatterY,
+                targetX: x,
+                targetY: y,
+                vx: 0,
+                vy: 0,
+                length: lineLength,
+                baseAlpha: 0.65 + brightness * 0.35,
+                currentAlpha: 0,
+                delay: Math.random() * 0.3,
+              });
+              x += lineLength + 3;
+            } else {
+              lines.push({
+                x: x + scatterX,
+                y: y + scatterY,
+                targetX: x,
+                targetY: y,
+                vx: 0,
+                vy: 0,
+                char: Math.random() < 0.5 ? "0" : "1",
+                baseAlpha: 0.55 + brightness * 0.45,
+                currentAlpha: 0,
+                delay: Math.random() * 0.3,
+              });
+              x += charStep;
+            }
           } else {
-            x += 4;
+            x += isF1 ? 4 : charStep;
           }
         }
       }
@@ -126,9 +158,16 @@ const ParticlePortrait = () => {
       const elapsed = (performance.now() - startTimeRef.current) / 1000;
       let maxMotion = 0;
 
+      if (!isF1) {
+        const fontSize = size <= 280 ? 7 : 9;
+        ctx.font = `${fontSize}px "SF Mono", "Fira Code", Consolas, monospace`;
+        ctx.textBaseline = "top";
+      } else {
+        ctx.lineWidth = size <= 280 ? 1.5 : 2.25;
+      }
+
       lines.forEach((p) => {
         const particleTime = elapsed - p.delay;
-
         if (particleTime < 0) return;
 
         const fadeProgress = Math.min(particleTime / 1.5, 1);
@@ -143,7 +182,6 @@ const ParticlePortrait = () => {
           const dy = p.y - mouse.y;
           const dist = Math.sqrt(dx * dx + dy * dy);
           const maxDist = 60;
-
           if (dist < maxDist && dist > 0) {
             const force = (1 - dist / maxDist) * 2;
             p.vx += (dx / dist) * force;
@@ -153,26 +191,27 @@ const ParticlePortrait = () => {
 
         const dx = p.targetX - p.x;
         const dy = p.targetY - p.y;
-
         const pullStrength = 0.01 + easedMove * 0.07;
         p.vx += dx * pullStrength;
         p.vy += dy * pullStrength;
-
         p.vx *= 0.92;
         p.vy *= 0.92;
-
         p.x += p.vx;
         p.y += p.vy;
 
         const motion = Math.abs(p.vx) + Math.abs(p.vy);
         if (motion > maxMotion) maxMotion = motion;
 
-        ctx.strokeStyle = `rgba(255, 255, 255, ${p.currentAlpha})`;
-        ctx.lineWidth = size <= 280 ? 1.5 : 2.25;
-        ctx.beginPath();
-        ctx.moveTo(p.x, p.y);
-        ctx.lineTo(p.x + p.length, p.y);
-        ctx.stroke();
+        if (isF1) {
+          ctx.strokeStyle = `rgba(255, 255, 255, ${p.currentAlpha})`;
+          ctx.beginPath();
+          ctx.moveTo(p.x, p.y);
+          ctx.lineTo(p.x + p.length, p.y);
+          ctx.stroke();
+        } else {
+          ctx.fillStyle = `rgba(255, 255, 255, ${p.currentAlpha})`;
+          ctx.fillText(p.char, p.x, p.y);
+        }
       });
 
       const settled = elapsed > 3 && !mouse.active && maxMotion < 0.05;
@@ -219,12 +258,13 @@ const ParticlePortrait = () => {
 
     return () => {
       cancelAnimationFrame(animationId);
+      imageLoadedRef.current = false;
       canvas.removeEventListener("mousemove", handleMouseMove);
       canvas.removeEventListener("mouseleave", handleLeave);
       canvas.removeEventListener("touchmove", handleTouchMove);
       canvas.removeEventListener("touchend", handleLeave);
     };
-  }, [size]);
+  }, [size, theme]);
 
   return (
     <canvas

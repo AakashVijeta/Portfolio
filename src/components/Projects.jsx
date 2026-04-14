@@ -6,19 +6,21 @@ import RevealTitle from "./RevealTitle";
 
 const spotlightProjects = [
   {
+    slug: "f1-podium-predictor",
     tag: "Machine Learning",
-    title: "Forecasting F1 podium finishers with XGBoost",
-    desc: "End-to-end ML system combining a Python training pipeline, a FastAPI prediction service backed by SQLite, and a React frontend for race-weekend exploration.",
-    techStack: "Python · XGBoost · FastAPI · SQLite · React",
+    title: "Calling the F1 podium before the lights go out",
+    desc: "A calibrated gradient-boosting model that turns each Grand Prix qualifying grid into a live podium forecast — with a public accuracy scoreboard tracking every round.",
+    techStack: "Python · scikit-learn · FastAPI · Postgres · React",
     link: "https://github.com/AakashVijeta/f1-podium-predictor",
     open: "https://f1.aakashvijeta.me",
     image: import.meta.env.BASE_URL + "assets/f1-predictor.png",
   },
   {
+    slug: "niftyedge",
     tag: "Quant Research",
-    title: "Generating daily Indian equity signals before market open",
-    desc: "Python backend handles ingestion, feature engineering, model training, and backtesting; a Vite + React frontend surfaces daily signals and strategy analytics.",
-    techStack: "Python · pandas · React · Vite · Netlify",
+    title: "A pre-market trading desk for the Nifty 50",
+    desc: "Walk-forward-validated XGBoost signals, an LLM analyst grounded in the day's probabilities, and a three-column dashboard that lands on screen before the opening bell.",
+    techStack: "Python · XGBoost · FastAPI · React · Groq LLM",
     link: "https://github.com/AakashVijeta/NiftyEdge-backend",
     open: "https://github.com/AakashVijeta/NiftyEdge-frontend",
     image: import.meta.env.BASE_URL + "assets/niftyedge.png",
@@ -40,9 +42,7 @@ const Projects = () => {
           <FadeInSection key={project.title} delay={`${(i + 1) * 100}ms`}>
             <a
               className="spotlight-row"
-              href={project.open || project.link}
-              target="_blank"
-              rel="noopener noreferrer"
+              href={`#/projects/${project.slug}`}
             >
               <div className="spotlight-info">
                 <span className="spotlight-tag">{project.tag}</span>

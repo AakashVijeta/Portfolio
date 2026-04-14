@@ -1,0 +1,104 @@
+.theme-toggle {
+  position: fixed;
+  top: 16px;
+  right: 24px;
+  z-index: 9999;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 14px 8px 8px;
+  background-color: rgba(12, 12, 11, 0.7);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid rgb(255 255 255 / 10%);
+  border-radius: 999px;
+  font-family: "SF Mono", Consolas, Menlo, monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  color: var(--light-slate);
+  cursor: pointer;
+  transition:
+    color 0.2s ease,
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.theme-toggle:hover {
+  color: var(--lightest-slate);
+  border-color: var(--accent-warm-glow);
+  transform: translateY(-1px);
+}
+
+.theme-toggle--f1 {
+  border-color: var(--accent-glow);
+  color: var(--lightest-slate);
+  box-shadow: 0 0 20px -4px var(--accent-glow);
+}
+
+.theme-toggle--f1:hover {
+  box-shadow: 0 0 26px -2px var(--accent-glow);
+}
+
+/* Mini checkered flag — 3x2 grid of squares */
+.theme-toggle-flag {
+  display: grid;
+  grid-template-columns: repeat(3, 5px);
+  grid-template-rows: repeat(2, 5px);
+  gap: 1px;
+  padding: 2px;
+  background-color: rgba(0, 0, 0, 0.4);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.theme-toggle-flag span {
+  display: block;
+  background-color: var(--lightest-slate);
+  transition: background-color 0.25s ease;
+}
+
+.theme-toggle-flag span:nth-child(2),
+.theme-toggle-flag span:nth-child(4),
+.theme-toggle-flag span:nth-child(6) {
+  background-color: transparent;
+}
+
+.theme-toggle--f1 .theme-toggle-flag span {
+  background-color: var(--accent);
+  box-shadow: 0 0 4px var(--accent-glow);
+}
+
+.theme-toggle--f1 .theme-toggle-flag span:nth-child(2),
+.theme-toggle--f1 .theme-toggle-flag span:nth-child(4),
+.theme-toggle--f1 .theme-toggle-flag span:nth-child(6) {
+  background-color: transparent;
+  box-shadow: none;
+}
+
+.theme-toggle-label {
+  white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .theme-toggle {
+    top: 12px;
+    right: 14px;
+    padding: 6px 12px 6px 6px;
+    font-size: 10px;
+    letter-spacing: 1px;
+    gap: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .theme-toggle-label {
+    display: none;
+  }
+
+  .theme-toggle {
+    padding: 6px;
+    border-radius: 8px;
+  }
+}
