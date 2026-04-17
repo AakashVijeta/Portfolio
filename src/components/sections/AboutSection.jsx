@@ -1,137 +1,159 @@
-const skills = [
-  'Python', 'React', 'TypeScript', 'FastAPI', 'scikit-learn',
-  'XGBoost', 'PostgreSQL', 'Docker', 'Vite', 'GSAP',
+const BASE = import.meta.env.BASE_URL;
+
+const CORE_SKILLS = [
+  'Python', 'React', 'TypeScript', 'FastAPI',
+  'scikit-learn', 'XGBoost', 'PostgreSQL', 'Docker',
+  'Pandas', 'NumPy', 'Vite', 'GSAP',
+  'Node.js', 'SQL',
+];
+
+const SOFT_SKILLS = [
+  'Problem Solving', 'Critical Thinking',
+  'Autonomy', 'Curiosity',
+  'Collaboration', 'Creativity',
+];
+
+const EDUCATION = [
+  {
+    org: 'IIT GUWAHATI',
+    range: '2023 — 2027',
+    line: 'B.TECH - Data Science & Artificial Intelligence',
+  },
+];
+
+const EXPERIENCES = [
+  {
+    org: '[3 YEARS BUILDING]',
+    range: '2023 — 2026',
+    line: 'PROJECTS - F1 Podium Predictor · NiftyEdge',
+  },
+  {
+    org: '[INTERNSHIPS + LABS]',
+    range: '2024 — 2026',
+    line: 'VARIOUS - ML Research · Applied Systems',
+  },
+  {
+    org: '[8 YEARS PROGRAMMING]',
+    range: '2018 — 2026',
+    line: 'TOTAL_RUNTIME - Continuous Learning Protocol',
+  },
 ];
 
 export default function AboutSection() {
   return (
     <section
-      className="section section-stripe about-section"
+      className="section section-stripe about-v2"
       style={{
         flexDirection: 'column',
         alignItems: 'stretch',
-        justifyContent: 'space-between',
-        padding: '64px 6vw 56px',
+        justifyContent: 'flex-start',
+        padding: '32px 48px 32px',
+        gap: '20px',
+        overflow: 'hidden',
       }}
     >
-      {/* Classification bar */}
-      <div className="section-enter-item" style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'baseline',
-        paddingBottom: '12px',
-        borderBottom: '1px solid var(--color-border)',
-        fontFamily: 'var(--font-display)',
-        fontSize: '0.6rem',
-        letterSpacing: '0.35em',
-        color: 'var(--color-muted)',
-        textTransform: 'uppercase',
-      }}>
-        <span style={{ color: 'var(--color-accent)' }}>
-          <span className="intro-dot" /> DOSSIER · 03
-        </span>
-        <span>SUBJECT · AAKASH VIJETA</span>
+      {/* TOP BAR */}
+      <div className="about-v2-topbar section-enter-item">
+        <div className="about-v2-title">SUBJECT PROFILE</div>
+        <div className="about-v2-topmeta">
+          <div>CASE FILE: AV-03</div>
+          <div>STATUS: BUILDING</div>
+        </div>
       </div>
 
-      {/* Main content row */}
-      <div className="about-grid">
-        {/* Left: monogram card */}
-        <div
-          className="section-enter-item about-monogram"
-          style={{ flexShrink: 0 }}
-        >
-          <div className="about-monogram-stamp">TOP FILE // 2026</div>
-          <div className="about-monogram-letters">
-            <span>A</span>
-            <span>V</span>
-          </div>
-          <div className="about-monogram-caption">
-            <div><span>CODE</span><span>AV-07</span></div>
-            <div><span>EST</span><span>2003</span></div>
-            <div><span>ROLE</span><span>BUILDER</span></div>
-            <div><span>BASE</span><span>IND</span></div>
-          </div>
-        </div>
+      {/* 3-COLUMN GRID */}
+      <div className="about-v2-grid">
 
-        {/* Right: bio + skills */}
-        <div style={{ maxWidth: '520px' }}>
-          <div
-            className="section-enter-item"
-            style={{
-              fontFamily: 'var(--font-display)',
-              fontSize: '0.7rem',
-              letterSpacing: '0.4em',
-              color: 'var(--color-accent)',
-              textTransform: 'uppercase',
-              marginBottom: '20px',
-            }}
-          >
-            About
-            <div className="speed-line" />
+        {/* LEFT COLUMN */}
+        <aside className="about-v2-left section-enter-item">
+          <div className="about-v2-subjectname">AAKASH VIJETA</div>
+          <div className="about-v2-photo">
+            <img src={BASE + 'profile.png'} alt="Aakash Vijeta" />
+            <div className="about-v2-photo-bracket tl" />
+            <div className="about-v2-photo-bracket tr" />
+            <div className="about-v2-photo-bracket bl" />
+            <div className="about-v2-photo-bracket br" />
+          </div>
+          <div className="about-v2-fields">
+            <div><span>CLASS</span><span>ML_ENGINEER</span></div>
+            <div><span>N. LEVEL</span><span>B.TECH_DS+AI</span></div>
+            <div><span>LVL_1</span><span>EN (Fluent)</span></div>
+            <div><span>LVL_2</span><span>HI (Native)</span></div>
+          </div>
+          <div className="about-v2-status-alert">
+            <span className="about-v2-status-chip">STATUS: ALERT</span>
+            <div className="about-v2-status-main">OPEN TO WORK</div>
+            <div className="about-v2-status-sub">
+              <span>INTERNSHIPS</span>
+              <span>REMOTE_READY</span>
+            </div>
+          </div>
+        </aside>
+
+        {/* MIDDLE COLUMN */}
+        <div className="about-v2-mid section-enter-item">
+          <div className="about-v2-mid-header">
+            <span>COMPETENCE_ANALYSIS_REPORT</span>
+            <span className="about-v2-readonly">[READ_ONLY]</span>
           </div>
 
-          <p
-            className="section-enter-item"
-            style={{
-              fontFamily: 'var(--font-body)',
-              fontSize: 'clamp(0.85rem, 1.5vw, 0.95rem)',
-              lineHeight: 1.75,
-              color: 'var(--color-text)',
-              marginBottom: '28px',
-            }}
-          >
-            I build intelligent systems at the intersection of machine learning,
-            software engineering, and applied mathematics. Currently studying
-            Data Science &amp; AI at IIT Guwahati — shipping things that are
-            both technically rigorous and actually useful.
+          <p className="about-v2-bio">
+            Builder obsessed with the intersection of <span className="hl-1">machine learning</span>,{' '}
+            <span className="hl-2">software engineering</span>, and applied mathematics.
+            I don't just train models — I ship intelligent systems that are both
+            technically rigorous and actually useful.
           </p>
 
-          <div className="section-enter-item" style={{
-            fontFamily: 'var(--font-display)',
-            fontSize: '0.6rem',
-            letterSpacing: '0.35em',
-            color: 'var(--color-muted)',
-            textTransform: 'uppercase',
-            marginBottom: '12px',
-          }}>
-            &gt; skills.list()
-          </div>
+          {/* Academic log */}
+          <div className="about-v2-subhead">// ACADEMIC_LOG [EDUCATION]</div>
+          {EDUCATION.map((e) => (
+            <div className="about-v2-record" key={e.org}>
+              <div className="about-v2-record-top">
+                <span className="about-v2-record-org">[{e.org}]</span>
+                <span className="about-v2-record-range">{e.range}</span>
+              </div>
+              <div className="about-v2-record-line">{e.line}</div>
+            </div>
+          ))}
 
-          <div className="section-enter-item" style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-            {skills.map(skill => (
-              <span
-                key={skill}
-                style={{
-                  fontFamily: 'var(--font-display)',
-                  fontSize: '0.65rem',
-                  letterSpacing: '0.15em',
-                  color: 'var(--color-accent)',
-                  border: '1px solid var(--color-border)',
-                  padding: '4px 10px',
-                  textTransform: 'uppercase',
-                }}
-              >
-                {skill}
-              </span>
+          {/* Field operations */}
+          <div className="about-v2-subhead" style={{ marginTop: '18px' }}>
+            // FIELD_OPERATIONS [EXPERIENCES]
+          </div>
+          {EXPERIENCES.map((x) => (
+            <div className="about-v2-record" key={x.org}>
+              <div className="about-v2-record-top">
+                <span className="about-v2-record-org">{x.org}</span>
+                <span className="about-v2-record-range">{x.range}</span>
+              </div>
+              <div className="about-v2-record-line">{x.line}</div>
+            </div>
+          ))}
+        </div>
+
+        {/* RIGHT COLUMN */}
+        <aside className="about-v2-right section-enter-item">
+          <div className="about-v2-right-header">SUBJECT_INVENTORY</div>
+
+          <div className="about-v2-inv-label">CORE_SKILLS</div>
+          <div className="about-v2-chipgrid">
+            {CORE_SKILLS.map((s) => (
+              <span className="about-v2-chip" key={s}>{s}</span>
             ))}
           </div>
-        </div>
-      </div>
 
-      {/* Bottom meta */}
-      <div className="section-enter-item" style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        paddingTop: '12px',
-        borderTop: '1px solid var(--color-border)',
-        fontFamily: 'var(--font-display)',
-        fontSize: '0.6rem',
-        letterSpacing: '0.3em',
-        color: 'var(--color-muted)',
-        textTransform: 'uppercase',
-      }}>
-        <span>FILED · 2026.04</span>
-        <span>CLASSIFICATION · PUBLIC</span>
+          <div className="about-v2-inv-label" style={{ marginTop: '18px' }}>SOFT_SKILLS</div>
+          <div className="about-v2-chipgrid">
+            {SOFT_SKILLS.map((s) => (
+              <span className="about-v2-chip" key={s}>{s}</span>
+            ))}
+          </div>
+
+          <div className="about-v2-danger">
+            <div className="about-v2-danger-icon">▲</div>
+            <div className="about-v2-danger-label">DANGER: HIGH</div>
+          </div>
+        </aside>
       </div>
     </section>
   );
