@@ -81,8 +81,8 @@ body::after {
   );
 }
 
-/* ── Terminal: subtle character-grid background ───────────────── */
-:root .App {
+/* ── Terminal: base App background (both themes via variable) ─── */
+.App {
   background-color: var(--color-bg);
 }
 

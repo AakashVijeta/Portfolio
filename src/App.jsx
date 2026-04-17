@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import 'bootstrap/dist/css/bootstrap.min.css'
 import Intro from "./components/Intro";
 import NavBar from "./components/NavBar";
 import About from "./components/about";
