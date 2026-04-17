@@ -1,5 +1,3 @@
-import ParticlePortrait from '../ParticlePortrait';
-
 const skills = [
   'Python', 'React', 'TypeScript', 'FastAPI', 'scikit-learn',
   'XGBoost', 'PostgreSQL', 'Docker', 'Vite', 'GSAP',
@@ -17,10 +15,18 @@ export default function AboutSection() {
       }}
     >
       <div
-        className="section-enter-item about-portrait"
+        className="section-enter-item about-monogram"
         style={{ flexShrink: 0 }}
       >
-        <ParticlePortrait />
+        <div className="about-monogram-letters">
+          <span>A</span>
+          <span>V</span>
+        </div>
+        <div className="about-monogram-caption">
+          <div>EST · 2003</div>
+          <div>ROLE · BUILDER</div>
+          <div>BASE · IND</div>
+        </div>
       </div>
 
       <div style={{ maxWidth: '480px' }}>

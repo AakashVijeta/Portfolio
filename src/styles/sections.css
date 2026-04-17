@@ -18,6 +18,135 @@
   will-change: opacity, transform;
 }
 
+/* ── Intro hero: giant typographic name-mark ───────────────── */
+.intro-namewrap {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  line-height: 0.85;
+}
+
+.intro-name {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(4rem, 18vw, 17rem);
+  letter-spacing: -0.02em;
+  color: var(--color-text);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.intro-name-b {
+  align-self: flex-end;
+  color: var(--color-accent);
+}
+
+.intro-name-cursor {
+  display: inline-block;
+  margin-left: 0.08em;
+  animation: intro-blink 1s steps(1) infinite;
+  color: var(--color-accent);
+}
+
+@keyframes intro-blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+.intro-speedline {
+  position: absolute;
+  right: 0;
+  bottom: -18px;
+  height: 4px;
+  width: 40%;
+  background: linear-gradient(to right, transparent, var(--color-accent));
+  display: none;
+}
+
+/* F1 treatment: italic skew, red underline speed-line, hide terminal boot */
+[data-theme="f1"] .intro-name {
+  font-style: italic;
+  letter-spacing: -0.03em;
+}
+[data-theme="f1"] .intro-name-a {
+  color: var(--color-text);
+  -webkit-text-stroke: 0;
+}
+[data-theme="f1"] .intro-name-b {
+  color: var(--color-accent);
+}
+[data-theme="f1"] .intro-speedline { display: block; }
+[data-theme="f1"] .intro-boot-terminal { display: none; }
+
+/* Terminal treatment: hide F1 driver tag, phosphor glow on name */
+:root:not([data-theme="f1"]) .intro-boot-f1 { display: none; }
+:root:not([data-theme="f1"]) .intro-name {
+  text-shadow: 0 0 18px rgba(0, 255, 65, 0.35);
+}
+:root:not([data-theme="f1"]) .intro-name-a {
+  color: var(--color-text);
+}
+
+/* ── About monogram block ───────────────────────────────────── */
+.about-monogram {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  border: 1px solid var(--color-border);
+  padding: 28px 32px;
+  background: var(--color-surface);
+  position: relative;
+}
+.about-monogram::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  width: 24px;
+  height: 24px;
+  border-top: 2px solid var(--color-accent);
+  border-left: 2px solid var(--color-accent);
+}
+.about-monogram::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  right: -1px;
+  width: 24px;
+  height: 24px;
+  border-bottom: 2px solid var(--color-accent);
+  border-right: 2px solid var(--color-accent);
+}
+.about-monogram-letters {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(6rem, 14vw, 11rem);
+  line-height: 0.85;
+  letter-spacing: -0.04em;
+  color: var(--color-text);
+  display: flex;
+  gap: 0.05em;
+}
+.about-monogram-letters span:nth-child(2) {
+  color: var(--color-accent);
+}
+[data-theme="f1"] .about-monogram-letters { font-style: italic; }
+:root:not([data-theme="f1"]) .about-monogram-letters {
+  text-shadow: 0 0 14px rgba(0, 255, 65, 0.3);
+}
+.about-monogram-caption {
+  font-family: var(--font-display);
+  font-size: 0.65rem;
+  letter-spacing: 0.3em;
+  color: var(--color-muted);
+  text-transform: uppercase;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  border-top: 1px solid var(--color-border);
+  padding-top: 12px;
+}
+
 /* Project card: lift + accent glow on hover (per spec) */
 .project-card:hover {
   transform: translateY(-6px);
