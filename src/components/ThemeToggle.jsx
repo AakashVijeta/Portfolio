@@ -1,6 +1,5 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import "../styles/ThemeToggle.css";
-import ThemeTransition from "./ThemeTransition";
 
 const STORAGE_KEY = "portfolio-theme";
 
@@ -11,8 +10,6 @@ const getInitialTheme = () => {
 
 const ThemeToggle = () => {
   const [theme, setTheme] = useState(getInitialTheme);
-  const [stage, setStage] = useState("idle"); // idle | active | exit
-  const timersRef = useRef([]);
 
   useEffect(() => {
     const root = document.documentElement;
@@ -24,52 +21,42 @@ const ThemeToggle = () => {
     window.localStorage.setItem(STORAGE_KEY, theme);
   }, [theme]);
 
-  useEffect(
-    () => () => timersRef.current.forEach(clearTimeout),
-    []
-  );
+  // Sync when T key toggles theme externally (via useSectionManager)
+  useEffect(() => {
+    const observer = new MutationObserver(() => {
+      const attr = document.documentElement.getAttribute("data-theme");
+      setTheme(attr === "f1" ? "f1" : "default");
+    });
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+    return () => observer.disconnect();
+  }, []);
 
   const isF1 = theme === "f1";
 
   const handleToggle = () => {
-    if (stage !== "idle") return;
-
-    const next = isF1 ? "default" : "f1";
-    // Overlay appears and new theme applies in the same commit, so only
-    // the destination theme's preloader is ever visible.
-    setStage("active");
-    setTheme(next);
-
-    const exit = setTimeout(() => setStage("exit"), 1200);
-    const done = setTimeout(() => setStage("idle"), 1900);
-
-    timersRef.current.push(exit, done);
+    setTheme(isF1 ? "default" : "f1");
   };
 
   return (
-    <>
-      <button
-        type="button"
-        className={`theme-toggle ${isF1 ? "theme-toggle--f1" : ""}`}
-        onClick={handleToggle}
-        disabled={stage !== "idle"}
-        aria-label={isF1 ? "Switch to default theme" : "Switch to F1 theme"}
-        title={isF1 ? "Default mode" : "Race mode"}
-      >
-        <span className="theme-toggle-flag" aria-hidden="true">
-          <span />
-          <span />
-          <span />
-          <span />
-          <span />
-          <span />
-        </span>
-        <span className="theme-toggle-label">
-          {isF1 ? "RACE MODE" : "LIGHTS OUT"}
-        </span>
-      </button>
-      <ThemeTransition stage={stage} />
-    </>
+    <button
+      type="button"
+      className={`theme-toggle ${isF1 ? "theme-toggle--f1" : ""}`}
+      onClick={handleToggle}
+      aria-label={isF1 ? "Switch to Terminal theme" : "Switch to F1 theme"}
+      title={isF1 ? "Terminal mode" : "F1 mode"}
+    >
+      <span className="theme-toggle-flag" aria-hidden="true">
+        <span />
+        <span />
+        <span />
+        <span />
+        <span />
+        <span />
+      </span>
+      <span className="theme-toggle-label">
+        {isF1 ? "RACE MODE" : "LIGHTS OUT"}
+      </span>
+    </button>
   );
 };
 
