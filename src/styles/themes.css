@@ -3,16 +3,16 @@
   --color-bg:       #050905;
   --color-surface:  #070d07;
   --color-accent:   #00ff41;
-  --color-text:     #00ff41;
-  --color-muted:    #005a15;
-  --color-border:   #002208;
+  --color-text:     #b8f5c8;   /* readable phosphor — not full-brightness green */
+  --color-muted:    #4a8c5c;
+  --color-border:   #0d3318;
   --color-white:    #e8ffe8;
 
   --font-display: 'Share Tech Mono', monospace;
   --font-body:    'Share Tech Mono', monospace;
 
-  --glow: 0 0 8px rgba(0, 255, 65, 0.5);
-  --glow-strong: 0 0 16px rgba(0, 255, 65, 0.35), 0 0 32px rgba(0, 255, 65, 0.15);
+  --glow: 0 0 8px rgba(0, 255, 65, 0.4);
+  --glow-strong: 0 0 16px rgba(0, 255, 65, 0.3), 0 0 32px rgba(0, 255, 65, 0.12);
 }
 
 /* ── F1 Carbon Speed ────────────────────────────────────────── */

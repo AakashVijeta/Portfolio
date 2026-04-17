@@ -1,4 +1,4 @@
-import { useCallback, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { useSectionContext, SECTIONS } from '../context/SectionContext';
 import { useSectionManager } from '../hooks/useSectionManager';
@@ -28,10 +28,19 @@ export default function SectionManager({ sections }) {
       return;
     }
 
+    // Kill any running tweens on these items before animating in
+    gsap.killTweensOf(items);
     gsap.fromTo(items,
       { opacity: 0, y: 20 },
       { opacity: 1, y: 0, duration: 0.5, stagger: 0.08, ease: 'power2.out' }
     );
+  }, []);
+
+  const resetSection = useCallback((index) => {
+    const el = sectionRefs.current[index];
+    if (!el) return;
+    const items = el.querySelectorAll('.section-enter-item');
+    if (items.length) gsap.set(items, { opacity: 0, y: 20 });
   }, []);
 
   const advance = useCallback(async (dir) => {
@@ -42,14 +51,16 @@ export default function SectionManager({ sections }) {
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     setIsTransitioning(true);
 
+    resetSection(nextIndex);
+
     if (prefersReduced || isMobile()) {
       const current = sectionRefs.current[activeIndex];
       const next    = sectionRefs.current[nextIndex];
       gsap.to(current, { opacity: 0, duration: 0.15 });
       await new Promise(r => setTimeout(r, 150));
       goTo(nextIndex);
-      gsap.fromTo(next, { opacity: 0 }, { opacity: 1, duration: 0.15 });
-      await new Promise(r => setTimeout(r, 150));
+      gsap.set(next, { opacity: 1 });
+      await new Promise(r => setTimeout(r, 50));
     } else if (isF1()) {
       await wipeRef.current.play();
       goTo(nextIndex);
@@ -60,7 +71,12 @@ export default function SectionManager({ sections }) {
 
     runEntranceAnimation(nextIndex);
     setIsTransitioning(false);
-  }, [activeIndex, isTransitioning, goTo, setIsTransitioning, runEntranceAnimation]);
+  }, [activeIndex, isTransitioning, goTo, setIsTransitioning, runEntranceAnimation, resetSection]);
+
+  // Animate section 0 on first mount
+  useEffect(() => {
+    runEntranceAnimation(0);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useSectionManager({ activeIndex, isTransitioning, advance });
 

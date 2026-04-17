@@ -13,10 +13,9 @@
   color: var(--color-text);
 }
 
-/* Entrance animation utility classes — applied by GSAP after transition */
+/* Initial state set by GSAP — CSS just marks the elements as targets */
 .section-enter-item {
-  opacity: 0;
-  transform: translateY(20px);
+  will-change: opacity, transform;
 }
 
 @media (max-width: 768px) {
