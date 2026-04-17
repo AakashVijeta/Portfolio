@@ -1,0 +1,27 @@
+/* Each section is exactly one viewport tall */
+.section {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background-color: var(--color-bg);
+  font-family: var(--font-body);
+  color: var(--color-text);
+}
+
+/* Entrance animation utility classes — applied by GSAP after transition */
+.section-enter-item {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+@media (max-width: 768px) {
+  .section-counter,
+  .key-hints {
+    display: none;
+  }
+}

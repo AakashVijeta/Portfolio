@@ -1,0 +1,107 @@
+/* ── Terminal CRT (default) ─────────────────────────────────── */
+:root {
+  --color-bg:       #050905;
+  --color-surface:  #070d07;
+  --color-accent:   #00ff41;
+  --color-text:     #00ff41;
+  --color-muted:    #005a15;
+  --color-border:   #002208;
+  --color-white:    #e8ffe8;
+
+  --font-display: 'Share Tech Mono', monospace;
+  --font-body:    'Share Tech Mono', monospace;
+
+  --glow: 0 0 8px rgba(0, 255, 65, 0.5);
+  --glow-strong: 0 0 16px rgba(0, 255, 65, 0.35), 0 0 32px rgba(0, 255, 65, 0.15);
+}
+
+/* ── F1 Carbon Speed ────────────────────────────────────────── */
+[data-theme="f1"] {
+  --color-bg:       #0a0a0a;
+  --color-surface:  #111111;
+  --color-accent:   #e10600;
+  --color-text:     #ffffff;
+  --color-muted:    #444444;
+  --color-border:   #1e1e1e;
+  --color-white:    #ffffff;
+
+  --font-display: 'Barlow Condensed', sans-serif;
+  --font-body:    'DM Sans', sans-serif;
+
+  --glow: 0 0 8px rgba(225, 6, 0, 0.5);
+  --glow-strong: 0 0 16px rgba(225, 6, 0, 0.4), 0 0 32px rgba(225, 6, 0, 0.2);
+}
+
+/* ── Terminal: scanlines + CRT vignette overlays ─────────────── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.15) 2px,
+    rgba(0, 0, 0, 0.15) 4px
+  );
+  pointer-events: none;
+  z-index: 9998;
+  opacity: 1;
+  transition: opacity 0.4s;
+}
+
+[data-theme="f1"] body::before {
+  opacity: 0;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 55%, rgba(0, 0, 0, 0.55) 100%);
+  pointer-events: none;
+  z-index: 9997;
+  opacity: 1;
+  transition: opacity 0.4s;
+}
+
+[data-theme="f1"] body::after {
+  opacity: 0;
+}
+
+/* ── F1: carbon fiber background ─────────────────────────────── */
+[data-theme="f1"] .App {
+  background-color: var(--color-bg);
+  background-image: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 4px,
+    rgba(255, 255, 255, 0.015) 4px,
+    rgba(255, 255, 255, 0.015) 5px
+  );
+}
+
+/* ── Terminal: subtle character-grid background ───────────────── */
+:root .App {
+  background-color: var(--color-bg);
+}
+
+/* ── F1: left red stripe on sections ─────────────────────────── */
+[data-theme="f1"] .section-stripe::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 3px;
+  height: 100%;
+  background: var(--color-accent);
+  pointer-events: none;
+}
+
+/* ── Reduced motion ──────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}

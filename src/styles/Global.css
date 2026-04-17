@@ -85,44 +85,16 @@ button {
 }
 
 :root {
-  --dark-navy: #030303;
-  --navy: #0c0c0b;
-  --light-navy: #141413;
-  --lightest-navy: #1c1c1c;
-  --navy-shadow: rgba(0, 0, 0, 0.7);
-  --slate: #93938f;
-  --light-slate: #b8b8b4;
-  --lightest-slate: #ededE8;
-  --white: #ffffff;
-  --green-bright: #00e676;
-  --green-tint: rgba(0, 230, 118, 0.12);
-  --accent: #00e676;
-  --accent-soft: rgba(0, 230, 118, 0.12);
-  --accent-glow: rgba(0, 230, 118, 0.4);
-  --accent-warm: #00e676;
-  --accent-warm-soft: rgba(0, 230, 118, 0.12);
-  --accent-warm-glow: rgba(0, 230, 118, 0.4);
+  /* Legacy aliases — kept for any old components during migration */
+  --navy: #050905;
+  --accent: #00ff41;
+  --accent-glow: rgba(0, 255, 65, 0.4);
 }
 
-/* F1 race-mode palette — Ferrari red on carbon black */
 [data-theme="f1"] {
-  --dark-navy: #000000;
-  --navy: #07070a;
-  --light-navy: #14090c;
-  --lightest-navy: #1f1014;
-  --navy-shadow: rgba(0, 0, 0, 0.8);
-  --slate: #8a8a94;
-  --light-slate: #c4c4cc;
-  --lightest-slate: #ffffff;
-  --white: #ffffff;
-  --green-bright: #e10600;
-  --green-tint: rgba(225, 6, 0, 0.12);
+  --navy: #0a0a0a;
   --accent: #e10600;
-  --accent-soft: rgba(225, 6, 0, 0.12);
   --accent-glow: rgba(225, 6, 0, 0.5);
-  --accent-warm: #e10600;
-  --accent-warm-soft: rgba(225, 6, 0, 0.12);
-  --accent-warm-glow: rgba(225, 6, 0, 0.45);
 }
 
 /* ================================================================
