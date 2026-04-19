@@ -27,8 +27,10 @@
   }
 }
 
-/* Hide native cursor — replaced by CustomCursor */
-*, *::before, *::after { cursor: none !important; }
+/* Hide native cursor — replaced by CustomCursor (pointer devices only) */
+@media (hover: hover) and (pointer: fine) {
+  *, *::before, *::after { cursor: none !important; }
+}
 
 /* Smooth hover micro-transitions on all links and buttons.
    Doesn't add hover effects — only smooths whatever is already defined. */

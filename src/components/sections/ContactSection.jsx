@@ -21,7 +21,7 @@ export default function ContactSection() {
         paddingBottom: '12px',
         borderBottom: '1px solid var(--color-border)',
         fontFamily: 'var(--font-display)',
-        fontSize: '0.6rem',
+        fontSize: '0.8rem',
         letterSpacing: '0.35em',
         color: 'var(--color-muted)',
         textTransform: 'uppercase',
@@ -41,7 +41,7 @@ export default function ContactSection() {
       }}>
         <div className="section-enter-item" style={{
           fontFamily: 'var(--font-display)',
-          fontSize: '0.7rem',
+          fontSize: '1rem',
           letterSpacing: '0.45em',
           color: 'var(--color-accent)',
           textTransform: 'uppercase',
@@ -101,7 +101,7 @@ export default function ContactSection() {
         paddingTop: '12px',
         borderTop: '1px solid var(--color-border)',
         fontFamily: 'var(--font-display)',
-        fontSize: '0.6rem',
+        fontSize: '0.8rem',
         letterSpacing: '0.3em',
         color: 'var(--color-muted)',
         textTransform: 'uppercase',

@@ -1,25 +1,34 @@
-import { useEffect, useRef } from 'react';
+import { useLayoutEffect, useRef } from 'react';
 import gsap from 'gsap';
 
 export default function IntroSection({ isActive }) {
   const rootRef = useRef(null);
 
-  useEffect(() => {
+  // useLayoutEffect + CSS opacity:0 on .intro-anim-item (see sections.css)
+  // prevents the ~1-frame flash where items were visible before GSAP reset
+  // them to 0 and started the timeline.
+  useLayoutEffect(() => {
     if (!isActive) return;
     const el = rootRef.current;
     if (!el) return;
 
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (prefersReduced) return;
 
     const stamp = el.querySelectorAll('.intro-stamp');
     const name1 = el.querySelector('.intro-name-a');
     const name2 = el.querySelector('.intro-name-b');
     const meta = el.querySelectorAll('.intro-meta-row');
     const dossierLines = el.querySelectorAll('.intro-dossier-line');
+    const allItems = [stamp, name1, name2, meta, dossierLines];
 
-    gsap.killTweensOf([stamp, name1, name2, meta, dossierLines]);
-    gsap.set([stamp, name1, name2, meta, dossierLines], { opacity: 0 });
+    gsap.killTweensOf(allItems);
+
+    if (prefersReduced) {
+      gsap.set(allItems, { opacity: 1, y: 0, skewX: 0 });
+      return;
+    }
+
+    gsap.set(allItems, { opacity: 0 });
     gsap.set([name1, name2], { y: 40, skewX: -6 });
 
     const tl = gsap.timeline();
@@ -92,7 +101,9 @@ export default function IntroSection({ isActive }) {
           color: 'var(--color-muted)',
           textTransform: 'uppercase',
         }}>
-          USE ARROW KEYS OR SCROLL TO NAVIGATE
+          {window.matchMedia('(hover: none)').matches
+            ? 'SWIPE UP / DOWN TO NAVIGATE'
+            : 'USE ARROW KEYS OR SCROLL TO NAVIGATE'}
         </div>
       </div>
     </section>

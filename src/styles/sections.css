@@ -73,7 +73,7 @@
   justify-content: space-between;
   gap: 16px;
   font-family: var(--font-display);
-  font-size: 0.65rem;
+  font-size: 0.85rem;
   letter-spacing: 0.25em;
   text-transform: uppercase;
 }
@@ -95,6 +95,16 @@
     padding: 16px 0 0;
     min-width: 0;
   }
+}
+
+/* Intro hero animated items start hidden so React's commit frame can't
+   flash them visible before GSAP's useLayoutEffect resets them. */
+.intro-hero .intro-stamp,
+.intro-hero .intro-name-a,
+.intro-hero .intro-name-b,
+.intro-hero .intro-meta-row,
+.intro-hero .intro-dossier-line {
+  opacity: 0;
 }
 
 /* ── Intro hero: giant typographic name-mark ───────────────── */
@@ -171,11 +181,14 @@
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
-  gap: 14px;
+  gap: 10px;
   font-family: var(--font-display);
-  font-size: clamp(1.3rem, 3.6vw, 2.6rem);
+  font-size: clamp(2rem, 5.2vw, 3.6rem);
   letter-spacing: 0.04em;
   color: var(--color-text);
+}
+.contact-command .contact-cursor {
+  margin-left: -4px;
 }
 .contact-prompt {
   color: var(--color-accent);
@@ -1151,7 +1164,28 @@
 }
 @media (max-width: 900px) {
   .profiler-container { grid-template-columns: 1fr; height: auto; max-height: none; }
-  .fingerprint-scanner { aspect-ratio: 1 / 1; }
+
+  /* Section becomes vertically scrollable — content taller than viewport on mobile */
+  .about-profiler {
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+    justify-content: flex-start !important;
+    scrollbar-width: none;
+  }
+  .about-profiler::-webkit-scrollbar { display: none; }
+
+  /* Allow all inner panels to show full content rather than clip */
+  .col-behavior { overflow: visible; }
+  .psych-report { overflow: visible; }
+  .cap-top { overflow: visible; }
+
+  /* Constrain scanner to a fixed square so it doesn't fill the whole viewport */
+  .fingerprint-scanner {
+    aspect-ratio: unset;
+    height: 260px;
+    width: min(100%, 260px);
+    margin: 0 auto;
+  }
 }
 
 /* ── About monogram block ───────────────────────────────────── */
@@ -1702,7 +1736,7 @@
   padding: 14px clamp(32px, 5vw, 72px) 28px;
   border-top: 1px solid var(--color-border);
   font-family: var(--font-display);
-  font-size: 0.62rem;
+  font-size: 0.70rem;
   letter-spacing: 0.3em;
   color: var(--color-muted);
   text-transform: uppercase;
@@ -1713,14 +1747,61 @@
   .strip-title { font-size: 1.6rem; }
 }
 @media (max-width: 720px) {
-  .projects-list { flex-direction: column; }
+  /* Horizontal scroll-snap slider: one card centered, peeks on both edges */
+  .projects-list {
+    flex-direction: row;
+    justify-content: flex-start;
+    overflow-x: auto;
+    overflow-y: hidden;
+    max-height: none;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    gap: 14px;
+    padding: 16px 10vw;
+    scroll-padding-inline: 10vw;
+    height: 50vh;
+    max-height: 460px;
+  }
+  .projects-list::-webkit-scrollbar { display: none; }
+
   .project-strip,
   .project-strip:hover:not(:disabled),
   .projects-list:hover .project-strip:not(:hover) {
-    flex: 0 0 140px;
-    width: 100%;
+    flex: 0 0 80vw;
+    width: 80vw;
+    min-width: 80vw;
+    max-width: 80vw;
+    height: 100%;
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
   }
-  .strip-title { font-size: 1.4rem; }
+
+  /* On touch, mobile cards show the "expanded" state by default — no hover */
+  .project-strip-inner { border-color: rgba(255,255,255,0.35); }
+  .project-strip .bg-img {
+    opacity: 1;
+    filter: grayscale(0) contrast(1.05);
+    transform: scale(1);
+  }
+  .project-strip .corner {
+    opacity: 1;
+    border-color: var(--color-white);
+    width: 16px;
+    height: 16px;
+  }
+  .project-strip .strip-details { transform: translateY(0); }
+  .project-strip .strip-access {
+    opacity: 1;
+    transform: translateY(0);
+    border-top-color: var(--color-accent);
+  }
+  .project-strip .strip-barcode { height: 40px; }
+  .strip-scan-beam { display: none; }
+  .strip-title {
+    font-size: 1.6rem;
+    white-space: normal;
+  }
 }
 
 /* ── Contact ── */
@@ -1758,12 +1839,12 @@
 .contact-bracket-box:link,
 .contact-bracket-box:visited {
   font-family: var(--font-display);
-  font-size: 0.7rem;
+  font-size: 0.95rem;
   letter-spacing: 0.35em;
   text-transform: uppercase;
   color: var(--color-muted);
   border: 1px solid var(--color-border);
-  padding: 12px 28px;
+  padding: 16px 32px;
   text-decoration: none;
   transition: color 0.2s, border-color 0.2s;
 }
@@ -1771,4 +1852,191 @@
 .contact-bracket-box:focus {
   color: var(--color-accent) !important;
   border-color: var(--color-accent);
+}
+
+/* ── Small-phone fixes (≤480px) ─────────────────────────────── */
+@media (max-width: 480px) {
+  /* Contact dossier: remove fixed min-width that causes horizontal overflow */
+  .contact-dossier {
+    min-width: 0;
+    width: 100%;
+  }
+
+  /* Contact email command: fit "> send email _" on one line */
+  .contact-command {
+    font-size: clamp(0.7rem, 3.1vw, 1rem);
+    gap: 6px;
+    letter-spacing: 0.02em;
+    width: 100%;
+    min-width: 0;
+    flex-wrap: nowrap;
+  }
+  .contact-target {
+    min-width: 0;
+    flex-shrink: 1;
+    overflow-wrap: anywhere;
+    text-underline-offset: 4px;
+    text-decoration-thickness: 1px;
+  }
+  .contact-prompt, .contact-verb { flex: 0 0 auto; }
+
+  /* Further constrain scanner photo on very small phones */
+  .fingerprint-scanner {
+    height: 180px;
+    width: min(100%, 180px);
+  }
+
+  /* Drop REF / STATUS meta on mobile — title alone reads cleaner */
+  .profiler-head-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+  .profiler-head-meta { display: none; }
+
+  /* SUBJECT PROFILE: keep on one line, scale font to fit */
+  .profiler-title {
+    white-space: nowrap;
+    font-size: clamp(1.1rem, 6.2vw, 1.8rem);
+    letter-spacing: 0.1em;
+  }
+
+  /* Identity grid: single column so long values don't clip */
+  .id-data-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .id-data-grid > .status-wrapper { grid-column: span 1; }
+
+  /* Projects top/bottom bars: stack on very small phones */
+  .projects-topbar,
+  .intro-hero,
+  .contact-top,
+  .contact-bottom {}
+  .projects-topbar { padding: 20px 18px 12px; }
+  .projects-topbar-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+  .projects-topmeta { text-align: left; }
+  .projects-bottombar {
+    /* Reserve room on the right for the fixed theme toggle pill */
+    padding: 10px 72px 14px 14px;
+    flex-wrap: nowrap;
+    gap: 8px;
+    font-size: 0.48rem;
+    letter-spacing: 0.10em;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .projects-bottombar > span {
+    white-space: nowrap;
+    min-width: 0;
+  }
+  .projects-bottombar > span:last-child {
+    margin-left: auto;
+    text-align: right;
+  }
+
+  /* Intro hero: tighter padding on small heights so name fits */
+  .intro-hero {
+    padding: 28px 20px 24px !important;
+  }
+  .intro-top-bar,
+  .intro-bottom-bar {
+    gap: 10px 16px;
+    font-size: 0.5rem;
+    letter-spacing: 0.22em;
+  }
+  /* Keep bottom-bar content clear of the fixed theme-toggle pill */
+  .intro-bottom-bar { padding-right: 92px; }
+
+  /* Intro dossier: font tightening to avoid overflow */
+  .intro-dossier-line {
+    font-size: 0.55rem;
+    letter-spacing: 0.18em;
+    gap: 10px;
+  }
+
+  /* Evidence row: stack to a single column so cards aren't tiny */
+  .evidence-row { grid-template-columns: 1fr; }
+  .evidence-row > .evidence-card:nth-child(n+3) { display: none; }
+
+  /* Contact bracket buttons: tighten padding so all three fit */
+  .contact-bracket-box,
+  .contact-bracket-box:link,
+  .contact-bracket-box:visited {
+    padding: 9px 12px;
+    font-size: 0.55rem;
+    letter-spacing: 0.22em;
+  }
+}
+
+/* ── Contact section mobile padding — the section root uses inline style
+   `padding: 64px 6vw 56px`; tighten on small screens so content fits. ── */
+@media (max-width: 600px) {
+  section.section.section-stripe[style*="64px 6vw 56px"] {
+    /* Bottom padding matches ThemeToggle's bottom offset (12px) so the
+       bottom meta bar and the toggle pill sit on the same baseline. */
+    padding: 28px 18px 12px !important;
+  }
+}
+
+/* ── Contact section: allow top/bottom meta bars to wrap ─────── */
+@media (max-width: 600px) {
+  section.section.section-stripe > div[style*="justify-content: space-between"] {
+    flex-wrap: wrap;
+    gap: 6px 14px;
+  }
+  /* Bottom meta row clears the fixed theme-toggle pill (bottom-right). */
+  section.section.section-stripe > div[style*="border-top: 1px solid"] {
+    padding-right: 88px;
+    font-size: 0.6rem !important;
+    letter-spacing: 0.2em !important;
+  }
+  /* Top meta row: bump to match bottom so they read as a pair */
+  section.section.section-stripe > div[style*="border-bottom: 1px solid"] {
+    font-size: 0.7rem !important;
+    letter-spacing: 0.2em !important;
+  }
+}
+
+/* ── Nav dots: hide on mobile — swipe is the mobile nav affordance ── */
+@media (max-width: 768px) {
+  nav[aria-label="Section navigation"] {
+    display: none !important;
+  }
+}
+
+/* ── Touch devices: disable hover-triggered transforms ───────── */
+@media (hover: none) {
+  .evidence-card:hover:not(:disabled),
+  .evidence-card:hover .evidence-card-media img,
+  .project-card:hover,
+  .project-card:hover img,
+  .project-card:hover .project-card-cta-arrow,
+  .contact-copy-btn:hover .contact-copy-arrow,
+  .contact-cta:hover,
+  .tech-chip:hover,
+  .history-item:hover {
+    transform: none !important;
+  }
+  .project-card:hover,
+  .evidence-card:hover:not(:disabled) {
+    box-shadow: none !important;
+  }
+  /* Neutralize strip hover entirely — slider uses snap, not hover */
+  .project-strip:hover:not(:disabled),
+  .project-strip:hover:not(:disabled) .project-strip-inner,
+  .project-strip:hover:not(:disabled) .bg-img,
+  .project-strip:hover:not(:disabled) .strip-details,
+  .project-strip:hover:not(:disabled) .strip-access,
+  .project-strip:hover:not(:disabled) .strip-barcode,
+  .project-strip:hover:not(:disabled) .strip-title,
+  .project-strip:hover:not(:disabled) .corner,
+  .project-strip:hover:not(:disabled) .status-indicator,
+  .project-strip:hover:not(:disabled) .strip-status {
+    box-shadow: none;
+  }
 }

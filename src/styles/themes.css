@@ -127,6 +127,16 @@ body::after {
   pointer-events: none;
 }
 
+/* Mobile: drop the left red stripe (and its corner accent) — the section
+   root already runs edge-to-edge on narrow viewports and the strip just
+   eats into content padding. */
+@media (max-width: 767.98px) {
+  [data-theme="f1"] .section-stripe::before,
+  [data-theme="f1"] .section-stripe::after {
+    display: none;
+  }
+}
+
 /* ── F1: corner accents on sections ──────────────────────────── */
 [data-theme="f1"] .section-stripe::after {
   content: '';

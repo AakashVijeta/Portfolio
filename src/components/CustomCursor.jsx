@@ -8,6 +8,8 @@ export default function CustomCursor() {
   const rafRef = useRef(null);
 
   useEffect(() => {
+    if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+
     const onMove = (e) => {
       posRef.current = { x: e.clientX, y: e.clientY };
       setCoords({ x: e.clientX, y: window.innerHeight - e.clientY });
@@ -30,6 +32,8 @@ export default function CustomCursor() {
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
   }, []);
+
+  if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return null;
 
   return (
     <>

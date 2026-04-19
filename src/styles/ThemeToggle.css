@@ -49,10 +49,12 @@
 
 @media (max-width: 720px) {
   .mode-switch {
-    bottom: 12px;
+    /* bottom offset tuned so the pill's vertical center matches the
+       bottom-bar text row (section padding-bottom 12px + ~8px text). */
+    bottom: 7px;
     right: 12px;
     font-size: 9px;
-    padding: 4px 7px;
+    padding: 3px 6px;
   }
   .mode-switch-key { display: none; }
 }

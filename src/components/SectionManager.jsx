@@ -138,6 +138,7 @@ export default function SectionManager({ sections }) {
           <div
             key={SECTIONS[i]}
             ref={el => sectionRefs.current[i] = el}
+            data-section-active={i === activeIndex ? 'true' : undefined}
             style={{
               position: 'absolute',
               inset: 0,

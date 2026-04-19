@@ -48,7 +48,7 @@ const EXPERIENCES = [
 export default function AboutSection() {
   return (
     <section
-      className="section section-stripe about-profiler"
+      className="section section-stripe about-profiler section-scroll"
       style={{
         flexDirection: 'column',
         alignItems: 'center',
