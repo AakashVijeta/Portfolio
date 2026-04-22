@@ -38,9 +38,8 @@ function genNoiseLayers(W) {
 
 function lerp(a, b, t) { return a + (b - a) * t; }
 
-function buildSignalPath(layers) {
+function buildSignalPath(layers, amp = 24) {
   const W = window.innerWidth;
-  const amp = 24;
   const { coarse, coarseStep, fine, fineStep } = layers;
   const points = [];
   let fi = 0;
@@ -64,6 +63,7 @@ export default function Preloader() {
   const [pct, setPct]           = useState(0);
   const [logCount, setLogCount] = useState(0);
   const [freq, setFreq]         = useState(12.4);
+  const [amplitude, setAmplitude] = useState(24);
 
   const rafRef       = useRef(null);
   const layerRef     = useRef(null);
@@ -88,46 +88,45 @@ export default function Preloader() {
         x: -W, duration: 4, ease: 'none', repeat: -1,
       });
 
-      // Phase 1: amplitude collapses → flat line
-      // Phase 2: HUD fades out (fast)
-      // Phase 3: top curtain slides UP, bottom curtain slides DOWN from center
-      //          → site revealed from the flat signal line outward
+      // Wave smoothly collapses by reducing amplitude instead of scaleY
       gsap.timeline()
-        .to(signalRef.current, {
-          scaleY: 0,
+        .to({ amp: 24 }, {
+          amp: 0,
           duration: TOTAL_MS / 1000,
-          ease: 'power3.in',
-          transformOrigin: 'center center',
+          ease: 'power2.inOut',
+          onUpdate: function() {
+            setAmplitude(this.targets()[0].amp);
+          },
         })
-        // Hand off: edges fade in as the wave finishes collapsing,
-        // sitting exactly on the centerline where the flat signal rests.
+        // Edges fade in as wave finishes — they inherit the flat line position
         .to([edgeTRef.current, edgeBRef.current], {
           opacity: 1,
           duration: 0.12,
           ease: 'none',
-        }, '<85%')
+        }, '<90%') // Slightly later for smoother handoff
+        // Content fades out
         .to(contentRef.current, {
           opacity: 0,
           duration: 0.15,
           ease: 'none',
         })
-        // Curtains slide away — the edges go with them, splitting the line in two.
+        // Curtains slide away — edges ride with them, splitting the flat line
         .to(curtainTRef.current, {
           yPercent: -100,
-          duration: 0.55,
+          duration: 0.6,
           ease: 'power2.inOut',
         }, '<0.05')
         .to(curtainBRef.current, {
           yPercent: 100,
-          duration: 0.55,
+          duration: 0.6,
           ease: 'power2.inOut',
         }, '<')
-        // Edges fade as they leave the viewport so they don't linger as bars.
+        // Edges fade out as they leave
         .to([edgeTRef.current, edgeBRef.current], {
           opacity: 0,
-          duration: 0.25,
+          duration: 0.3,
           ease: 'power2.in',
-        }, '>-0.2');
+        }, '>-0.25');
     });
 
     return () => ctx.revert();
@@ -217,9 +216,9 @@ export default function Preloader() {
               viewBox={`0 0 ${W * 2} ${SVG_H}`}
               preserveAspectRatio="none"
             >
-              <path d={pathRef.current} className="pl-signal-path" />
+              <path d={buildSignalPath(layerRef.current, amplitude)} className="pl-signal-path" />
               <g transform={`translate(${W}, 0)`}>
-                <path d={pathRef.current} className="pl-signal-path" />
+                <path d={buildSignalPath(layerRef.current, amplitude)} className="pl-signal-path" />
               </g>
             </svg>
           </div>
