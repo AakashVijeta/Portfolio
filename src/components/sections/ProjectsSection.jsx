@@ -1,5 +1,8 @@
+import { useLayoutEffect, useRef } from 'react';
+import gsap from 'gsap';
 import { useSectionContext } from '../../context/SectionContext';
 import { projectDetails } from '../../data/projects';
+import { scrambleText } from '../../utils/scramble';
 
 const CLASSIFIED_SLOTS = [
   { slug: '__c1', codename: 'CLASSIFIED', tag: 'REDACTED' },
@@ -7,19 +10,68 @@ const CLASSIFIED_SLOTS = [
   { slug: '__c3', codename: 'CLASSIFIED', tag: 'REDACTED' },
 ];
 
-export default function ProjectsSection() {
+export default function ProjectsSection({ isActive }) {
   const { setOverlayProject } = useSectionContext();
+  const rootRef = useRef(null);
   const cards = [...projectDetails, ...CLASSIFIED_SLOTS];
+
+  useLayoutEffect(() => {
+    if (!isActive) return;
+    const title = rootRef.current?.querySelector('.scramble-title');
+    if (title) scrambleText(title);
+  }, [isActive]);
+
+  useLayoutEffect(() => {
+    const root = rootRef.current;
+    if (!root) return undefined;
+
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    if (prefersReduced || !canHover) return undefined;
+
+    const ctx = gsap.context(() => {
+      const strips = gsap.utils.toArray('.project-strip:not(:disabled)');
+      const cleanups = strips.map((strip) => {
+        const details = strip.querySelector('.strip-details');
+        const corners = strip.querySelectorAll('.corner');
+        const barcode = strip.querySelector('.strip-barcode');
+
+        const enter = () => {
+          gsap.to(details, { y: -4, duration: 0.42, ease: 'power3.out', overwrite: 'auto' });
+          gsap.to(corners, { opacity: 1, duration: 0.24, stagger: 0.025, overwrite: 'auto' });
+          gsap.to(barcode, { scaleY: 1.18, transformOrigin: 'top center', duration: 0.32, ease: 'power2.out', overwrite: 'auto' });
+        };
+
+        const leave = () => {
+          gsap.to(details, { y: 0, duration: 0.38, ease: 'power3.out', overwrite: 'auto' });
+          gsap.to(corners, { opacity: 0, duration: 0.2, overwrite: 'auto', clearProps: 'opacity' });
+          gsap.to(barcode, { scaleY: 1, duration: 0.28, ease: 'power2.out', overwrite: 'auto', clearProps: 'transform' });
+        };
+
+        strip.addEventListener('mouseenter', enter);
+        strip.addEventListener('mouseleave', leave);
+        return () => {
+          strip.removeEventListener('mouseenter', enter);
+          strip.removeEventListener('mouseleave', leave);
+        };
+      });
+
+      return () => cleanups.forEach((cleanup) => cleanup());
+    }, root);
+
+    return () => ctx.revert();
+  }, []);
 
   return (
     <section
+      ref={rootRef}
       className="section section-stripe projects-section"
       style={{ flexDirection: 'column', alignItems: 'stretch', padding: 0, overflow: 'hidden' }}
     >
       <header className="projects-topbar section-enter-item">
         <div className="projects-topbar-row">
           <div className="projects-title">
-            EVIDENCE BOARD
+            <span className="scramble-title">EVIDENCE BOARD</span>
             <div className="speed-line" />
           </div>
           <div className="projects-topmeta">

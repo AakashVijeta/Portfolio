@@ -1,10 +1,22 @@
+import { useLayoutEffect, useRef } from 'react';
+import { scrambleText } from '../../utils/scramble';
+
 const EMAIL = 'aakashvijeta2@gmail.com';
 const GITHUB = 'https://github.com/AakashVijeta';
 const LINKEDIN = 'https://linkedin.com/in/aakashvijeta';
 
-export default function ContactSection() {
+export default function ContactSection({ isActive }) {
+  const rootRef = useRef(null);
+
+  useLayoutEffect(() => {
+    if (!isActive) return;
+    const title = rootRef.current?.querySelector('.contact-title');
+    if (title) scrambleText(title);
+  }, [isActive]);
+
   return (
     <section
+      ref={rootRef}
       className="section section-stripe"
       style={{
         flexDirection: 'column',
@@ -48,7 +60,7 @@ export default function ContactSection() {
           color: 'var(--color-accent)',
           textTransform: 'uppercase',
         }}>
-          Initiate Contact
+          <span className="contact-title">Initiate Contact</span>
           <div className="speed-line" />
         </div>
 

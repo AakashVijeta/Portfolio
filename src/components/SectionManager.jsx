@@ -24,16 +24,23 @@ export default function SectionManager({ sections }) {
 
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (prefersReduced) {
-      gsap.set(items, { opacity: 1, y: 0 });
+      gsap.set(items, { opacity: 1, y: 0, filter: 'blur(0px)' });
       return;
     }
 
     // Kill any running tweens on these items before animating in
     gsap.killTweensOf(items);
     gsap.fromTo(items,
-      { opacity: 0, y: 20 },
-      { opacity: 1, y: 0, duration: 0.5, stagger: 0.08, ease: 'power2.out',
-        onComplete: () => gsap.set(items, { clearProps: 'transform,opacity' }) }
+      { opacity: 0, y: 28, filter: 'blur(8px)' },
+      {
+        opacity: 1,
+        y: 0,
+        filter: 'blur(0px)',
+        duration: 0.68,
+        stagger: { each: 0.07, from: 'start' },
+        ease: 'power3.out',
+        onComplete: () => gsap.set(items, { clearProps: 'transform,opacity,filter' }),
+      }
     );
   }, []);
 
@@ -41,7 +48,7 @@ export default function SectionManager({ sections }) {
     const el = sectionRefs.current[index];
     if (!el) return;
     const items = el.querySelectorAll('.section-enter-item');
-    if (items.length) gsap.set(items, { opacity: 0, y: 20 });
+    if (items.length) gsap.set(items, { opacity: 0, y: 28, filter: 'blur(8px)' });
   }, []);
 
   const advance = useCallback(async (dir) => {

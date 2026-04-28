@@ -1,3 +1,6 @@
+import { useLayoutEffect, useRef } from 'react';
+import { scrambleText } from '../../utils/scramble';
+
 const CORE_PRIMARY = ['Python', 'FastAPI'];
 const CORE_REST = [
   'React', 'TypeScript',
@@ -45,9 +48,18 @@ const EXPERIENCES = [
   },
 ];
 
-export default function AboutSection() {
+export default function AboutSection({ isActive }) {
+  const rootRef = useRef(null);
+
+  useLayoutEffect(() => {
+    if (!isActive) return;
+    const title = rootRef.current?.querySelector('.profiler-title');
+    if (title) scrambleText(title);
+  }, [isActive]);
+
   return (
     <section
+      ref={rootRef}
       className="section section-stripe about-profiler section-scroll"
       style={{
         flexDirection: 'column',
