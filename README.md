@@ -1,56 +1,97 @@
-# aakashvijeta.me
+# Aakash Vijeta — Cinematic Portfolio
 
-Personal portfolio site — live at [aakashvijeta.me](https://aakashvijeta.me).
+<div align="center">
+  <p align="center">
+    <a href="https://aakashvijeta.me"><b>Live Demo</b></a> •
+    <a href="#-the-experience">The Experience</a> •
+    <a href="#-tech-stack">Tech Stack</a> •
+    <a href="#-interaction-controls">Controls</a>
+  </p>
+  <img src="https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black" />
+  <img src="https://img.shields.io/badge/GSAP-3.15-88CE02?style=for-the-badge&logo=greensock&logoColor=white" />
+  <img src="https://img.shields.io/badge/Vite-7.3-646CFF?style=for-the-badge&logo=vite&logoColor=white" />
+  <img src="https://img.shields.io/badge/Vercel-Deployed-000000?style=for-the-badge&logo=vercel&logoColor=white" />
+</div>
 
-Tech-noir, single-page portfolio with a terminal/F1 dual theme, GSAP-powered section transitions, and a custom preloader.
+---
 
-## Tech stack
+## 🎬 The Experience
 
-- React 19 + Vite
-- GSAP (ScrollTrigger, Observer, CustomEase) for all animations and transitions
-- Deployed on Vercel
+The portfolio leverages a **"Cinematic Tech-Noir"** aesthetic, blending industrial F1-inspired UI with terminal-grade digital elements. Every interaction is designed to feel tactile, weighted, and responsive.
 
-## Getting started
+### Key Features
+
+*   **🌑 Atmospheric Noise Engine:** A custom canvas-based animated grain atmosphere that provides depth and texture without sacrificing performance.
+*   **🌓 Dual-Persona Themes:** 
+    *   `TERMINAL` — A phosphor green, CRT-inspired aesthetic for the builder/engineer.
+    *   `F1` — A high-contrast, carbon fibre and racing-red aesthetic for the performance-driven professional.
+*   **⚡ GSAP-Powered Motion System:** Deep integration with GSAP (ScrollTrigger, Observer) for smooth, logic-based section transitions and entrance animations.
+*   **🧩 Text Scramble Logic:** A custom "hacker-style" scramble effect used for headings and interactive elements, providing a sense of real-time decryption.
+*   **⏳ Signal-Tracing Preloader:** A sophisticated entry sequence featuring a collapsing frequency wave and a curtain-split reveal. It uses `sessionStorage` persistence to respect user time on return visits.
+
+---
+
+## 🛠 Tech Stack
+
+| Category | Technology |
+| :--- | :--- |
+| **Framework** | [React 19](https://react.dev/) + [Vite](https://vitejs.dev/) |
+| **Animation** | [GSAP](https://gsap.com/) (ScrollTrigger, CustomEase, Observer) |
+| **Styling** | Vanilla CSS (CSS Variables for dynamic theming) |
+| **Deployment** | [Vercel](https://vercel.com/) |
+
+---
+
+## 📂 Project Structure
 
 ```bash
-npm install
-npm run dev
-```
-
-Then open http://localhost:5173.
-
-## Scripts
-
-- `npm run dev` — start the dev server
-- `npm run build` — production build to `dist/`
-- `npm run preview` — preview the production build locally
-- `npm run lint` — run ESLint
-
-## Project structure
-
-```
 src/
-  components/        React components
-    sections/        IntroSection, ProjectsSection, AboutSection, ContactSection
-  context/           SectionContext — global nav state
-  hooks/             useSectionManager — keyboard/wheel/touch input
-  data/              projects.js — project content
-  styles/            Global CSS, themes, section styles, preloader
-  App.jsx            Root layout
-  main.jsx           Entry point
-public/              Static assets (project images, favicon)
+├── components/        
+│   ├── sections/      # Intro, Projects (Evidence Board), About, Contact
+│   ├── ProjectOverlay.jsx # Detailed project view (Decryption Mode)
+│   ├── Preloader.jsx  # Signal-tracing entry sequence
+│   └── ThemeToggle.jsx # Aesthetic mode switcher
+├── hooks/             
+│   └── useSectionManager.js # Wheel/touch/keyboard navigation logic
+├── utils/             
+│   └── scramble.js    # Character-shuffling animation engine
+├── context/           
+│   └── SectionContext.jsx   # Global state for sections and overlays
+└── styles/            
+    ├── main.css       # Core design system & layout
+    └── sections.css   # Section-specific cinematic styling
 ```
 
-## Themes
+---
 
-Press `T` (or use the toggle top-left) to switch between:
-- **Terminal** — phosphor green CRT aesthetic
-- **F1** — carbon fibre red racing aesthetic
+## ⌨️ Interaction Controls
 
-## Deployment
+| Action | Control |
+| :--- | :--- |
+| **Navigation** | Scroll Wheel / Arrow Keys / Swipe (Mobile) |
+| **Theme Toggle** | Press `T` or use the top-left toggle |
+| **Decrypt Project** | Click any card on the **Evidence Board** |
+| **Exit Overlay** | Press `ESC` or click outside the briefing |
 
-Configured for Vercel. Push to `main` and Vercel handles the rest.
+---
 
-## License
+## 🚀 Getting Started
 
-Personal project — feel free to read the source for reference, but please don't redeploy it as your own.
+```bash
+# Clone and install
+npm install
+
+# Start development
+npm run dev
+
+# Build for production
+npm run build
+```
+
+---
+
+## ⚖️ License
+
+Personal project — feel free to explore the source for architectural reference. Please do not redeploy the design or content as your own.
+
+&copy; 2026 Aakash Vijeta
