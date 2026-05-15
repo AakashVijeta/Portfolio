@@ -2981,6 +2981,19 @@
     box-shadow: none !important;
   }
 
+  .project-card:hover {
+    border-color: var(--color-border) !important;
+  }
+
+  .project-card:hover .project-card-bracket {
+    opacity: 0 !important;
+  }
+
+  .project-card:hover .project-card-cta {
+    color: inherit !important;
+    background: transparent !important;
+  }
+
   /* Neutralize strip hover entirely — slider uses snap, not hover */
   .project-strip:hover:not(:disabled),
   .project-strip:hover:not(:disabled) .project-strip-inner,
@@ -3299,6 +3312,13 @@
   .ihyb-name-b {
     font-size: clamp(2.8rem, 16vw, 6.8rem);
     white-space: normal;
+  }
+
+  /* Italic slant in F1 theme causes last glyph to overhang the container
+     and get clipped by overflow-x: hidden on .intro-hero. */
+  [data-theme="f1"] .ihyb-name-a,
+  [data-theme="f1"] .ihyb-name-b {
+    padding-right: 0.15em;
   }
 
   .ihyb-dossier {

@@ -79,7 +79,7 @@ export function useSectionManager({ activeIndex, isTransitioning, advance }) {
         const scrollable = getActiveScrollable();
         if (scrollable) {
           const { scrollTop, scrollHeight, clientHeight } = scrollable;
-          if (scrollTop + clientHeight < scrollHeight - 24) return;
+          if (scrollTop + clientHeight < scrollHeight - 80) return;
         }
         gesture.lastFiredAt = Date.now();
         advance(1);
@@ -89,7 +89,7 @@ export function useSectionManager({ activeIndex, isTransitioning, advance }) {
         if (isTransitioning || inCooldown()) return;
         if (!isVerticallyDominant(self)) return;
         const scrollable = getActiveScrollable();
-        if (scrollable && scrollable.scrollTop > 24) return;
+        if (scrollable && scrollable.scrollTop > 80) return;
         gesture.lastFiredAt = Date.now();
         advance(-1);
       },
