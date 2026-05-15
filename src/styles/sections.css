@@ -1742,6 +1742,15 @@
     width: min(100%, 260px);
     margin: 0 auto;
   }
+
+  /* Consolidate scroll to outer .about-profiler so the section-advance guard
+     watches the right element. Without this, profiler-main-scroll scrolls
+     independently and the guard always sees scrollTop=0 on the outer container,
+     triggering accidental section changes. */
+  .profiler-main-scroll {
+    overflow-y: visible;
+    max-height: none;
+  }
 }
 
 /* ── About monogram block ───────────────────────────────────── */
