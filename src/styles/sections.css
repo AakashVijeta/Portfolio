@@ -911,13 +911,13 @@
 
 .profiler-main-scroll {
   flex: 1;
+  min-height: 0;
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  overflow-y: auto;
-  max-height: 76vh;
+  overflow: hidden;
   padding: 20px 0;
 }
 
@@ -938,7 +938,9 @@
   width: 100%;
   max-width: 1602px;
   margin: 0 auto;
-  height: min(88dvh, 868px);
+  flex: 1;
+  min-height: 0;
+  max-height: 868px;
   font-family: var(--font-display);
   position: relative;
   z-index: 1;
@@ -1695,6 +1697,95 @@
   }
 }
 
+/* ── Desktop height breakpoints ─────────────────────────────────────────
+   Right column chip content needs ~743px; base overhead is 260px.
+   Each tier reduces chrome so the container grows enough to fit content.
+   ──────────────────────────────────────────────────────────────────── */
+
+/* Tier 1 — 1000-1050px tall screens (e.g. 1440×1000 laptops):
+   Shrinking head/foot/padding alone adds ~60px; content fits. */
+@media (max-height: 1050px) and (min-width: 901px) {
+  .profiler-head {
+    height: 100px;
+    gap: 10px;
+  }
+  .profiler-foot {
+    height: 56px;
+    gap: 8px;
+    padding-top: 10px;
+  }
+  .profiler-main-scroll {
+    padding: 8px 0;
+  }
+  .fingerprint-scanner {
+    aspect-ratio: unset;
+    height: 180px;
+    width: 180px;
+    margin: 0 auto;
+  }
+  .profiler-title {
+    font-size: clamp(1.4rem, 3vw, 2.2rem);
+  }
+}
+
+/* Tier 2 — 768-930px tall screens (e.g. 1366×768, 1280×800):
+   Also shrink chips and cap-top gap so right column content drops to ~550px. */
+@media (max-height: 930px) and (min-width: 901px) {
+  .tech-chip {
+    font-size: 0.75rem;
+    padding: 6px 10px;
+  }
+  .tech-chip-primary {
+    padding: 7px 10px;
+  }
+  .chips-grid {
+    gap: 5px;
+  }
+  .chips-primary {
+    gap: 5px;
+    margin-bottom: 5px;
+  }
+  .tech-category {
+    gap: 5px;
+  }
+  .cap-top {
+    gap: 10px;
+  }
+  .fingerprint-scanner {
+    height: 160px;
+    width: 160px;
+  }
+  .alert-box {
+    width: 60px;
+    height: 60px;
+  }
+}
+
+/* Tier 3 — ≤700px tall screens: further tighten everything. */
+@media (max-height: 700px) and (min-width: 901px) {
+  .profiler-head {
+    height: 80px;
+    gap: 6px;
+  }
+  .profiler-foot {
+    height: 48px;
+  }
+  .profiler-main-scroll {
+    padding: 4px 0;
+  }
+  .fingerprint-scanner {
+    height: 120px;
+    width: 120px;
+  }
+  .tech-chip {
+    font-size: 0.68rem;
+    padding: 4px 8px;
+  }
+  .tech-chip-primary {
+    padding: 5px 8px;
+  }
+}
+
 @media (max-width: 900px) {
   .cap-inner-threat {
     display: none;
@@ -1702,6 +1793,7 @@
 
   .profiler-container {
     grid-template-columns: 1fr;
+    flex: none;
     height: auto;
     max-height: none;
   }

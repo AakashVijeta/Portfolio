@@ -37,10 +37,12 @@
     drop-shadow(0 0 3px var(--color-accent))
     drop-shadow(0 0 6px color-mix(in srgb, var(--color-accent) 50%, transparent));
 }
-/* The flat signal sits at 44vh (centerline top:calc(44% - 30px) + CY 30px),
-   not at the 50% curtain seam — offset the edges so they hand off seamlessly. */
-.pl-curtain-edge--t { bottom: 6vh; }
-.pl-curtain-edge--b { top: -6vh; }
+/* Signal center is at 44% of .pl (var(--pl-axis)), seam is at 50%.
+   Delta = 6% of .pl = 12% of each curtain (height: 50%).
+   Using % instead of vh avoids the layout-vs-visual viewport mismatch
+   on mobile browsers where vh != actual fixed-element height. */
+.pl-curtain-edge--t { bottom: 12%; }
+.pl-curtain-edge--b { top: -12%; }
 
 /* All HUD content sits above the curtains */
 .pl-content {
