@@ -92,7 +92,7 @@ export default function ProjectsSection({ isActive }) {
                 <div
                   key={project.slug}
                   className={`project-bar ${isClassified ? 'project-bar-classified' : ''} ${isProjActive ? 'is-active' : ''}`}
-                  onMouseEnter={() => !isClassified && handleMouseEnter(project)}
+                  onMouseEnter={() => !isClassified && !isTouch() && handleMouseEnter(project)}
                   onClick={() => !isClassified && isTouch() && setOverlayProject(project)}
                   style={{ '--idx': idx }}
                 >

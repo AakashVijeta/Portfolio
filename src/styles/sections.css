@@ -1787,62 +1787,117 @@
 }
 
 @media (max-width: 900px) {
-  .cap-inner-threat {
-    display: none;
-  }
-
-  .profiler-container {
-    grid-template-columns: 1fr;
-    flex: none;
-    height: auto;
-    max-height: none;
-  }
-
-  /* Section becomes vertically scrollable — content taller than viewport on mobile.
-     Extra top/bottom padding gives a little overscroll room so the user can drift
-     past the content edges before a vertical swipe advances the section. */
+  /* ── Section scroll ── */
   .about-profiler {
     overflow-y: auto !important;
     -webkit-overflow-scrolling: touch;
     justify-content: flex-start !important;
     scrollbar-width: none;
-    padding-top: 32px;
-    padding-bottom: 64px;
+    padding-top: 0;
+    padding-bottom: 40px;
   }
+  .about-profiler::-webkit-scrollbar { display: none; }
 
-  .about-profiler::-webkit-scrollbar {
+  /* ── Header/footer: auto height, tighter padding ── */
+  .profiler-head {
+    height: auto;
+    min-height: 60px;
+    padding: 14px clamp(14px, 4vw, 28px) 12px;
+    gap: 8px;
+  }
+  .profiler-title {
+    font-size: clamp(1.5rem, 6.5vw, 2.2rem);
+  }
+  .profiler-head-meta {
     display: none;
   }
-
-  /* Allow all inner panels to show full content rather than clip */
-  .col-behavior {
-    overflow: visible;
+  .profiler-foot {
+    height: auto;
+    min-height: 48px;
+    padding: 10px clamp(14px, 4vw, 28px) 12px;
+    gap: 6px;
   }
 
-  .psych-report {
+  /* ── Main scroll: let outer section handle overflow ──
+     Must use overflow: visible (both axes) — single-axis visible with
+     the other axis non-visible gets silently promoted to auto by CSS,
+     creating a nested scroll container that breaks the section-advance guard. */
+  .profiler-main-scroll {
     overflow: visible;
+    max-height: none;
+    padding: 0;
+    justify-content: flex-start;
   }
 
-  .cap-top {
-    overflow: visible;
+  /* ── Grid: single column, tighter gap and padding ── */
+  .profiler-container {
+    grid-template-columns: 1fr;
+    flex: none;
+    height: auto;
+    max-height: none;
+    gap: 10px;
+    padding: 0 clamp(14px, 4vw, 28px);
   }
 
-  /* Constrain scanner to a fixed square so it doesn't fill the whole viewport */
+  .profiler-module {
+    padding: 12px;
+    transition: none;
+  }
+
+  /* ── Identity column: flex column so status-wrapper spans full card width ──
+     status-wrapper is inside id-data-grid and has grid-column: span 2 already.
+     Keeping id-data-grid as 2-column (desktop default) means span 2 fills the
+     full width of id-data-grid, which itself fills the full col-identity width. */
+  .col-identity {
+    height: auto;
+    overflow: visible;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .identity-name {
+    font-size: 1rem;
+    padding-bottom: 8px;
+  }
   .fingerprint-scanner {
     aspect-ratio: unset;
-    height: 260px;
-    width: min(100%, 260px);
+    height: 180px;
+    width: min(100%, 180px);
     margin: 0 auto;
+    flex-shrink: 0;
+  }
+  .id-data-grid {
+    gap: 8px;
+    font-size: 0.65rem;
+  }
+  .id-val {
+    font-size: 0.78rem;
   }
 
-  /* Consolidate scroll to outer .about-profiler so the section-advance guard
-     watches the right element. Without this, profiler-main-scroll scrolls
-     independently and the guard always sees scrollTop=0 on the outer container,
-     triggering accidental section changes. */
-  .profiler-main-scroll {
-    overflow-y: visible;
-    max-height: none;
+  /* ── Behavior column ── */
+  .col-behavior { overflow: visible; }
+  .psych-report { overflow: visible; }
+  .psych-bio { font-size: 0.85rem; line-height: 1.6; }
+  .analysis-header {
+    font-size: 0.58rem;
+    flex-wrap: wrap;
+    gap: 4px;
   }
+  .history-block-title { font-size: 0.6rem; }
+  .history-item { padding: 6px 0; }
+  .history-date, .history-period { font-size: 0.6rem; }
+  .history-line { font-size: 0.72rem; }
+
+  /* ── Capabilities column ── */
+  .cap-top { overflow: visible; gap: 10px; }
+  .cap-inv-label { font-size: 0.6rem; }
+  .cap-inner-threat { display: none; }
+  .tech-chip {
+    font-size: 0.72rem;
+    padding: 6px 10px;
+  }
+  .tech-chip-primary { padding: 7px 10px; }
+  .chips-grid { gap: 6px; }
+  .chips-primary { gap: 6px; margin-bottom: 6px; }
 }
 
 /* ── About monogram block ───────────────────────────────────── */
@@ -3064,13 +3119,25 @@
   .contact-copy-btn:hover .contact-copy-arrow,
   .contact-cta:hover,
   .tech-chip:hover,
-  .history-item:hover {
+  .history-item:hover,
+  .profiler-module:hover {
     transform: none !important;
   }
 
   .project-card:hover,
-  .evidence-card:hover:not(:disabled) {
+  .evidence-card:hover:not(:disabled),
+  .profiler-module:hover {
     box-shadow: none !important;
+  }
+
+  .evidence-card:hover:not(:disabled) {
+    border-color: var(--color-border) !important;
+  }
+
+  /* Kill transitions so sticky-hover state doesn't animate in/out on touch */
+  .evidence-card,
+  .evidence-card-media img {
+    transition: none !important;
   }
 
   .project-card:hover {
@@ -3084,6 +3151,19 @@
   .project-card:hover .project-card-cta {
     color: inherit !important;
     background: transparent !important;
+  }
+
+  .profiler-module:hover {
+    border-color: var(--color-border) !important;
+  }
+
+  .profiler-module:hover::after {
+    opacity: 0 !important;
+  }
+
+  /* Kill transitions on about cards — pointless on touch, adds jank */
+  .profiler-module {
+    transition: none !important;
   }
 
   /* Neutralize strip hover entirely — slider uses snap, not hover */
@@ -3545,6 +3625,61 @@
   .projects-topbar,
   .contact-topbar {
     height: 72px;
+  }
+}
+
+/* ── Project Overlay links ───────────────────────────────────────── */
+.overlay-links {
+  margin-top: 0;
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.overlay-link {
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  text-decoration: none;
+  text-transform: uppercase;
+  padding: 10px 20px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.overlay-link-secondary {
+  color: var(--color-accent);
+  border: 1px solid var(--color-accent);
+}
+
+.overlay-link-secondary:hover {
+  background: rgba(var(--accent-rgb, 61, 255, 122), 0.1);
+}
+
+.overlay-link-primary {
+  color: var(--color-white);
+  border: 1px solid var(--color-white);
+  font-weight: 700;
+}
+
+.overlay-link-primary:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+@media (max-width: 600px) {
+  .overlay-links {
+    gap: 6px;
+  }
+  .overlay-link {
+    flex: 1;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    padding: 12px 8px;
+    min-height: 48px;
+    white-space: nowrap;
   }
 }
 
