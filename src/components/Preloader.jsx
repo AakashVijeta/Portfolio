@@ -85,8 +85,8 @@ export default function Preloader() {
           yPercent:  100, duration: 0.6, ease: 'power2.inOut',
         }, '<')
         .to([edgeTRef.current, edgeBRef.current], {
-          opacity: 0, duration: 0.3, ease: 'power2.in',
-        }, '>-0.25');
+          opacity: 0, duration: 0.2, ease: 'power2.in',
+        }, '<0.05');
     });
     return () => ctx.revert();
   }, []);
