@@ -32,6 +32,77 @@
   *, *::before, *::after { cursor: none !important; }
 }
 
+/* CustomCursor */
+.cc-dot,
+.cc-ring,
+.cc-label {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 99999;
+  will-change: transform;
+}
+
+.cc-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--color-accent);
+  opacity: 1;
+  transition: opacity 0.18s ease;
+}
+
+.cc-dot.cc-hover,
+.cc-dot.cc-press {
+  opacity: 0;
+}
+
+.cc-ring {
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--color-accent);
+  opacity: 0;
+  transform-origin: center;
+  transition: opacity 0.2s ease,
+              width 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+              height 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+              border-color 0.2s ease;
+}
+
+.cc-ring.cc-hover {
+  opacity: 1;
+  width: 40px;
+  height: 40px;
+}
+
+.cc-ring.cc-press {
+  opacity: 1;
+  width: 28px;
+  height: 28px;
+}
+
+.cc-label {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  color: var(--color-accent);
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9);
+  line-height: 1.4;
+  white-space: nowrap;
+  transition: color 0.2s ease, opacity 0.2s ease;
+}
+
+.cc-label.cc-label-hover,
+.cc-label.cc-label-press {
+  color: var(--color-white);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cc-dot,
+  .cc-ring,
+  .cc-label { transition: none; }
+}
+
 /* Smooth hover micro-transitions on all links and buttons.
    Doesn't add hover effects — only smooths whatever is already defined. */
 a,
