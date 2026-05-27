@@ -934,6 +934,7 @@
 .profiler-container {
   display: grid;
   grid-template-columns: 308px 1fr 308px;
+  grid-template-rows: 100%;
   gap: 22px;
   width: 100%;
   max-width: 1602px;
@@ -941,6 +942,7 @@
   flex: 1;
   min-height: 0;
   max-height: 868px;
+  overflow: hidden;
   font-family: var(--font-display);
   position: relative;
   z-index: 1;
@@ -1482,10 +1484,14 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
+  overflow: hidden;
+  min-height: 0;
+  height: 100%;
 }
 
 .cap-top {
-  flex: 1;
+  flex: 1 1 0;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   gap: 14px;
@@ -1702,9 +1708,9 @@
    Each tier reduces chrome so the container grows enough to fit content.
    ──────────────────────────────────────────────────────────────────── */
 
-/* Tier 1 — 1000-1050px tall screens (e.g. 1440×1000 laptops):
+/* Tier 1 — 1000-1100px tall screens (e.g. 1440×1000, 1920×1080 laptops):
    Shrinking head/foot/padding alone adds ~60px; content fits. */
-@media (max-height: 1050px) and (min-width: 901px) {
+@media (max-height: 1100px) and (min-width: 901px) {
   .profiler-head {
     height: 100px;
     gap: 10px;
@@ -1728,9 +1734,12 @@
   }
 }
 
-/* Tier 2 — 768-930px tall screens (e.g. 1366×768, 1280×800):
-   Also shrink chips and cap-top gap so right column content drops to ~550px. */
-@media (max-height: 930px) and (min-width: 901px) {
+/* Tier 2 — 768-1000px tall screens (e.g. 1366×768, 1280×800, 1806×949):
+   Also shrink chips and cap-top gap so right column content drops to ~550px.
+   Upper bound raised from 930→1000 so the 931-1050 dead zone (Tier 1 chrome
+   shrink active but chips still base size) doesn't overflow the right panel
+   and push the danger triangle below the .cap-top border box. */
+@media (max-height: 1000px) and (min-width: 901px) {
   .tech-chip {
     font-size: 0.75rem;
     padding: 6px 10px;
@@ -2194,7 +2203,7 @@
   min-height: 0;
   max-height: 76vh;
   overflow: hidden;
-  transition: grid-template-columns 0.9s cubic-bezier(0.25, 1, 0.5, 1);
+  transition: grid-template-columns 0.55s cubic-bezier(0.22, 1, 0.36, 1);
   padding: 0 clamp(20px, 3vw, 48px);
 }
 
@@ -2221,7 +2230,7 @@
   max-height: 75vh;
   padding: 24px 20px;
   /* Reduced horizontal padding to shrink distance */
-  transition: width 0.8s cubic-bezier(0.25, 1, 0.5, 1), max-width 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+  transition: width 0.55s cubic-bezier(0.22, 1, 0.36, 1), max-width 0.55s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .projects-layout.is-active .projects-stack {
@@ -2238,8 +2247,8 @@
   overflow: hidden;
   cursor: pointer;
   contain: layout paint;
-  will-change: flex-grow, opacity;
-  transition: flex 0.45s cubic-bezier(0.25, 1, 0.5, 1), filter 0.35s ease, opacity 0.35s ease;
+  transform: translateZ(0);
+  transition: flex 0.55s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.3s ease;
 }
 
 .project-bar:disabled {
@@ -2314,14 +2323,15 @@
   opacity: 0.4;
   filter: grayscale(1);
   transform: scale(1.15) translateZ(0);
-  will-change: transform, opacity, filter;
-  transition: transform 0.6s cubic-bezier(0.4, 0, 0.6, 1), opacity 0.4s ease, filter 0.4s ease;
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.6, 1), opacity 0.4s ease;
 }
 
 .project-bar.is-active .bg-img {
   opacity: 0.85;
   filter: grayscale(0);
-  transform: scale(1);
+  transform: scale(1) translateZ(0);
 }
 
 /* Content */
@@ -2339,6 +2349,7 @@
 
 .strip-left,
 .strip-right {
+  transform: translateZ(0);
   transition: transform 0.45s cubic-bezier(0.25, 1, 0.5, 1);
   will-change: transform;
 }
@@ -2359,6 +2370,8 @@
   letter-spacing: 0.15em;
   color: var(--color-accent);
   text-transform: uppercase;
+  will-change: transform;
+  transform: translateZ(0);
   transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
@@ -2376,6 +2389,8 @@
   text-transform: capitalize;
   opacity: 0.7;
   transform-origin: left bottom;
+  transform: translateZ(0);
+  will-change: transform;
   transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s ease;
 }
 
@@ -2517,7 +2532,7 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  transition: all 0.3s ease;
+  transition: background 0.3s ease, color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
   font-weight: 600;
 }
 
@@ -2554,7 +2569,7 @@
   color: var(--color-accent);
   background: rgba(0, 0, 0, 0.3);
   border-radius: 6px;
-  transition: all 0.3s;
+  transition: background 0.3s, color 0.3s, border-color 0.3s;
 }
 
 .pane-tag:hover {

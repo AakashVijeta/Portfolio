@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { projectDetails } from '../../data/projects';
 import { useSectionContext } from '../../context/SectionContext';
@@ -42,15 +42,15 @@ export default function ProjectsSection({ isActive }) {
 
     const pane = paneRef.current;
     const ctx = gsap.context(() => {
-      const tl = gsap.timeline({ defaults: { ease: 'power2.out', clearProps: 'all' } });
+      const tl = gsap.timeline({ defaults: { ease: 'power2.out', force3D: true, clearProps: 'transform,opacity' } });
 
-      tl.from(pane, { opacity: 0, x: -16, filter: 'blur(6px)', duration: 0.4 });
-      tl.from('.pane-title',    { y: 16, opacity: 0, duration: 0.34 }, '<0.05');
-      tl.from('.pane-subtitle', { y: 12, opacity: 0, duration: 0.32 }, '<0.07');
-      tl.from('.pane-link-btn', { y: 8,  opacity: 0, stagger: 0.08, duration: 0.26 }, '<0.06');
-      tl.from('.pane-tag',      { scale: 0.78, opacity: 0, stagger: 0.04, duration: 0.22 }, '<0.05');
-      tl.from('.pane-heading',  { opacity: 0, letterSpacing: '0.45em', duration: 0.3 }, '<0.1');
-      tl.from('.pane-feature',  { x: -14, opacity: 0, stagger: 0.07, duration: 0.28 }, '<0.05');
+      tl.from(pane, { opacity: 0, x: -16, duration: 0.35 });
+      tl.from('.pane-title',    { y: 16, opacity: 0, duration: 0.3 }, '<0.05');
+      tl.from('.pane-subtitle', { y: 12, opacity: 0, duration: 0.28 }, '<0.06');
+      tl.from('.pane-link-btn', { y: 8,  opacity: 0, stagger: 0.06, duration: 0.24 }, '<0.05');
+      tl.from('.pane-tag',      { scale: 0.78, opacity: 0, stagger: 0.03, duration: 0.2 }, '<0.04');
+      tl.from('.pane-heading',  { opacity: 0, duration: 0.26 }, '<0.08');
+      tl.from('.pane-feature',  { x: -14, opacity: 0, stagger: 0.05, duration: 0.24 }, '<0.04');
     }, pane);
 
     return () => ctx.revert();
@@ -59,6 +59,18 @@ export default function ProjectsSection({ isActive }) {
   useLayoutEffect(() => {
     if (!isActive) return;
   }, [isActive]);
+
+  useEffect(() => {
+    projectDetails.forEach(p => {
+      if (!p.image) return;
+      const img = new Image();
+      img.src = p.image;
+      if (img.decode) img.decode().catch(() => {});
+    });
+
+    const dummy = { v: 0 };
+    gsap.to(dummy, { v: 1, duration: 0.01, onComplete: () => gsap.killTweensOf(dummy) });
+  }, []);
 
   return (
     <section
@@ -98,7 +110,14 @@ export default function ProjectsSection({ isActive }) {
                 >
                   <div className="project-bar-inner">
                     {!isClassified && project.image && (
-                      <img src={project.image} alt={project.title} className="bg-img" />
+                      <img
+                        src={project.image}
+                        alt={project.title}
+                        className="bg-img"
+                        loading="eager"
+                        decoding="async"
+                        fetchpriority="high"
+                      />
                     )}
                     <div className="strip-content">
                       <div className="strip-left">
