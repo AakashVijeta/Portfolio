@@ -1838,9 +1838,13 @@
     justify-content: flex-start;
   }
 
-  /* ── Grid: single column, tighter gap and padding ── */
+  /* ── Grid: single column, tighter gap and padding ──
+     Must override desktop's `grid-template-rows: 100%`. Left at 100% the
+     single explicit row eats full height and items 2-3 fall into broken
+     implicit rows — only col-identity renders. `auto` rows size to content. */
   .profiler-container {
     grid-template-columns: 1fr;
+    grid-template-rows: auto;
     flex: none;
     height: auto;
     max-height: none;
@@ -1896,8 +1900,14 @@
   .history-date, .history-period { font-size: 0.6rem; }
   .history-line { font-size: 0.72rem; }
 
-  /* ── Capabilities column ── */
-  .cap-top { overflow: visible; gap: 10px; }
+  /* ── Capabilities column ──
+     Wrapper drops desktop height:100%/overflow:hidden so it sizes to content
+     in the auto grid row instead of collapsing. */
+  .col-capabilities-wrapper {
+    height: auto;
+    overflow: visible;
+  }
+  .cap-top { overflow: visible; gap: 10px; flex: none; }
   .cap-inv-label { font-size: 0.6rem; }
   .cap-inner-threat { display: none; }
   .tech-chip {

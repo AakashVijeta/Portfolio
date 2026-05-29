@@ -116,7 +116,7 @@ export default function ProjectsSection({ isActive }) {
                         className="bg-img"
                         loading="eager"
                         decoding="async"
-                        fetchpriority="high"
+                        fetchPriority="high"
                       />
                     )}
                     <div className="strip-content">
