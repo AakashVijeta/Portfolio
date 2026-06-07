@@ -1698,8 +1698,283 @@
 
 @media (max-width: 1100px) {
   .profiler-container {
-    grid-template-columns: 220px 1fr 210px;
+    grid-template-columns: 220px minmax(0, 1fr) 210px;
     gap: 14px;
+  }
+}
+
+/* 13-inch laptop / compact desktop pass. Keep this above the phone breakpoint:
+   mobile owns max-width: 768px, this layer only densifies desktop layouts. */
+@media (min-width: 769px) and (max-width: 1320px) {
+  .section {
+    min-width: 0;
+  }
+
+  .ihyb-topbar,
+  .ihyb-bottombar {
+    font-size: clamp(0.48rem, 0.65vw, 0.58rem);
+    letter-spacing: 0.16em;
+  }
+
+  .ihyb-topbar-left {
+    min-width: 0;
+    flex-wrap: wrap;
+    row-gap: 6px;
+  }
+
+  .ihyb-center {
+    grid-template-columns: minmax(0, 1fr) minmax(180px, 240px);
+    justify-content: stretch;
+    gap: clamp(18px, 3vw, 40px);
+    padding-inline: clamp(24px, 3.5vw, 48px);
+  }
+
+  .ihyb-namewrap {
+    width: 100%;
+  }
+
+  .ihyb-name-a,
+  .ihyb-name-b {
+    font-size: clamp(4rem, 9.2vw, 7.4rem);
+  }
+
+  .ihyb-dossier {
+    width: min(100%, 240px);
+    justify-self: end;
+    font-size: clamp(0.58rem, 0.72vw, 0.7rem);
+  }
+
+  .ihyb-dos-row {
+    gap: 10px;
+  }
+
+  .profiler-head,
+  .projects-topbar,
+  .contact-topbar {
+    height: 112px;
+    padding-inline: clamp(24px, 4vw, 52px);
+  }
+
+  .profiler-foot,
+  .projects-bottombar,
+  .contact-bottombar {
+    height: 64px;
+    padding-inline: clamp(24px, 4vw, 52px);
+    font-size: 0.58rem;
+    letter-spacing: 0.18em;
+  }
+
+  .profiler-title,
+  .projects-title,
+  .contact-title-main {
+    font-size: clamp(1.7rem, 3.3vw, 2.7rem);
+    letter-spacing: 0.1em;
+  }
+
+  .profiler-head-meta,
+  .projects-topmeta,
+  .contact-topmeta {
+    font-size: 0.58rem;
+    letter-spacing: 0.18em;
+  }
+
+  .profiler-container {
+    grid-template-columns: minmax(190px, 240px) minmax(0, 1fr) minmax(190px, 240px);
+    gap: clamp(12px, 1.6vw, 18px);
+    padding-inline: clamp(20px, 3vw, 40px);
+  }
+
+  .profiler-module,
+  .col-identity,
+  .col-behavior,
+  .col-capabilities-wrapper {
+    min-width: 0;
+  }
+
+  .identity-name,
+  .cap-inv-label,
+  .danger-label {
+    overflow-wrap: anywhere;
+  }
+
+  .analysis-header,
+  .history-header,
+  .status-footer {
+    flex-wrap: wrap;
+  }
+
+  .psych-bio {
+    font-size: clamp(0.9rem, 1.05vw, 1rem);
+  }
+
+  .history-block-title {
+    letter-spacing: 0.16em;
+  }
+
+  .projects-layout {
+    max-height: none;
+    padding-inline: clamp(16px, 2.5vw, 32px);
+  }
+
+  .projects-layout.is-active {
+    grid-template-columns: minmax(0, 56%) minmax(0, 44%);
+  }
+
+  .projects-stack {
+    width: 100%;
+    padding: 16px 12px;
+  }
+
+  .strip-content {
+    padding: clamp(1rem, 1.8vw, 1.25rem);
+    gap: 16px;
+  }
+
+  .strip-title {
+    font-size: clamp(1.05rem, 1.5vw, 1.35rem);
+  }
+
+  .project-bar.is-active .strip-title {
+    transform: scale(1.45);
+  }
+
+  .strip-tag {
+    max-width: 18ch;
+    text-align: right;
+  }
+
+  .projects-details-col {
+    padding: 12px 12px 12px 6px;
+    min-width: 0;
+  }
+
+  .project-details-pane {
+    gap: 18px;
+    min-width: 0;
+    padding: 14px 12px 14px 0;
+  }
+
+  .pane-title {
+    font-size: clamp(1.6rem, 2.8vw, 2.6rem);
+  }
+
+  .contact-main {
+    padding: 32px clamp(24px, 4vw, 52px);
+  }
+
+  .contact-command {
+    max-width: 100%;
+    min-width: 0;
+    font-size: clamp(1.65rem, 4.4vw, 3rem);
+  }
+
+  .contact-target {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .contact-bracket-box,
+  .contact-bracket-box:link,
+  .contact-bracket-box:visited {
+    font-size: clamp(0.66rem, 0.9vw, 0.82rem);
+    letter-spacing: 0.22em;
+    padding: 12px 20px;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1180px) {
+  .ihyb-center {
+    grid-template-columns: 1fr;
+    align-content: center;
+    gap: 22px;
+  }
+
+  .ihyb-dossier {
+    width: min(100%, 520px);
+    justify-self: start;
+  }
+
+  .ihyb-dossier::before {
+    left: 0;
+    right: 0;
+    top: -12px;
+    bottom: auto;
+    width: auto;
+    height: 1px;
+  }
+
+  .ihyb-name-a,
+  .ihyb-name-b {
+    font-size: clamp(4rem, 10.5vw, 6.6rem);
+  }
+
+  .profiler-container {
+    grid-template-columns: minmax(170px, 210px) minmax(0, 1fr) minmax(170px, 210px);
+  }
+
+  .id-data-grid,
+  .chips-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .id-data-grid > .status-wrapper {
+    grid-column: span 1;
+  }
+
+  .status-main {
+    font-size: 1.08rem;
+  }
+
+  .projects-layout.is-active {
+    grid-template-columns: minmax(0, 52%) minmax(0, 48%);
+  }
+
+  .project-bar.is-active .strip-left {
+    transform: translateX(8px);
+  }
+
+  .project-bar.is-active .strip-right {
+    transform: translateX(-8px);
+  }
+
+  .project-bar.is-active .strip-title {
+    transform: scale(1.24);
+  }
+
+  .strip-right {
+    display: none;
+  }
+
+  .pane-subtitle,
+  .pane-feature {
+    font-size: 0.82rem;
+  }
+
+  .contact-command {
+    font-size: clamp(1.25rem, 4vw, 2.4rem);
+    letter-spacing: 0.02em;
+  }
+}
+
+@media (min-width: 901px) and (max-width: 1320px) {
+  .profiler-main-scroll {
+    padding: 10px 0;
+  }
+
+  .fingerprint-scanner {
+    height: clamp(150px, 17vw, 210px);
+    width: clamp(150px, 17vw, 210px);
+    aspect-ratio: unset;
+    margin-inline: auto;
+  }
+
+  .tech-chip {
+    font-size: clamp(0.68rem, 0.8vw, 0.76rem);
+    padding: 6px 9px;
+  }
+
+  .tech-chip-primary {
+    padding: 7px 9px;
   }
 }
 
@@ -3725,5 +4000,468 @@
   .contact-bottombar,
   .ihyb-bottombar {
     margin-bottom: clamp(12px, 2dvh, 20px);
+  }
+}
+
+/* PROJECTS + ABOUT FINAL COMPACT DESKTOP PASS
+   These rules intentionally live late in the file so they override the newer
+   Projects v2 block while staying completely outside the mobile breakpoint. */
+@media (min-width: 901px) and (max-width: 1240px) {
+  :root {
+    --compact-section-edge: clamp(44px, 5vw, 72px);
+  }
+
+  .about-profiler,
+  .projects-section {
+    min-width: 0;
+  }
+
+  .profiler-head,
+  .projects-topbar {
+    height: 92px;
+    gap: 8px;
+    padding: 0 var(--compact-section-edge) 12px;
+  }
+
+  .profiler-foot,
+  .projects-bottombar {
+    height: 52px;
+    gap: 8px;
+    padding: 10px var(--compact-section-edge) 0;
+    font-size: 0.54rem;
+    letter-spacing: 0.16em;
+  }
+
+  .profiler-title,
+  .projects-title {
+    font-size: clamp(1.55rem, 3.2vw, 2.25rem);
+    letter-spacing: 0.08em;
+  }
+
+  .profiler-head-meta,
+  .projects-topmeta {
+    font-size: 0.54rem;
+    letter-spacing: 0.15em;
+  }
+
+  .profiler-main-scroll {
+    align-items: stretch;
+    justify-content: center;
+    padding: 8px var(--compact-section-edge);
+  }
+
+  .profiler-container {
+    grid-template-columns: minmax(180px, 0.68fr) minmax(0, 1.3fr) minmax(180px, 0.68fr);
+    gap: clamp(10px, 1.35vw, 16px);
+    padding-inline: 0;
+    max-width: none;
+  }
+
+  .profiler-module {
+    padding: 10px;
+  }
+
+  .identity-name {
+    font-size: clamp(0.82rem, 1.1vw, 1rem);
+    padding-bottom: 8px;
+  }
+
+  .fingerprint-scanner {
+    width: clamp(132px, 15vw, 168px);
+    height: clamp(132px, 15vw, 168px);
+  }
+
+  .id-data-grid {
+    grid-template-columns: 1fr;
+    gap: 7px;
+    font-size: 0.6rem;
+  }
+
+  .id-data-grid > .status-wrapper {
+    grid-column: span 1;
+  }
+
+  .id-key {
+    font-size: 0.58rem;
+  }
+
+  .id-val {
+    font-size: 0.7rem;
+    overflow-wrap: anywhere;
+  }
+
+  .status-wrapper {
+    padding: 10px;
+    margin-top: 8px;
+  }
+
+  .status-main {
+    font-size: clamp(0.88rem, 1.4vw, 1.08rem);
+  }
+
+  .status-footer {
+    gap: 6px;
+  }
+
+  .analysis-header {
+    font-size: 0.66rem;
+    padding-bottom: 0.7rem;
+    margin-bottom: 1rem;
+    gap: 6px 12px;
+  }
+
+  .psych-report {
+    padding-right: 0;
+  }
+
+  .psych-bio {
+    font-size: clamp(0.82rem, 1vw, 0.94rem);
+    line-height: 1.55;
+    margin-bottom: 1rem;
+  }
+
+  .dossier-history {
+    gap: 10px;
+  }
+
+  .history-block-title {
+    font-size: 0.58rem;
+    letter-spacing: 0.13em;
+    margin-bottom: 8px;
+  }
+
+  .history-item {
+    margin-bottom: 0.75rem;
+    font-size: 0.76rem;
+    line-height: 1.42;
+  }
+
+  .history-header {
+    gap: 0.45rem;
+  }
+
+  .history-line {
+    font-size: 0.78rem;
+    line-height: 1.4;
+  }
+
+  .cap-top {
+    gap: 8px;
+  }
+
+  .cap-inv-label,
+  .danger-label {
+    font-size: 0.58rem;
+    letter-spacing: 0.18em;
+  }
+
+  .tech-category {
+    gap: 4px;
+  }
+
+  .cat-title {
+    font-size: 0.58rem;
+    margin-bottom: 6px;
+  }
+
+  .chips-primary,
+  .chips-grid {
+    gap: 5px;
+    margin-bottom: 5px;
+  }
+
+  .chips-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .tech-chip {
+    font-size: clamp(0.62rem, 0.78vw, 0.72rem);
+    padding: 5px 8px;
+  }
+
+  .tech-chip-primary {
+    padding: 6px 8px;
+  }
+
+  .cap-inner-threat {
+    padding-top: 8px;
+    gap: 5px;
+  }
+
+  .alert-box {
+    width: 48px;
+    height: 48px;
+  }
+
+  .projects-layout {
+    max-height: none;
+    padding: 0 var(--compact-section-edge);
+    grid-template-columns: minmax(0, 1fr) 0;
+  }
+
+  .projects-layout.is-active {
+    grid-template-columns: minmax(0, 54%) minmax(0, 46%);
+  }
+
+  .projects-stack-col,
+  .projects-details-col {
+    min-width: 0;
+  }
+
+  .projects-stack {
+    width: 100%;
+    max-width: none;
+    max-height: none;
+    padding: 12px 8px;
+    gap: 7px;
+  }
+
+  .projects-layout.is-active .projects-stack {
+    width: 100%;
+    max-width: none;
+  }
+
+  .projects-layout.is-active .project-bar {
+    flex: 0.55;
+  }
+
+  .projects-layout.is-active .project-bar.is-active {
+    flex: 4.4;
+  }
+
+  .project-bar,
+  .project-bar-inner {
+    border-radius: 10px;
+  }
+
+  .strip-content {
+    padding: 14px 16px;
+    min-width: 0;
+  }
+
+  .strip-left {
+    min-width: 0;
+  }
+
+  .strip-id {
+    font-size: 0.52rem;
+  }
+
+  .strip-title {
+    max-width: 100%;
+    font-size: clamp(0.95rem, 1.35vw, 1.15rem);
+    line-height: 1.05;
+  }
+
+  .project-bar.is-active .strip-left,
+  .project-bar.is-active .strip-right {
+    transform: none;
+  }
+
+  .project-bar.is-active .strip-id {
+    transform: translateY(-0.75rem);
+  }
+
+  .project-bar.is-active .strip-title {
+    transform: scale(1.16);
+  }
+
+  .strip-right {
+    display: none;
+  }
+
+  .projects-details-col {
+    align-items: stretch;
+    padding: 0 8px 0 6px;
+  }
+
+  .project-details-pane {
+    max-width: none;
+    height: min(100%, 560px);
+    max-height: 100%;
+    align-self: center;
+    gap: 12px;
+    padding: 6px 10px 6px 0;
+    overscroll-behavior: contain;
+  }
+
+  .pane-title {
+    font-size: clamp(1.18rem, 2.35vw, 1.9rem);
+    line-height: 1;
+  }
+
+  .pane-subtitle {
+    font-size: 0.78rem;
+    line-height: 1.4;
+  }
+
+  .pane-links {
+    gap: 8px;
+  }
+
+  .pane-link-btn {
+    font-size: 0.58rem;
+    padding: 7px 10px;
+  }
+
+  .pane-tech {
+    gap: 5px;
+  }
+
+  .pane-tag {
+    font-size: 0.54rem;
+    padding: 4px 7px;
+  }
+
+  .pane-section {
+    gap: 8px;
+    margin-top: 0;
+  }
+
+  .pane-heading {
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+  }
+
+  .pane-features {
+    gap: 7px;
+  }
+
+  .pane-feature {
+    font-size: 0.73rem;
+    line-height: 1.36;
+    padding-left: 10px;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1040px) {
+  :root {
+    --compact-section-edge: clamp(28px, 5vw, 48px);
+  }
+
+  .about-profiler {
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+    justify-content: flex-start !important;
+    scrollbar-width: none;
+  }
+
+  .about-profiler::-webkit-scrollbar {
+    display: none;
+  }
+
+  .profiler-head,
+  .projects-topbar {
+    height: auto;
+    min-height: 72px;
+    padding: 14px var(--compact-section-edge) 10px;
+  }
+
+  .profiler-foot,
+  .projects-bottombar {
+    height: auto;
+    min-height: 44px;
+    padding: 9px var(--compact-section-edge) 10px;
+  }
+
+  .profiler-main-scroll {
+    overflow: visible;
+    padding: 0 var(--compact-section-edge) 18px;
+    justify-content: flex-start;
+  }
+
+  .profiler-container {
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+    grid-template-rows: auto auto;
+    grid-template-areas:
+      "identity behavior"
+      "capabilities behavior";
+    flex: none;
+    height: auto;
+    max-height: none;
+    overflow: visible;
+    gap: 12px;
+  }
+
+  .col-identity {
+    grid-area: identity;
+    height: auto;
+  }
+
+  .col-behavior {
+    grid-area: behavior;
+    overflow: visible;
+  }
+
+  .col-capabilities-wrapper {
+    grid-area: capabilities;
+    height: auto;
+    overflow: visible;
+  }
+
+  .psych-report,
+  .cap-top {
+    overflow: visible;
+  }
+
+  .cap-inner-threat {
+    display: none;
+  }
+
+  .projects-layout {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    gap: 10px;
+    padding: 0 var(--compact-section-edge);
+  }
+
+  .projects-layout.is-active {
+    grid-template-columns: none;
+  }
+
+  .projects-stack-col {
+    height: 52%;
+    flex: 0 0 52%;
+  }
+
+  .projects-details-col {
+    height: 48%;
+    flex: 1 1 48%;
+    padding: 0 0 8px;
+    align-items: stretch;
+  }
+
+  .projects-stack {
+    height: 100%;
+    padding: 8px 0;
+  }
+
+  .projects-layout.is-active .project-bar {
+    flex: 0.85;
+    opacity: 0.42;
+  }
+
+  .projects-layout.is-active .project-bar.is-active {
+    flex: 2.6;
+  }
+
+  .project-details-pane {
+    height: 100%;
+    max-height: 100%;
+    padding: 0 8px 8px 0;
+    overscroll-behavior: contain;
+  }
+
+  .pane-features {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .pane-feature {
+    padding: 8px;
+    border-left-width: 1px;
+    border-top: 1px solid var(--color-border);
   }
 }
