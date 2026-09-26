@@ -129,4 +129,61 @@ export const projectDetails = [
       metrics: "Backtested P&L with TP/SL, precision at threshold, hit-rate on the 5-day horizon.",
     },
   },
+  {
+    slug: "racing-line-optimization",
+    tag: "Reinforcement Learning",
+    title: "Racing Line Optimization",
+    subtitle:
+      "A Soft Actor-Critic agent that teaches itself to drive fast laps around real Formula 1 circuits — and finishes 48 of 50 tracks it has never seen.",
+    techStack: [
+      "Python",
+      "Stable-Baselines3",
+      "SAC",
+      "Gymnasium",
+      "NumPy",
+      "pygame",
+      "ffmpeg",
+      "TensorBoard",
+      "pytest",
+      "GitHub Actions",
+    ],
+    image: BASE + "assets/racing-line.png",
+    repos: [
+      { label: "GitHub", href: "https://github.com/AakashVijeta/racing-line-optimization" },
+      { label: "Lap Video", href: "https://github.com/AakashVijeta/racing-line-optimization/releases/download/models-v1/suzuka_lap.mp4" },
+    ],
+    overview: [
+      "A Soft Actor-Critic agent drives a simplified F1 car around real-world circuits in a custom Gymnasium environment, outputting continuous steering and throttle/brake at every step. It trains on 37 real circuits plus 400 procedurally generated ones, and is scored only on tracks it never saw — including Suzuka, which the current model laps in 1:27.9 at an average of 238.5 km/h.",
+      "The environment is built from scratch: GeoJSON circuit layouts are projected to metres, fitted with a centripetal Catmull-Rom spline and resampled by curvature, then driven by a vehicle model with a speed-dependent traction circle, aerodynamic downforce, drag and kinematic bicycle steering. A procedural generator produces realistic circuits tuned to match the real ones' corner and straight statistics.",
+      "Generalization was the hard part. Adding generated tracks and domain randomization — random width, mirroring, reversal and mid-lap starts — took unseen-track completion from 21/50 to 48/50. Along the way the project surfaced subtle failure modes: SAC's auto-tuned entropy silently cancelling the progress reward, and agents learning to park before hard corners because a postponed penalty is a discounted one.",
+    ],
+    features: [
+      "Generalizes to unseen tracks. The v15b model finishes 48 of 50 held-out generated circuits (vs. 21/50 for a real-circuits-only baseline) and laps the never-seen Suzuka in 1:27.9.",
+      "Physics-based vehicle model. A kinematic bicycle with a speed-dependent traction circle, downforce reaching ~7 G at 250 km/h, drag capping top speed near 340 km/h, and ±0.4 rad steering.",
+      "Procedural circuit generator. 400 training, 16 validation and 50 test tracks, rejected if self-intersecting or too tight, and tuned to match real circuits' corner radius, corner count and straight fraction.",
+      "Domain randomization. Every episode scales track width, may mirror or reverse the layout, and starts at a random point, offset and speed so the policy can't memorize a lap.",
+      "Careful reward design. Per-metre progress reward, jitter penalty, and a stall penalty sized so parking before a corner is always worse than crashing — even after discounting.",
+      "Broadcast-style lap renderer. Chase cam with kerbs, speed-coloured racing line, speed dial, throttle/brake bars, G-G diagram and live telemetry traces, piped straight into ffmpeg at 1080p60.",
+    ],
+    architecture: `circuits/*.geojson ──▶ track_preprocessing.py ──▶ tracks/*.npy
+  (lon/lat lines)        project · dedupe ·          (centerline
+                         spline · resample            in metres)
+                                                          │
+                     track_generator.py ─────────────────┤
+                     (400 / 16 / 50 procedural)           ▼
+                                                 RacingEnv (Gymnasium)
+                                                  │  Car: traction circle,
+                                                  │  downforce, drag
+                                                  ▼
+                                          SAC agent (Stable-Baselines3)
+                                                  │
+                                                  ▼
+                                  agent_eval · record_lap · export_video`,
+    model: {
+      algorithm: "Soft Actor-Critic (Stable-Baselines3), MlpPolicy [512, 512, 256], 8 parallel SubprocVecEnv workers, entropy coefficient capped at 0.02.",
+      target: "Continuous control — [steering, throttle] in [-1, 1]; reward is per-metre progress minus time, jitter, crash and stall penalties, plus a lap bonus.",
+      training: "37 real circuits + 400 generated tracks (50/50 mix) with domain randomization and failure-weighted sampling; γ = 0.995, 2M replay buffer, LR 3e-4 → 3e-5.",
+      metrics: "Laps completed and lap time on held-out tracks; best checkpoint chosen by validation score on Monaco, Spa and 16 generated tracks.",
+    },
+  },
 ];

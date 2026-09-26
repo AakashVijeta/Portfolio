@@ -10,7 +10,6 @@ const isTouch = () => window.matchMedia('(hover: none)').matches;
 const CLASSIFIED_SLOTS = [
   { slug: '__c1', codename: 'CLASSIFIED', tag: 'REDACTED' },
   { slug: '__c2', codename: 'CLASSIFIED', tag: 'REDACTED' },
-  { slug: '__c3', codename: 'CLASSIFIED', tag: 'REDACTED' },
 ];
 
 export default function ProjectsSection({ isActive }) {
