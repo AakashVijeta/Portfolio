@@ -3714,6 +3714,8 @@
 
 /* ── Name stack — flex column, name-b right-aligns for diagonal ─ */
 .ihyb-namewrap {
+  margin: 0;
+  font: inherit;
   display: flex;
   flex-direction: column;
   align-items: flex-start;

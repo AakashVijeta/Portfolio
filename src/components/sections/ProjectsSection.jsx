@@ -111,7 +111,7 @@ export default function ProjectsSection({ isActive }) {
                     {!isClassified && project.image && (
                       <img
                         src={project.image}
-                        alt={project.title}
+                        alt={`${project.title} — ${project.tag} project screenshot`}
                         className="bg-img"
                         loading="eager"
                         decoding="async"

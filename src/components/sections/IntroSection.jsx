@@ -164,10 +164,10 @@ export default function IntroSection({ isActive }) {
       </header>
 
       <div className="ihyb-center">
-        <div className="ihyb-namewrap">
-          <div className="ihyb-name-a">AAKASH</div>
-          <div className="ihyb-name-b">VIJETA</div>
-        </div>
+        <h1 className="ihyb-namewrap" aria-label="Aakash Vijeta">
+          <span className="ihyb-name-a">AAKASH</span>
+          <span className="ihyb-name-b">VIJETA</span>
+        </h1>
 
         <aside className="ihyb-dossier">
           {dosRows.map((r) => (

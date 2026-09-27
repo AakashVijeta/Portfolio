@@ -1,4 +1,5 @@
-const BASE = import.meta.env.BASE_URL;
+// Optional chaining lets vite.config.js import this file in Node (no import.meta.env there)
+const BASE = import.meta.env?.BASE_URL ?? "/";
 
 export const projectDetails = [
   {
@@ -20,7 +21,7 @@ export const projectDetails = [
       "Vite 8",
       "GSAP",
     ],
-    image: BASE + "assets/f1-predictor.png",
+    image: BASE + "assets/f1-predictor.webp",
     repos: [
       { label: "GitHub", href: "https://github.com/AakashVijeta/f1-podium-predictor" },
       { label: "API Docs", href: "https://api.aakashvijeta.me/docs" },
@@ -81,7 +82,7 @@ export const projectDetails = [
       "Groq · Llama 3.3 70B",
       "OpenRouter",
     ],
-    image: BASE + "assets/niftyedge.png",
+    image: BASE + "assets/niftyedge.webp",
     repos: [
       { label: "Backend", href: "https://github.com/AakashVijeta/NiftyEdge-api" },
       { label: "Frontend", href: "https://github.com/AakashVijeta/NiftyEdge" },
@@ -147,7 +148,7 @@ export const projectDetails = [
       "pytest",
       "GitHub Actions",
     ],
-    image: BASE + "assets/racing-line.png",
+    image: BASE + "assets/racing-line.webp",
     repos: [
       { label: "GitHub", href: "https://github.com/AakashVijeta/racing-line-optimization" },
       { label: "Lap Video", href: "https://github.com/AakashVijeta/racing-line-optimization/releases/download/models-v1/suzuka_lap.mp4" },

@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://aakashvijeta.me/</loc>
-    <changefreq>monthly</changefreq>
-    <priority>1.0</priority>
+    <lastmod>2026-09-27</lastmod>
+    <image:image><image:loc>https://aakashvijeta.me/assets/f1-predictor.webp</image:loc></image:image>
+    <image:image><image:loc>https://aakashvijeta.me/assets/niftyedge.webp</image:loc></image:image>
+    <image:image><image:loc>https://aakashvijeta.me/assets/racing-line.webp</image:loc></image:image>
   </url>
 </urlset>

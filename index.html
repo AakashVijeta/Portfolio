@@ -4,31 +4,52 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <meta name="theme-color" content="#050905" />
 
-    <title>Aakash Vijeta</title>
-    <meta name="description" content="Aakash Vijeta — portfolio of machine learning, quant research, and software engineering projects." />
+    <title>Aakash Vijeta — Machine Learning & Quant Research Portfolio</title>
+    <meta name="description" content="Aakash Vijeta, a Data Science & AI undergraduate at IIT Guwahati, builds production ML systems: an F1 podium predictor, NiftyEdge quant trading signals, and a reinforcement-learning racing agent." />
     <meta name="author" content="Aakash Vijeta" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
     <link rel="canonical" href="https://aakashvijeta.me/" />
+    <link rel="me" href="https://github.com/AakashVijeta" />
+    <link rel="me" href="https://www.linkedin.com/in/aakash-vijeta-1bb42b2b9" />
 
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content="profile" />
+    <meta property="og:site_name" content="Aakash Vijeta" />
+    <meta property="og:locale" content="en_US" />
     <meta property="og:url" content="https://aakashvijeta.me/" />
-    <meta property="og:title" content="Aakash Vijeta" />
-    <meta property="og:description" content="Portfolio of machine learning, quant research, and software engineering projects." />
+    <meta property="og:title" content="Aakash Vijeta — Machine Learning & Quant Research" />
+    <meta property="og:description" content="Production ML systems, quant trading research and reinforcement-learning agents — F1 Podium Predictor, NiftyEdge and Racing Line Optimization." />
+    <meta property="profile:first_name" content="Aakash" />
+    <meta property="profile:last_name" content="Vijeta" />
 
     <meta name="twitter:card" content="summary" />
-    <meta name="twitter:title" content="Aakash Vijeta" />
-    <meta name="twitter:description" content="Portfolio of machine learning, quant research, and software engineering projects." />
+    <meta name="twitter:title" content="Aakash Vijeta — Machine Learning & Quant Research" />
+    <meta name="twitter:description" content="Production ML systems, quant trading research and reinforcement-learning agents — F1 Podium Predictor, NiftyEdge and Racing Line Optimization." />
+
+    <!--seo:jsonld-->
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Cormorant+Garamond:wght@400;500;600&family=Rethink+Sans:wght@400;500;600;700&display=swap" />
 
     <style>
-      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Cormorant+Garamond:wght@400;500;600&family=Rethink+Sans:wght@400;500;600;700&display=swap');
+      /* Pre-mount content for crawlers; replaced once React renders */
+      body:has(#seo-fallback) { margin: 0; }
+      #seo-fallback { box-sizing: border-box; min-height: 100vh; padding: 48px max(16px, calc((100% - 720px) / 2));
+        background: #050905; color: #b7f5c3; font: 16px/1.6 'JetBrains Mono', Consolas, monospace; }
+      #seo-fallback h1 { color: #3dff7a; font-size: 2rem; margin: 0 0 16px; }
+      #seo-fallback h2 { font-size: 1.1rem; margin: 40px 0 8px; }
+      #seo-fallback h3 { font-size: 1rem; margin: 24px 0 4px; }
+      #seo-fallback a { color: #3dff7a; }
     </style>
 
     <script>
-      (function(){var t=localStorage.getItem('portfolio-theme');if(t==='f1')document.documentElement.setAttribute('data-theme','f1');})();
+      (function(){try{var t=localStorage.getItem('portfolio-theme');if(t==='f1')document.documentElement.setAttribute('data-theme','f1');}catch(e){}})();
     </script>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root"><!--seo:fallback--></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
