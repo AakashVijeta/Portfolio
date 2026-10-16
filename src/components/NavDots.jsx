@@ -10,7 +10,7 @@ export default function NavDots() {
       aria-label="Section navigation"
       style={{
         position: 'fixed',
-        right: '20px',
+        right: '8px',
         top: '50%',
         transform: 'translateY(-50%)',
         zIndex: 10002,
@@ -40,7 +40,10 @@ export default function NavDots() {
               flexDirection: 'column',
               alignItems: 'center',
               gap: isHovered ? '6px' : '0px',
-              padding: '11px 16px',
+              // Fixed-width column so the dots hug the edge; the hover label overflows centred
+              width: '40px',
+              boxSizing: 'border-box',
+              padding: '11px 0',
               transition: 'gap 0.2s ease',
             }}
           >
