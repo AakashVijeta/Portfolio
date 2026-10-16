@@ -83,6 +83,27 @@ export default function ProjectsSection({ isActive }) {
     gsap.to(dummy, { v: 1, duration: 0.01, onComplete: () => gsap.killTweensOf(dummy) });
   }, []);
 
+  const listRef = useRef(null);
+
+  // Flow mode: mark each card once it scrolls into view (drives rise + scan reveal).
+  useEffect(() => {
+    if (mode !== 'flow' || !listRef.current) return;
+    const cards = listRef.current.querySelectorAll('.pm-card');
+    if (typeof IntersectionObserver === 'undefined') {
+      cards.forEach((c) => c.classList.add('is-seen'));
+      return;
+    }
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (!e.isIntersecting) return;
+        e.target.classList.add('is-seen');
+        obs.unobserve(e.target);
+      });
+    }, { rootMargin: '0px 0px -15% 0px' });
+    cards.forEach((c) => obs.observe(c));
+    return () => obs.disconnect();
+  }, [mode]);
+
   return (
     <section
       ref={rootRef}
@@ -101,6 +122,47 @@ export default function ProjectsSection({ isActive }) {
         <hr className="profiler-rule" />
       </header>
 
+      {mode === 'flow' ? (
+        <div className="pm-list" ref={listRef}>
+          {projectDetails.map((project, idx) => (
+            <article key={project.slug} className="pm-card">
+              <button
+                type="button"
+                className="pm-media"
+                onClick={() => setOverlayProject(project)}
+                aria-label={`Open ${project.title}`}
+              >
+                {project.image && (
+                  <img
+                    src={project.image}
+                    alt={`${project.title} — ${project.tag} project screenshot`}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                )}
+                <span className="pm-scan" aria-hidden="true" />
+              </button>
+              <div className="pm-body">
+                <div className="pm-meta">
+                  <span className="pm-id">EVIDENCE #{String(idx + 1).padStart(2, '0')}</span>
+                  <span className="pm-tag">{project.tag}</span>
+                </div>
+                <h3 className="pm-title">{project.title}</h3>
+                <p className="pm-subtitle">{project.subtitle}</p>
+                <ul className="pm-tech">
+                  {project.techStack.slice(0, 4).map((t) => <li key={t}>{t}</li>)}
+                </ul>
+                <button type="button" className="pm-open" onClick={() => setOverlayProject(project)}>
+                  [ OPEN FILE <span aria-hidden="true">→</span> ]
+                </button>
+              </div>
+            </article>
+          ))}
+          <div className="pm-classified">
+            +{String(CLASSIFIED_SLOTS.length).padStart(2, '0')} FILES · CLASSIFIED
+          </div>
+        </div>
+      ) : (
       <div
         className={`projects-layout ${isHovered && activeProject ? 'is-active' : ''}`}
         onMouseLeave={handleMouseLeave}
@@ -207,13 +269,16 @@ export default function ProjectsSection({ isActive }) {
           )}
         </div>
       </div>
+      )}
 
       <div className="projects-bottombar section-enter-item">
         <hr className="profiler-rule" />
         <div className="projects-bottombar-inner">
           <span>{projectDetails.length.toString().padStart(2, '0')} ACTIVE · {CLASSIFIED_SLOTS.length.toString().padStart(2, '0')} CLASSIFIED</span>
           <KeyHints />
-          <span>{window.matchMedia('(hover: none)').matches ? '◁  SWIPE · TAP TO VIEW  ▷' : '◁  HOVER · NAVIGATE  ▷'}</span>
+          {mode === 'paged' && (
+            <span>{window.matchMedia('(hover: none)').matches ? '◁  SWIPE · TAP TO VIEW  ▷' : '◁  HOVER · NAVIGATE  ▷'}</span>
+          )}
         </div>
       </div>
     </section>

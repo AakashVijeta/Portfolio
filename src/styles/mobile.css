@@ -239,4 +239,153 @@
   @media (prefers-reduced-motion: reduce) {
     html.is-flow .ihyb-scroll-cue > span { animation: none; }
   }
+
+  /* ── Projects: evidence file stack ────────────────────────────── */
+  html.is-flow .pm-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 12px var(--flow-gutter) 8px;
+  }
+  html.is-flow .pm-card {
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1), transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  html.is-flow .pm-card.is-seen { opacity: 1; transform: none; }
+
+  html.is-flow .pm-media {
+    all: unset;
+    display: block;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background: #020202;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  html.is-flow .pm-media img {
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    object-fit: cover;
+    object-position: top left;
+    display: block;
+    clip-path: inset(0 100% 0 0);
+    transition: clip-path 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.1s;
+  }
+  html.is-flow .pm-card.is-seen .pm-media img { clip-path: inset(0 0 0 0); }
+  /* Scan line sweeps with the reveal */
+  html.is-flow .pm-scan {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 2px;
+    background: var(--color-accent);
+    box-shadow: var(--glow-strong);
+    opacity: 0;
+    pointer-events: none;
+  }
+  html.is-flow .pm-card.is-seen .pm-scan { animation: pm-scan 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.1s both; }
+  @keyframes pm-scan {
+    0% { left: 0; opacity: 1; }
+    90% { opacity: 1; }
+    100% { left: calc(100% - 2px); opacity: 0; }
+  }
+
+  html.is-flow .pm-body {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 16px;
+  }
+  html.is-flow .pm-meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+  html.is-flow .pm-id { color: var(--color-accent); }
+  html.is-flow .pm-tag { color: var(--color-muted); text-align: right; }
+  html.is-flow .pm-title {
+    font-family: var(--font-body);
+    font-size: clamp(1.25rem, 5.6vw, 1.6rem);
+    font-weight: 500;
+    line-height: 1.15;
+    color: var(--color-text);
+  }
+  html.is-flow .pm-subtitle {
+    font-size: 0.88rem;
+    line-height: 1.5;
+    color: var(--color-muted);
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+  }
+  html.is-flow .pm-tech {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  html.is-flow .pm-tech li {
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.08em;
+    padding: 4px 8px;
+    border: 1px solid var(--color-border);
+    color: var(--color-text);
+  }
+  html.is-flow .pm-open {
+    all: unset;
+    box-sizing: border-box;
+    margin-top: 4px;
+    min-height: 48px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.24em;
+    color: var(--color-accent);
+    border: 1px solid var(--color-accent);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  html.is-flow .pm-open:active { background: var(--color-accent); color: var(--color-bg); }
+  html.is-flow .pm-open:focus-visible,
+  html.is-flow .pm-media:focus-visible { outline: 1px solid var(--color-accent); outline-offset: 3px; }
+
+  html.is-flow .pm-classified {
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.24em;
+    color: var(--color-muted);
+    border: 1px dashed var(--color-border);
+    background-image: repeating-linear-gradient(135deg, transparent 0 10px, color-mix(in srgb, var(--color-border) 60%, transparent) 10px 11px);
+  }
+
+  @media (min-width: 640px) {
+    html.is-flow .pm-list { display: grid; grid-template-columns: 1fr 1fr; }
+    html.is-flow .pm-classified { grid-column: 1 / -1; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html.is-flow .pm-card { opacity: 1; transform: none; transition: none; }
+    html.is-flow .pm-media img { clip-path: none; transition: none; }
+    html.is-flow .pm-card.is-seen .pm-scan { animation: none; }
+  }
 }
