@@ -1,7 +1,7 @@
 /* ── Terminal CRT (default) ─────────────────────────────────── */
 :root {
-  --color-bg:       #050905;
-  --color-surface:  #080d08;
+  --color-bg:       #020402;
+  --color-surface:  #050805;
   --color-accent:   #3dff7a;
   --color-text:     #b7f5c3;
   --color-muted:    #5a8a6a;
@@ -46,7 +46,7 @@ body::after {
   background:
     linear-gradient(var(--color-border) 1px, transparent 1px) 0 0 / 60px 60px,
     linear-gradient(90deg, var(--color-border) 1px, transparent 1px) 0 0 / 60px 60px;
-  opacity: 0.35;
+  opacity: 0.25;
   pointer-events: none;
   z-index: 0;
 }
