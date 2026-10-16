@@ -6,15 +6,26 @@
    ================================================================ */
 @media (max-width: 900px) {
   html.is-flow {
-    --flow-gutter: 16px;
+    /* Notch-safe side gutter (viewport-fit=cover lets content reach the sensor housing in landscape) */
+    --flow-gutter: max(24px, env(safe-area-inset-left), env(safe-area-inset-right));
+    /* Spacing scale: generous negative space is the point on a dark, dense brand */
+    --space-section: 96px;  /* top of each section */
+    --space-block: 56px;    /* between blocks inside a section */
+    --space-item: 28px;     /* between items in a list */
     --rail-h: 44px;
-    overflow-x: hidden;
-    overflow-y: auto;
+    /* The viewport is the only vertical scroller. overflow-x: clip guards against
+       horizontal bleed without creating a scroll container (hidden/auto would, and a
+       nested scroller swallows the first swipe). */
+    overflow: visible;
+    overflow-x: clip;
     height: auto;
   }
-  html.is-flow body {
+  html.is-flow body,
+  html.is-flow #root {
     overflow: visible;
+    overflow-x: clip;
     overscroll-behavior: auto;
+    max-width: none;
     height: auto;
   }
 
@@ -55,14 +66,22 @@
   html.is-flow .cc-ring,
   html.is-flow .cc-label { display: none !important; }
 
+  /* Project sheet open: hold the page still behind it */
+  html.is-flow.overlay-open,
+  html.is-flow.overlay-open body { overflow: hidden; }
+  html.is-flow .project-overlay-inner { overscroll-behavior: contain; }
+
   /* Shared section header/footer rhythm */
   html.is-flow .projects-topbar,
   html.is-flow .profiler-head,
   html.is-flow .contact-topbar {
     height: auto;
-    padding: 32px var(--flow-gutter) 12px;
-    gap: 10px;
+    padding: var(--space-section) var(--flow-gutter) 0;
+    gap: 16px;
   }
+  /* Projects follows the hero, whose own space already separates them; a small top pad
+     keeps its heading inside the bottom-of-screen peek */
+  html.is-flow .projects-topbar { padding-top: 20px; }
   html.is-flow .projects-title,
   html.is-flow .profiler-title,
   html.is-flow .contact-title-main {
@@ -74,7 +93,7 @@
   html.is-flow .contact-topbar-row {
     flex-direction: column;
     align-items: flex-start;
-    gap: 6px;
+    gap: 10px;
   }
   html.is-flow .projects-topmeta,
   html.is-flow .profiler-head-meta,
@@ -82,15 +101,18 @@
     text-align: left;
     font-size: 0.62rem;
   }
+  /* Only the last section keeps its footer; the rest read as one page */
+  html.is-flow .ihyb-bottombar,
   html.is-flow .projects-bottombar,
-  html.is-flow .profiler-foot,
+  html.is-flow .profiler-foot { display: none; }
+  /* Last section: no full-screen void; footer sits at its bottom */
+  html.is-flow .contact-section { min-height: 75svh; }
   html.is-flow .contact-bottombar {
+    margin-top: auto;
     height: auto;
-    padding: 16px var(--flow-gutter) 24px;
+    padding: 24px var(--flow-gutter) 32px;
     font-size: 0.6rem;
   }
-  html.is-flow .projects-bottombar-inner,
-  html.is-flow .profiler-foot-inner,
   html.is-flow .contact-bottombar-inner {
     flex-wrap: wrap;
     gap: 8px 16px;
@@ -150,9 +172,12 @@
     box-shadow: var(--glow-strong);
   }
   html.is-flow .mobile-rail-item:focus-visible { outline: 1px solid var(--color-accent); outline-offset: -4px; }
-  /* Small phones: numbers only, label for the active section */
+  /* Narrow phones: numbers only (active = accent + underline); label for the
+     active section from 400px; every label from 480px */
   html.is-flow .mobile-rail-label { display: none; }
-  html.is-flow .mobile-rail-item.is-active .mobile-rail-label { display: inline; }
+  @media (min-width: 400px) {
+    html.is-flow .mobile-rail-item.is-active .mobile-rail-label { display: inline; }
+  }
 
   html.is-flow .mobile-rail .mode-switch {
     align-self: center;
@@ -176,77 +201,70 @@
   }
 
   /* ── Intro ────────────────────────────────────────────────────── */
+  /* Slightly shorter than the screen so the Projects header peeks in below it */
   html.is-flow .intro-hero {
-    height: calc(100svh - var(--rail-h) - env(safe-area-inset-top));
-    min-height: 0;
+    height: auto;
+    min-height: calc(100svh - var(--rail-h) - env(safe-area-inset-top) - 88px);
     overflow: hidden;
-    justify-content: space-between;
+    justify-content: flex-start;
   }
   html.is-flow .ihyb-topbar {
     padding: 14px var(--flow-gutter) 10px;
     font-size: 0.56rem;
     letter-spacing: 0.16em;
   }
-  html.is-flow .ihyb-topbar::after,
-  html.is-flow .ihyb-bottombar::before { left: var(--flow-gutter); right: var(--flow-gutter); }
+  html.is-flow .ihyb-topbar::after { left: var(--flow-gutter); right: var(--flow-gutter); }
   html.is-flow .ihyb-topbar-left { gap: 8px; flex-wrap: wrap; }
 
-  /* Name anchored to the lower third, dossier directly beneath */
+  /* Name + dossier as one block, optically centred in the hero */
   html.is-flow .ihyb-center {
     flex: 1;
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
+    justify-content: center;
     align-items: stretch;
-    gap: clamp(16px, 3svh, 28px);
-    padding: 0 var(--flow-gutter) clamp(20px, 6svh, 56px);
+    gap: clamp(28px, 5svh, 48px);
+    padding: clamp(32px, 7svh, 64px) var(--flow-gutter);
   }
-  /* Shrink-wrap so the AAKASH/VIJETA diagonal stays tight when the height cap wins (landscape) */
-  html.is-flow .ihyb-namewrap { width: fit-content; max-width: 100%; }
+  html.is-flow .ihyb-namewrap {
+    width: 100%;
+    align-items: flex-start;
+  }
   html.is-flow .ihyb-name-a,
   html.is-flow .ihyb-name-b {
-    /* AAKASH (≈3.83em, the wider line) + F1 italic overhang fills the content width */
-    font-size: min(calc((100vw - 2 * var(--flow-gutter)) / 4.1), 22svh);
+    /* AAKASH (≈3.83em, the wider line) + F1 italic overhang fills the content width.
+       !important beats the shared short-landscape rule in sections.css. */
+    font-size: min(calc((100vw - 2 * var(--flow-gutter)) / 4.1), 22svh) !important;
+    line-height: 0.92;
     white-space: nowrap;
+  }
+  /* Both lines flush-left; the desktop diagonal does not survive a narrow column */
+  html.is-flow .ihyb-name-b {
+    align-self: flex-start;
+    margin-top: 0;
   }
   html.is-flow[data-theme="f1"] .ihyb-name-a,
   html.is-flow[data-theme="f1"] .ihyb-name-b { padding-right: 0.12em; }
 
   html.is-flow .ihyb-dossier {
     width: 100%;
-    font-size: clamp(0.62rem, 2.8vw, 0.8rem);
+    font-size: clamp(0.66rem, 2.9vw, 0.82rem);
     letter-spacing: 0.08em;
+    padding-top: 14px;
   }
   html.is-flow .ihyb-dossier::before {
     left: 0; right: 0;
-    top: -10px; bottom: auto;
+    top: 0; bottom: auto;
     width: auto; height: 1px;
   }
-
-  html.is-flow .ihyb-bottombar {
-    padding: 10px var(--flow-gutter) max(14px, env(safe-area-inset-bottom));
-    font-size: 0.56rem;
-    letter-spacing: 0.16em;
-  }
-  html.is-flow .ihyb-scroll-cue { color: var(--color-accent); }
-  html.is-flow .ihyb-scroll-cue > span {
-    display: inline-block;
-    animation: ihyb-cue 1.6s cubic-bezier(0.22, 1, 0.36, 1) infinite;
-  }
-  @keyframes ihyb-cue {
-    0%, 100% { transform: translateY(0); opacity: 1; }
-    50% { transform: translateY(4px); opacity: 0.5; }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    html.is-flow .ihyb-scroll-cue > span { animation: none; }
-  }
+  html.is-flow .ihyb-dos-row { padding: 8px 0; }
 
   /* ── Projects: evidence file stack ────────────────────────────── */
   html.is-flow .pm-list {
     display: flex;
     flex-direction: column;
-    gap: 20px;
-    padding: 12px var(--flow-gutter) 8px;
+    gap: var(--space-block);
+    padding: 40px var(--flow-gutter) var(--space-section);
   }
   html.is-flow .pm-card {
     border: 1px solid var(--color-border);
@@ -301,8 +319,8 @@
   html.is-flow .pm-body {
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    padding: 16px;
+    gap: 16px;
+    padding: 24px;
   }
   html.is-flow .pm-meta {
     display: flex;
@@ -348,7 +366,7 @@
   html.is-flow .pm-open {
     all: unset;
     box-sizing: border-box;
-    margin-top: 4px;
+    margin-top: 12px;
     min-height: 48px;
     width: 100%;
     display: flex;
@@ -366,22 +384,9 @@
   html.is-flow .pm-open:focus-visible,
   html.is-flow .pm-media:focus-visible { outline: 1px solid var(--color-accent); outline-offset: 3px; }
 
-  html.is-flow .pm-classified {
-    height: 64px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: var(--font-mono);
-    font-size: 0.66rem;
-    letter-spacing: 0.24em;
-    color: var(--color-muted);
-    border: 1px dashed var(--color-border);
-    background-image: repeating-linear-gradient(135deg, transparent 0 10px, color-mix(in srgb, var(--color-border) 60%, transparent) 10px 11px);
-  }
 
   @media (min-width: 640px) {
     html.is-flow .pm-list { display: grid; grid-template-columns: 1fr 1fr; }
-    html.is-flow .pm-classified { grid-column: 1 / -1; }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -390,25 +395,38 @@
     html.is-flow .pm-card.is-seen .pm-scan { animation: none; }
   }
 
-  /* ── About: single-column subject profile ─────────────────────── */
+  /* ── About: one column, one left edge, no boxes ───────────────── */
+  /* The identity/behaviour wrappers dissolve (display: contents) so their pieces
+     can be re-ordered by importance: bio → availability → facts → history → skills. */
   html.is-flow .profiler-main-scroll {
     flex: none;
     height: auto;
     overflow: visible !important;
-    padding: 8px var(--flow-gutter) 0;
+    padding: 40px var(--flow-gutter) var(--space-section);
   }
   html.is-flow .profiler-container {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: var(--space-block);
+    width: 100%;
+    max-width: 640px;
     height: auto;
     max-height: none;
     overflow: visible;
     padding: 0;
   }
-  html.is-flow .profiler-module { padding: 16px; overflow: hidden; }
+  html.is-flow .col-identity,
   html.is-flow .col-behavior,
-  html.is-flow .psych-report,
+  html.is-flow .psych-report { display: contents; }
+  html.is-flow .profiler-module {
+    padding: 0;
+    border: 0;
+    background: none;
+    box-shadow: none;
+    overflow: visible;
+  }
+  html.is-flow .profiler-module::before,
+  html.is-flow .profiler-module::after { content: none; }
   html.is-flow .col-capabilities-wrapper,
   html.is-flow .cap-top {
     height: auto;
@@ -418,106 +436,109 @@
     overflow: visible !important;
   }
 
-  /* Identity strip: 96px scanner left, name + ID grid right */
-  html.is-flow .col-identity {
-    display: grid;
-    grid-template-columns: 96px minmax(0, 1fr);
-    grid-template-areas: "scan name" "scan grid";
-    column-gap: 14px;
-    row-gap: 8px;
-    align-items: start;
-    height: auto;
-  }
-  html.is-flow .identity-name {
-    grid-area: name;
-    font-size: 0.9rem;
-    padding-bottom: 6px;
-    text-align: left;
-  }
-  html.is-flow .fingerprint-scanner {
-    grid-area: scan;
-    width: 96px;
-    height: 96px;
-    aspect-ratio: 1 / 1;
-    margin: 0;
-  }
-  html.is-flow .scan-data-profile { display: none; }
-  html.is-flow .id-data-grid {
-    grid-area: grid;
-    grid-template-columns: 1fr;
-    gap: 6px 10px;
-    font-size: 0.6rem;
-  }
-  html.is-flow .id-key { font-size: 0.52rem; }
-  @media (min-width: 480px) {
-    html.is-flow .id-data-grid { grid-template-columns: 1fr 1fr; }
-  }
-  html.is-flow .id-val { font-size: 0.62rem; }
+  /* Decorative or redundant on a phone (name is in the hero, label is chrome) */
+  html.is-flow .identity-name,
+  html.is-flow .fingerprint-scanner,
+  html.is-flow .analysis-header { display: none !important; }
 
-  /* Availability promoted to its own module */
-  html.is-flow .col-availability { padding: 0; border: 0; background: none; }
-  html.is-flow .col-availability .status-wrapper { margin: 0; padding: 16px; }
-  html.is-flow .status-main { font-size: clamp(1.1rem, 5.4vw, 1.5rem); }
-  html.is-flow .status-header,
-  html.is-flow .status-footer { font-size: 0.56rem; }
-
-  /* Bio: highlights flow as underline + tint, no boxes */
-  html.is-flow .psych-report { padding-right: 0; }
+  /* 1. Bio leads */
   html.is-flow .psych-bio {
+    order: 1;
     display: block;
-    font-size: 0.98rem;
-    line-height: 1.65;
+    font-size: 1.05rem;
+    line-height: 1.75;
+    max-width: 60ch;
   }
   html.is-flow .psych-bio .hl-1,
   html.is-flow .psych-bio .hl-2 {
     border: 0;
-    padding: 0 2px;
-    background: color-mix(in srgb, var(--color-accent) 12%, transparent);
-    text-decoration: underline;
-    text-decoration-color: color-mix(in srgb, var(--color-accent) 60%, transparent);
-    text-underline-offset: 3px;
-    -webkit-box-decoration-break: clone;
-    box-decoration-break: clone;
+    padding: 0;
+    background: none;
+    color: var(--color-accent);
   }
-  html.is-flow .analysis-header { font-size: 0.56rem; margin-bottom: 12px; padding-bottom: 8px; }
 
-  /* Timeline rows */
-  html.is-flow .dossier-history { display: flex; flex-direction: column; gap: 20px; margin-top: 20px; }
-  html.is-flow .history-block-title { font-size: 0.6rem; margin-bottom: 10px; }
-  html.is-flow .history-item { margin-bottom: 12px; padding-left: 10px; font-size: 0.85rem; line-height: 1.45; }
-  html.is-flow .history-header { flex-direction: column; align-items: flex-start; gap: 2px; margin-bottom: 4px; }
-  html.is-flow .history-period { display: block; font-size: 0.6rem; color: var(--color-muted); }
-  html.is-flow .history-line { display: block; -webkit-line-clamp: unset; overflow: visible; font-size: 0.85rem; line-height: 1.45; }
+  /* 2. Availability: the one framed element in the section */
+  html.is-flow .col-availability { order: 2; }
+  html.is-flow .col-availability .status-wrapper { margin: 0; padding: 24px; gap: 10px; }
+  html.is-flow .status-main { font-size: clamp(1.15rem, 5.4vw, 1.5rem); }
+  html.is-flow .status-header,
+  html.is-flow .status-footer { font-size: 0.58rem; }
 
-  /* Capabilities */
-  html.is-flow .cap-top { display: flex; flex-direction: column; gap: 18px; }
-  html.is-flow .cap-inv-label { font-size: 0.56rem; text-align: left; }
-  html.is-flow .tech-category { gap: 8px; }
-  html.is-flow .cat-title { font-size: 0.6rem; }
-  html.is-flow .chips-primary { display: flex; flex-direction: row; flex-wrap: wrap; gap: 8px; }
-  html.is-flow .chips-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    max-height: none;
-    overflow: visible;
+  /* 3. Facts: plain 2×2 key/value grid */
+  html.is-flow .id-data-grid {
+    order: 3;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px 20px;
+    font-size: 0.8rem;
   }
-  html.is-flow .tech-category:last-child .chips-grid { display: flex; }
-  html.is-flow .tech-chip { font-size: 0.7rem; padding: 6px 10px; transform: none !important; }
-  html.is-flow .tech-chip-primary { font-size: 0.82rem; padding: 8px 14px; }
+  html.is-flow .id-cell { display: flex; flex-direction: column; gap: 6px; }
+  html.is-flow .id-key { font-size: 0.6rem; color: var(--color-muted); }
+  html.is-flow .id-val { font-size: 0.8rem; }
+
+  /* 4. History: title and date on one line, description below, one rail */
+  html.is-flow .dossier-history { order: 4; display: flex; flex-direction: column; gap: var(--space-block); margin: 0; }
+  html.is-flow .history-block-title { font-size: 0.62rem; margin-bottom: 24px; }
+  html.is-flow .history-item { margin: 0 0 var(--space-item); padding-left: 16px; font-size: 0.9rem; line-height: 1.6; }
+  html.is-flow .history-item:last-child { margin-bottom: 0; }
+  html.is-flow .history-header {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 8px;
+  }
+  html.is-flow .history-period {
+    display: block;
+    flex-shrink: 0;
+    border: 0;
+    background: none;
+    padding: 0;
+    font-size: 0.62rem;
+    color: var(--color-muted);
+  }
+  html.is-flow .history-line { display: block; -webkit-line-clamp: unset; overflow: visible; font-size: 0.9rem; line-height: 1.5; }
+
+  /* 5. Skills: one chip size; primary chips are marked by colour, not scale */
+  html.is-flow .col-capabilities-wrapper { order: 5; }
+  html.is-flow .cap-top { display: flex; flex-direction: column; gap: 40px; }
+  html.is-flow .cap-inv-label { display: none; }
+  html.is-flow .tech-category { display: flex; flex-direction: row; flex-wrap: wrap; align-items: center; gap: 10px; }
+  html.is-flow .tech-category .cat-title { flex-basis: 100%; font-size: 0.62rem; margin: 0 0 6px; }
+  html.is-flow .tech-category .cat-rule { display: none; }
+  html.is-flow .chips-primary,
+  html.is-flow .chips-grid { display: contents; }
+  html.is-flow .tech-category:last-child .chips-grid { display: contents; }
+  html.is-flow .tech-chip,
+  html.is-flow .tech-chip-primary {
+    box-sizing: border-box;
+    min-height: 32px;
+    display: inline-flex;
+    align-items: center;
+    width: auto;
+    font-size: 0.74rem;
+    font-weight: 400;
+    padding: 0 12px;
+    flex: none !important;
+    transform: none !important;
+  }
+  html.is-flow .tech-chip-primary {
+    color: var(--color-accent);
+    border-color: var(--color-accent);
+  }
 
   /* ── Contact: closing screen, CTAs in thumb reach ─────────────── */
   html.is-flow .contact-main {
     flex: 1;
     max-height: none;
-    justify-content: flex-end;
-    padding: 24px var(--flow-gutter) 8px;
+    justify-content: flex-start;
+    padding: 40px var(--flow-gutter) var(--space-section);
   }
   html.is-flow .contact-content-inner { max-width: none; }
   html.is-flow .contact-title-wrap {
     font-size: clamp(0.72rem, 3.4vw, 0.95rem) !important;
     letter-spacing: 0.32em !important;
-    margin-bottom: 16px !important;
+    margin-bottom: 24px !important;
     white-space: nowrap;
   }
   html.is-flow .contact-command {
@@ -528,8 +549,8 @@
   html.is-flow .cm-actions {
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    margin-top: 24px;
+    gap: 16px;
+    margin-top: 40px;
   }
   html.is-flow .cm-primary,
   html.is-flow .cm-secondary a {
@@ -583,7 +604,7 @@
   html.is-flow .cm-secondary a:focus-visible,
   html.is-flow .cm-copy:focus-visible { outline: 1px solid var(--color-accent); outline-offset: 3px; }
 
-  html.is-flow .contact-dossier { margin-top: 28px !important; }
+  html.is-flow .contact-dossier { margin-top: var(--space-block) !important; }
   html.is-flow .contact-dossier .intro-dossier-line { gap: 16px; font-size: 0.7rem; letter-spacing: 0.18em; }
   html.is-flow .contact-bottombar { padding-bottom: max(24px, env(safe-area-inset-bottom)); }
 }

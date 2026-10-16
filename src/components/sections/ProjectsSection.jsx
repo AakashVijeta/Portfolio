@@ -102,7 +102,7 @@ export default function ProjectsSection({ isActive }) {
         e.target.classList.add('is-seen');
         obs.unobserve(e.target);
       });
-    }, { rootMargin: '0px 0px -15% 0px' });
+    }, { rootMargin: '0px 0px -5% 0px' });
     cards.forEach((c) => obs.observe(c));
     return () => obs.disconnect();
   }, [mode]);
@@ -161,9 +161,6 @@ export default function ProjectsSection({ isActive }) {
               </div>
             </article>
           ))}
-          <div className="pm-classified">
-            +{String(CLASSIFIED_SLOTS.length).padStart(2, '0')} FILES · CLASSIFIED
-          </div>
         </div>
       ) : (
       <div

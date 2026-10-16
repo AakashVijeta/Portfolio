@@ -6,6 +6,11 @@ export default function ProjectOverlay() {
   const { overlayProject, setOverlayProject } = useSectionContext();
 
   useEffect(() => {
+    document.documentElement.classList.toggle('overlay-open', !!overlayProject);
+    return () => document.documentElement.classList.remove('overlay-open');
+  }, [overlayProject]);
+
+  useEffect(() => {
     if (!overlayProject) return;
     gsap.fromTo('.project-overlay-inner',
       { opacity: 0, y: 30 },
