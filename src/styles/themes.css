@@ -23,11 +23,10 @@
   --glow-strong: 0 0 16px rgba(0, 255, 65, 0.3), 0 0 32px rgba(0, 255, 65, 0.12);
 }
 
-/* ── Page texture: fine film grain + faint grid ──────────────────
-   A solid page colour, a 6% fractal-noise grain over everything and a
-   60px grid behind the content. Both layers are fixed, static and
-   pointer-transparent (no blend modes or flicker: they shimmer on
-   high-DPR screens while scrolling). */
+/* ── Page texture: fine film grain ───────────────────────────────
+   A solid page colour and a 6% fractal-noise grain over everything.
+   The layer is fixed, static and pointer-transparent (no blend modes
+   or flicker: they shimmer on high-DPR screens while scrolling). */
 html,
 body {
   background-color: var(--color-bg);
@@ -41,20 +40,6 @@ body::before {
   opacity: 0.06;
   pointer-events: none;
   z-index: 9998;
-}
-
-/* The grid sits BEHIND the content: the app and its sections are transparent
-   over the page colour, and the app is lifted above the grid. */
-body::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background:
-    linear-gradient(var(--color-border) 1px, transparent 1px) 0 0 / 60px 60px,
-    linear-gradient(90deg, var(--color-border) 1px, transparent 1px) 0 0 / 60px 60px;
-  opacity: 0.25;
-  pointer-events: none;
-  z-index: 0;
 }
 
 .App {
