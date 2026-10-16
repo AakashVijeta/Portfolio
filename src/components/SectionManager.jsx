@@ -5,6 +5,7 @@ import { useSectionManager } from '../hooks/useSectionManager';
 import WipeTransition from './WipeTransition';
 import GlitchTransition from './GlitchTransition';
 import SectionCounter from './SectionCounter';
+import { playEntrance, hideEntrance } from '../utils/entranceAnimation';
 
 const isF1 = () => document.documentElement.getAttribute('data-theme') === 'f1';
 const isMobile = () => window.innerWidth <= 768;
@@ -16,44 +17,11 @@ export default function SectionManager({ sections }) {
   const sectionRefs = useRef([]);
 
   const runEntranceAnimation = useCallback((index) => {
-    const el = sectionRefs.current[index];
-    if (!el) return;
-    const items = el.querySelectorAll('.section-enter-item');
-    if (!items.length) return;
-
-    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (prefersReduced) {
-      gsap.set(items, { opacity: 1, y: 0 });
-      return;
-    }
-
-    // Kill any running tweens on these items before animating in
-    gsap.killTweensOf(items);
-    // Suppress CSS transitions — .profiler-module has transition:transform which
-    // fights GSAP frame-by-frame and causes jank. Restore on complete.
-    items.forEach(el => el.style.setProperty('transition', 'none'));
-    gsap.fromTo(items,
-      { opacity: 0, y: 28 },
-      {
-        opacity: 1,
-        y: 0,
-        duration: 0.68,
-        stagger: { each: 0.07, from: 'start' },
-        ease: 'power3.out',
-        force3D: true,
-        onComplete: () => {
-          gsap.set(items, { clearProps: 'transform,opacity' });
-          items.forEach(el => el.style.removeProperty('transition'));
-        },
-      }
-    );
+    playEntrance(sectionRefs.current[index]);
   }, []);
 
   const resetSection = useCallback((index) => {
-    const el = sectionRefs.current[index];
-    if (!el) return;
-    const items = el.querySelectorAll('.section-enter-item');
-    if (items.length) gsap.set(items, { opacity: 0, y: 28 });
+    hideEntrance(sectionRefs.current[index]);
   }, []);
 
   const advance = useCallback(async (dir) => {
@@ -131,9 +99,9 @@ export default function SectionManager({ sections }) {
     };
   }, [goTo, setIsTransitioning, resetSection, runEntranceAnimation, navigateToRef]);
 
-  // Animate section 0 on first mount
+  // Animate the current section on first mount (index 0 on a fresh load)
   useEffect(() => {
-    runEntranceAnimation(0);
+    runEntranceAnimation(activeIndexRef.current);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useSectionManager({ activeIndex, isTransitioning, advance });
