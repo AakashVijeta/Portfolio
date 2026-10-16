@@ -3,6 +3,7 @@ import { useLayoutMode } from './hooks/useLayoutMode';
 import { SectionProvider } from './context/SectionContext';
 import SectionManager from './components/SectionManager';
 import MobileFlow from './components/MobileFlow';
+import MobileRail from './components/MobileRail';
 import ProjectOverlay from './components/ProjectOverlay';
 import Preloader from './components/Preloader';
 import BottomBar from './components/BottomBar';
@@ -33,8 +34,8 @@ function App() {
       <div className="App">
         <CustomCursor />
         <Preloader />
-        <BottomBar />
-        <NavDots />
+        {mode === 'paged' && <BottomBar />}
+        {mode === 'paged' ? <NavDots /> : <MobileRail />}
         {mode === 'paged'
           ? <SectionManager sections={SECTION_COMPONENTS} />
           : <MobileFlow sections={SECTION_COMPONENTS} />}
