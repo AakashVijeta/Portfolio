@@ -6,8 +6,8 @@
 @media (min-width: 901px) {
   html:not(.is-flow) {
     --d-gutter: 48px;  /* clear of the fixed section dots */
-    --d-head-h: 96px;
-    --d-foot-h: 52px;
+    --d-head-h: 84px;
+    --d-foot-h: 44px;
     --d-chrome-font: 0.7rem;
     --d-chrome-ls: 0.3em;
   }
@@ -64,13 +64,13 @@
     flex: 0 0 auto;
     height: var(--d-foot-h);
     min-height: var(--d-foot-h);
-    padding: 10px var(--d-gutter) 0;
+    padding: 8px var(--d-gutter) 0;
     font-family: var(--font-display);
     font-size: var(--d-chrome-font);
     letter-spacing: var(--d-chrome-ls);
   }
   /* Intro footer has no rule element of its own; keep its text on the same line as the others */
-  html:not(.is-flow) .ihyb-bottombar { align-items: flex-start; padding-top: 22px; }
+  html:not(.is-flow) .ihyb-bottombar { align-items: flex-start; padding-top: 18px; }
   html:not(.is-flow) .about-profiler .profiler-foot-inner,
   html:not(.is-flow) .about-profiler .foot-version {
     font-size: var(--d-chrome-font);
@@ -169,9 +169,9 @@
   html:not(.is-flow) .about-profiler .psych-bio .hl-1,
   html:not(.is-flow) .about-profiler .psych-bio .hl-2 { padding: 1px 6px; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
   html:not(.is-flow) .about-profiler .dossier-history {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: var(--v-gap);
     margin-top: var(--v-gap);
     padding-top: var(--v-gap);
     border-top: 1px solid var(--color-border);
@@ -187,29 +187,38 @@
   /* Capabilities: chips sized to their text, wrapping */
   html:not(.is-flow) .about-profiler .cap-top { display: flex; flex-direction: column; gap: var(--v-gap); }
   html:not(.is-flow) .about-profiler .cap-inv-label { font-size: 0.68rem; }
-  html:not(.is-flow) .about-profiler .tech-category { display: flex; flex-direction: column; gap: var(--v-sm); }
+  /* Each category is one two-column grid: primary chips first, then the rest,
+     every chip the same width and height with centred labels */
+  html:not(.is-flow) .about-profiler .tech-category {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  html:not(.is-flow) .about-profiler .tech-category > .cat-title,
+  html:not(.is-flow) .about-profiler .tech-category > .cat-rule { grid-column: 1 / -1; margin: 0; }
+  html:not(.is-flow) .about-profiler .tech-category > .cat-rule { margin-bottom: 4px; }
   html:not(.is-flow) .about-profiler .cat-title { font-size: 0.64rem; }
   html:not(.is-flow) .about-profiler .chips-primary,
   html:not(.is-flow) .about-profiler .chips-grid,
-  html:not(.is-flow) .about-profiler .tech-category:last-child .chips-grid {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 8px;
-    max-height: none;
-    overflow: visible;
-    margin: 0;
-  }
+  html:not(.is-flow) .about-profiler .tech-category:last-child .chips-grid { display: contents; }
   html:not(.is-flow) .about-profiler .tech-chip,
   html:not(.is-flow) .about-profiler .tech-chip-primary {
-    flex: 0 0 auto !important;
-    width: auto;
-    min-height: clamp(30px, 4.2vh, 38px);
-    display: inline-flex;
+    flex: none !important;
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
+    height: clamp(30px, 4.2vh, 38px);
+    min-height: 0;
+    display: flex;
     align-items: center;
-    padding: 0 12px;
+    justify-content: center;
+    text-align: center;
+    padding: 0 8px;
     font-size: 0.8rem;
     letter-spacing: 0.03em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 }
 
@@ -228,7 +237,7 @@
   html:not(.is-flow) .about-profiler .history-date { font-size: 0.82rem; }
   html:not(.is-flow) .about-profiler .history-line { font-size: 0.8rem; line-height: 1.45; }
   html:not(.is-flow) .about-profiler .tech-chip,
-  html:not(.is-flow) .about-profiler .tech-chip-primary { min-height: 28px; font-size: 0.74rem; padding: 0 10px; }
+  html:not(.is-flow) .about-profiler .tech-chip-primary { height: 28px; font-size: 0.74rem; padding: 0 6px; }
 }
 
 /* Profile on narrower desktops: give the middle report more of the width */
