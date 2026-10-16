@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import KeyHints from '../KeyHints';
 import { useLayoutMode } from '../../hooks/useLayoutMode';
 
@@ -10,6 +10,29 @@ const LINKEDIN = 'https://www.linkedin.com/in/aakash-vijeta-1bb42b2b9';
 export default function ContactSection({ isActive }) {
   const mode = useLayoutMode();
   const rootRef = useRef(null);
+  const [copied, setCopied] = useState(false);
+  const copyTimerRef = useRef(null);
+  useEffect(() => () => clearTimeout(copyTimerRef.current), []);
+
+  const copyEmail = async () => {
+    try {
+      await navigator.clipboard.writeText(EMAIL);
+    } catch {
+      // Clipboard unavailable/denied: select the address so the user can copy it manually.
+      const target = rootRef.current?.querySelector('.contact-target');
+      if (target) {
+        const range = document.createRange();
+        range.selectNodeContents(target);
+        const sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+      }
+      return;
+    }
+    setCopied(true);
+    clearTimeout(copyTimerRef.current);
+    copyTimerRef.current = setTimeout(() => setCopied(false), 2000);
+  };
 
   useLayoutEffect(() => {
     if (!isActive) return;
@@ -43,7 +66,7 @@ export default function ContactSection({ isActive }) {
       {/* Center: command + target */}
       <div className="contact-main">
         <div className="contact-content-inner">
-          <div className="section-enter-item" style={{
+          <div className="section-enter-item contact-title-wrap" style={{
             fontFamily: 'var(--font-display)',
             fontSize: '1rem',
             letterSpacing: '0.45em',
@@ -61,11 +84,24 @@ export default function ContactSection({ isActive }) {
             <span className="contact-cursor">_</span>
           </div>
 
-          <div className="section-enter-item" style={{ display: 'flex', gap: '16px', alignItems: 'center', flexWrap: 'wrap', marginTop: '32px' }}>
-            <a href={`mailto:${EMAIL}`} className="contact-bracket-box">[ INITIATE CONTACT ]</a>
-            <a href={GITHUB} target="_blank" rel="noopener noreferrer" className="contact-bracket-box">[ GITHUB ]</a>
-            <a href={LINKEDIN} target="_blank" rel="noopener noreferrer" className="contact-bracket-box">[ LINKEDIN ]</a>
-          </div>
+          {mode === 'flow' ? (
+            <div className="section-enter-item cm-actions">
+              <a href={`mailto:${EMAIL}`} className="cm-primary">[ SEND EMAIL <span aria-hidden="true">→</span> ]</a>
+              <button type="button" className="cm-copy" onClick={copyEmail} aria-live="polite">
+                {copied ? 'COPIED ✓' : 'COPY ADDRESS'}
+              </button>
+              <div className="cm-secondary">
+                <a href={GITHUB} target="_blank" rel="noopener noreferrer">[ GITHUB ]</a>
+                <a href={LINKEDIN} target="_blank" rel="noopener noreferrer">[ LINKEDIN ]</a>
+              </div>
+            </div>
+          ) : (
+            <div className="section-enter-item" style={{ display: 'flex', gap: '16px', alignItems: 'center', flexWrap: 'wrap', marginTop: '32px' }}>
+              <a href={`mailto:${EMAIL}`} className="contact-bracket-box">[ INITIATE CONTACT ]</a>
+              <a href={GITHUB} target="_blank" rel="noopener noreferrer" className="contact-bracket-box">[ GITHUB ]</a>
+              <a href={LINKEDIN} target="_blank" rel="noopener noreferrer" className="contact-bracket-box">[ LINKEDIN ]</a>
+            </div>
+          )}
 
           <div className="section-enter-item contact-dossier" style={{ marginTop: '48px' }}>
             <div className="intro-dossier-line">

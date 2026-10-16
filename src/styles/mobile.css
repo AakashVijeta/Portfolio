@@ -504,4 +504,85 @@
   html.is-flow .tech-category:last-child .chips-grid { display: flex; }
   html.is-flow .tech-chip { font-size: 0.7rem; padding: 6px 10px; transform: none !important; }
   html.is-flow .tech-chip-primary { font-size: 0.82rem; padding: 8px 14px; }
+
+  /* ── Contact: closing screen, CTAs in thumb reach ─────────────── */
+  html.is-flow .contact-main {
+    flex: 1;
+    max-height: none;
+    justify-content: flex-end;
+    padding: 24px var(--flow-gutter) 8px;
+  }
+  html.is-flow .contact-content-inner { max-width: none; }
+  html.is-flow .contact-title-wrap {
+    font-size: clamp(0.72rem, 3.4vw, 0.95rem) !important;
+    letter-spacing: 0.32em !important;
+    margin-bottom: 16px !important;
+    white-space: nowrap;
+  }
+  html.is-flow .contact-command {
+    font-size: clamp(0.95rem, 4.6vw, 1.5rem);
+    gap: 8px;
+    overflow-wrap: anywhere;
+  }
+  html.is-flow .cm-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 24px;
+  }
+  html.is-flow .cm-primary,
+  html.is-flow .cm-secondary a {
+    box-sizing: border-box;
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-display);
+    letter-spacing: 0.24em;
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  html.is-flow .cm-primary {
+    width: 100%;
+    font-size: 0.82rem;
+    color: var(--color-bg);
+    background: var(--color-accent);
+    border: 1px solid var(--color-accent);
+    font-weight: 700;
+  }
+  html.is-flow .cm-primary:active { filter: brightness(0.85); }
+  html.is-flow .cm-copy {
+    all: unset;
+    box-sizing: border-box;
+    align-self: center;
+    min-height: 44px;
+    padding: 0 16px;
+    display: inline-flex;
+    align-items: center;
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.24em;
+    color: var(--color-muted);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    cursor: pointer;
+  }
+  html.is-flow .cm-secondary {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  html.is-flow .cm-secondary a {
+    font-size: 0.72rem;
+    color: var(--color-text);
+    border: 1px solid var(--color-border);
+  }
+  html.is-flow .cm-secondary a:active { border-color: var(--color-accent); color: var(--color-accent); }
+  html.is-flow .cm-primary:focus-visible,
+  html.is-flow .cm-secondary a:focus-visible,
+  html.is-flow .cm-copy:focus-visible { outline: 1px solid var(--color-accent); outline-offset: 3px; }
+
+  html.is-flow .contact-dossier { margin-top: 28px !important; }
+  html.is-flow .contact-dossier .intro-dossier-line { gap: 16px; font-size: 0.7rem; letter-spacing: 0.18em; }
+  html.is-flow .contact-bottombar { padding-bottom: max(24px, env(safe-area-inset-bottom)); }
 }
