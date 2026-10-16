@@ -23,7 +23,12 @@ export default function ProjectsSection({ isActive }) {
   const [isHovered, setIsHovered] = useState(false);
   const [animKey, setAnimKey] = useState(0);
 
+  // Ignore hover until the cursor actually moves after the section opens,
+  // so cards don't activate just because they slid in under a still cursor.
+  const pointerArmedRef = useRef(false);
+
   const handleMouseEnter = (project) => {
+    if (!pointerArmedRef.current) return;
     if (isHovered && activeProject?.slug === project.slug) return;
     setIsHovered(true);
     setActiveProject(project);
@@ -55,8 +60,13 @@ export default function ProjectsSection({ isActive }) {
     return () => ctx.revert();
   }, [displayProject, animKey]);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
+    pointerArmedRef.current = false;
+    setIsHovered(false);
     if (!isActive) return;
+    const arm = () => { pointerArmedRef.current = true; };
+    window.addEventListener('mousemove', arm, { once: true });
+    return () => window.removeEventListener('mousemove', arm);
   }, [isActive]);
 
   useEffect(() => {
@@ -104,6 +114,7 @@ export default function ProjectsSection({ isActive }) {
                   key={project.slug}
                   className={`project-bar ${isClassified ? 'project-bar-classified' : ''} ${isProjActive ? 'is-active' : ''}`}
                   onMouseEnter={() => !isClassified && !isTouch() && handleMouseEnter(project)}
+                  onMouseMove={() => !isClassified && !isTouch() && handleMouseEnter(project)}
                   onClick={() => !isClassified && isTouch() && setOverlayProject(project)}
                   style={{ '--idx': idx }}
                 >
