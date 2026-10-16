@@ -201,7 +201,8 @@
     gap: clamp(16px, 3svh, 28px);
     padding: 0 var(--flow-gutter) clamp(20px, 6svh, 56px);
   }
-  html.is-flow .ihyb-namewrap { width: 100%; }
+  /* Shrink-wrap so the AAKASH/VIJETA diagonal stays tight when the height cap wins (landscape) */
+  html.is-flow .ihyb-namewrap { width: fit-content; max-width: 100%; }
   html.is-flow .ihyb-name-a,
   html.is-flow .ihyb-name-b {
     /* AAKASH (≈3.83em, the wider line) + F1 italic overhang fills the content width */

@@ -2,12 +2,15 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useSectionContext, SECTIONS } from '../context/SectionContext';
 import { playEntrance, hideEntrance } from '../utils/entranceAnimation';
 
+const hasIO = typeof IntersectionObserver !== 'undefined';
+
 // Mobile (≤ 900px): every section in normal document flow with native scroll.
 export default function MobileFlow({ sections }) {
   const { activeIndex, goTo } = useSectionContext();
   const refs = useRef([]);
   const startIndexRef = useRef(activeIndex);
-  const [entered, setEntered] = useState(() => SECTIONS.map((_, i) => i === 0 || i === activeIndex));
+  // Without IntersectionObserver every section counts as entered up front.
+  const [entered, setEntered] = useState(() => SECTIONS.map((_, i) => !hasIO || i === 0 || i === activeIndex));
 
   // Before paint: hide entrance items of sections not yet on screen, and
   // restore the scroll position when arriving from the paged layout.
@@ -19,8 +22,7 @@ export default function MobileFlow({ sections }) {
 
   useEffect(() => {
     const els = refs.current.filter(Boolean);
-    if (typeof IntersectionObserver === 'undefined') {
-      setEntered(SECTIONS.map(() => true));
+    if (!hasIO) {
       els.forEach((el) => playEntrance(el));
       return;
     }

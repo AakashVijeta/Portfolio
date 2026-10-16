@@ -64,11 +64,14 @@ export default function ProjectsSection({ isActive }) {
 
   useEffect(() => {
     pointerArmedRef.current = false;
-    setIsHovered(false);
     if (!isActive) return;
     const arm = () => { pointerArmedRef.current = true; };
     window.addEventListener('mousemove', arm, { once: true });
-    return () => window.removeEventListener('mousemove', arm);
+    // Leaving the section clears any hover state left behind
+    return () => {
+      window.removeEventListener('mousemove', arm);
+      setIsHovered(false);
+    };
   }, [isActive]);
 
   useEffect(() => {
