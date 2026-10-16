@@ -28,15 +28,14 @@
   /* Texture on phones: fine fractal-noise grain + a faint 60px grid instead of the CRT
      scanlines and vignette (stripes alias on high-DPR screens; blend modes and flicker
      shimmer while scrolling). Both layers are fixed, static and pointer-transparent. */
-  html.is-flow body::before,
-  html.is-flow[data-theme="f1"] body::before {
+  html.is-flow body::before {
     background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E") 0 0 / 500px 500px;
     mix-blend-mode: normal;
     animation: none !important;
     opacity: 0.06 !important;
   }
-  /* Terminal: the grid sits BEHIND the page, so sections go transparent over the page
-     colour and the app is lifted above it. F1 keeps its carbon weave and gets no grid. */
+  /* The grid sits BEHIND the page, so sections go transparent over the page
+     colour and the app is lifted above it. */
   html.is-flow:not([data-theme="f1"]) body::after {
     background:
       linear-gradient(var(--color-border) 1px, transparent 1px) 0 0 / 60px 60px,
@@ -44,7 +43,6 @@
     opacity: 0.35;
     z-index: 0;
   }
-  html.is-flow[data-theme="f1"] body::after { content: none; }
   html.is-flow:not([data-theme="f1"]) .App,
   html.is-flow:not([data-theme="f1"]) .section { background-color: transparent; }
   html.is-flow .App { position: relative; z-index: 1; }
@@ -94,9 +92,6 @@
   html.is-flow .cc-dot,
   html.is-flow .cc-ring,
   html.is-flow .cc-label { display: none !important; }
-
-  /* F1 section corner brackets read as clutter in a single scrolling column */
-  html.is-flow[data-theme="f1"] .section-stripe::after { content: none; }
 
   /* Project sheet open: hold the page still behind it */
   html.is-flow.overlay-open,
@@ -275,8 +270,6 @@
     align-self: center;
     margin-top: 0;
   }
-  html.is-flow[data-theme="f1"] .ihyb-name-a,
-  html.is-flow[data-theme="f1"] .ihyb-name-b { padding-right: 0.12em; }
 
   html.is-flow .ihyb-dossier {
     width: 100%;
@@ -415,7 +408,6 @@
   html.is-flow .pm-open:active { background: var(--color-accent); color: var(--color-bg); }
   html.is-flow .pm-open:focus-visible,
   html.is-flow .pm-media:focus-visible { outline: 1px solid var(--color-accent); outline-offset: 3px; }
-
 
   @media (min-width: 640px) {
     html.is-flow .pm-list { display: grid; grid-template-columns: 1fr 1fr; }

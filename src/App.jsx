@@ -6,7 +6,6 @@ import MobileFlow from './components/MobileFlow';
 import MobileRail from './components/MobileRail';
 import ProjectOverlay from './components/ProjectOverlay';
 import Preloader from './components/Preloader';
-import BottomBar from './components/BottomBar';
 import NavDots from './components/NavDots';
 import CustomCursor from './components/CustomCursor';
 import IntroSection from './components/sections/IntroSection';
@@ -34,7 +33,6 @@ function App() {
       <div className="App">
         <CustomCursor />
         <Preloader />
-        {mode === 'paged' && <BottomBar />}
         {mode === 'paged' ? <NavDots /> : <MobileRail />}
         {mode === 'paged'
           ? <SectionManager sections={SECTION_COMPONENTS} />

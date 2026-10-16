@@ -14,29 +14,9 @@ const DOS_TERMINAL = [
   { key: 'STACK', val: 'DS · ML · AI SYS' },
 ];
 
-const DOS_F1 = [
-  { key: 'TEAM', val: 'INDEPENDENT' },
-  { key: 'BASE', val: 'IIT GUWAHATI · IND' },
-];
-
-function useTheme() {
-  const [isF1, setIsF1] = useState(
-    () => document.documentElement.getAttribute('data-theme') === 'f1'
-  );
-  useEffect(() => {
-    const obs = new MutationObserver(() =>
-      setIsF1(document.documentElement.getAttribute('data-theme') === 'f1')
-    );
-    obs.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
-    return () => obs.disconnect();
-  }, []);
-  return isF1;
-}
-
 export default function IntroSection({ isActive }) {
   const rootRef = useRef(null);
   const nameRef = useRef(null);
-  const isF1 = useTheme();
   const mode = useLayoutMode();
 
   const [preloaderDone, setPreloaderDone] = useState(() => !!sessionStorage.getItem('preloaded'));
@@ -174,11 +154,11 @@ export default function IntroSection({ isActive }) {
       ro.disconnect();
       lines.forEach((el) => el.style.removeProperty('font-size'));
     };
-  }, [mode, preloaderDone, isF1]);
+  }, [mode, preloaderDone]);
 
   if (!preloaderDone) return <section className="section intro-hero" />;
 
-  const dosRows = isF1 ? DOS_F1 : DOS_TERMINAL;
+  const dosRows = DOS_TERMINAL;
 
   return (
     <section ref={rootRef} className="section intro-hero">
@@ -188,7 +168,7 @@ export default function IntroSection({ isActive }) {
           <span className="intro-dot" />
           <span className="ihyb-accent">AUTH · ROOT_ACCESS</span>
           <span className="ihyb-sep">·</span>
-          <span>{isF1 ? 'F1_MODE · ACTIVE' : 'TERMINAL · ACTIVE'}</span>
+          <span>TERMINAL · ACTIVE</span>
         </div>
       </header>
 

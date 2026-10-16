@@ -4,8 +4,7 @@
    during scroll. Drop the expensive effects below 768px.
    ================================================================ */
 @media (max-width: 767.98px) {
-  .App,
-  [data-theme="f1"] .App {
+  .App {
     background-image: none !important;
   }
 
@@ -116,7 +115,6 @@ button {
     opacity 0.22s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-
 :root {
   /* Legacy aliases — kept for any old components during migration */
   --navy: #050905;
@@ -124,47 +122,11 @@ button {
   --accent-glow: rgba(0, 255, 65, 0.4);
 }
 
-[data-theme="f1"] {
-  --navy: #0a0a0a;
-  --accent: #e10600;
-  --accent-glow: rgba(225, 6, 0, 0.5);
-}
-
 /* ================================================================
    F1 — Start-line race lights (hidden in default theme)
    ================================================================ */
 .race-lights {
   display: none;
-}
-
-[data-theme="f1"] .race-lights {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  position: fixed;
-  top: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 500;
-  padding: 6px 12px;
-  background: linear-gradient(180deg, #0b0406 0%, #140608 100%);
-  border: 1px solid rgba(225, 6, 0, 0.35);
-  border-radius: 5px;
-  box-shadow:
-    0 0 0 1px rgba(0, 0, 0, 0.6) inset,
-    0 3px 16px -6px rgba(225, 6, 0, 0.35);
-  pointer-events: none;
-}
-
-[data-theme="f1"] .race-lights-pillar {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-}
-
-[data-theme="f1"] .race-lights-lamp {
-  width: 9px;
-  height: 9px;
 }
 
 .race-lights-pillar {
@@ -189,177 +151,9 @@ button {
   60%, 95%    { background-color: #2a0506; box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.8); }
 }
 
-@media (max-width: 600px) {
-  [data-theme="f1"] .race-lights {
-    transform: translateX(-50%) scale(0.8);
-    top: 8px;
-  }
-}
-
-/* ================================================================
-   F1 — Section dividers as faint checkered strips
-   ================================================================ */
-[data-theme="f1"] .section-header::after {
-  background: transparent;
-  background-image:
-    linear-gradient(45deg, #fff 25%, transparent 25%),
-    linear-gradient(-45deg, #fff 25%, transparent 25%),
-    linear-gradient(45deg, transparent 75%, #fff 75%),
-    linear-gradient(-45deg, transparent 75%, #fff 75%);
-  background-size: 5px 5px;
-  background-position: 0 0, 0 2.5px, 2.5px -2.5px, -2.5px 0;
-  height: 5px;
-  opacity: 0.55;
-  mask-image: linear-gradient(to right, #000, transparent);
-  -webkit-mask-image: linear-gradient(to right, #000, transparent);
-}
-
-[data-theme="f1"] .project-detail-section-header::after {
-  background: transparent;
-  background-image:
-    linear-gradient(45deg, #fff 25%, transparent 25%),
-    linear-gradient(-45deg, #fff 25%, transparent 25%),
-    linear-gradient(45deg, transparent 75%, #fff 75%),
-    linear-gradient(-45deg, transparent 75%, #fff 75%);
-  background-size: 4px 4px;
-  background-position: 0 0, 0 2px, 2px -2px, -2px 0;
-  height: 4px;
-  opacity: 0.5;
-  mask-image: linear-gradient(to right, #000, transparent);
-  -webkit-mask-image: linear-gradient(to right, #000, transparent);
-}
-
-/* ================================================================
-   F1 — Section number becomes a grid-position style badge
-   ================================================================ */
-[data-theme="f1"] .project-detail-section-number {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 26px;
-  height: 26px;
-  background-color: var(--accent);
-  color: #fff;
-  border-radius: 3px;
-  font-size: 12px;
-  font-weight: 700;
-  box-shadow: 0 0 10px -2px var(--accent-glow);
-}
-
-/* ================================================================
-   F1 — Subtle racing stripe accent on spotlight cards
-   ================================================================ */
-[data-theme="f1"] .spotlight-row {
-  position: relative;
-}
-
-[data-theme="f1"] .spotlight-row::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 20%;
-  bottom: 20%;
-  width: 2px;
-  background: linear-gradient(
-    180deg,
-    var(--accent) 0%,
-    var(--accent) 60%,
-    transparent 100%
-  );
-  opacity: 0.4;
-  transition: opacity 0.2s ease;
-  pointer-events: none;
-}
-
-[data-theme="f1"] .spotlight-row:hover::before {
-  opacity: 0.85;
-}
-
-[data-theme="f1"] .spotlight-list > *:nth-child(even) .spotlight-row::before {
-  left: auto;
-  right: 0;
-}
-
-/* ================================================================
-   F1 — Tech tags take a monospace racing-number vibe
-   ================================================================ */
-[data-theme="f1"] .project-detail-tech li,
-[data-theme="f1"] .spotlight-tech li,
-[data-theme="f1"] .spotlight-tag,
-[data-theme="f1"] .project-detail-tag {
-  font-family: var(--font-mono);
-  letter-spacing: 1px;
-}
-
-/* ================================================================
-   F1 — Chrome dot becomes a rev-limiter pulse (dot only — no text changes)
-   ================================================================ */
-[data-theme="f1"] .chrome-dot {
-  box-shadow:
-    0 0 8px var(--accent),
-    0 0 16px var(--accent-glow);
-  animation: revLimiter 1.2s ease-in-out infinite;
-}
-
 @keyframes revLimiter {
   0%, 100% { transform: scale(1); opacity: 1; }
   50%      { transform: scale(1.2); opacity: 0.55; }
-}
-
-/* ================================================================
-   F1 — Feature bullets → play-triangle
-   ================================================================ */
-[data-theme="f1"] .project-detail-features li::before {
-  content: "▶";
-  font-size: 11px;
-  top: 4px;
-}
-
-/* ================================================================
-   F1 — Navbar: warm the pill container to the race palette
-   ================================================================ */
-[data-theme="f1"] .navbar.is-scrolled > .container {
-  border-color: rgba(225, 6, 0, 0.25);
-  box-shadow: 0 0 20px -10px var(--accent-glow);
-}
-
-/* ================================================================
-   F1 — Section title: swap leading "/" for an alloy-wheel tire
-   ================================================================ */
-[data-theme="f1"] .section-title .reveal-word:first-child {
-  display: none;
-}
-
-[data-theme="f1"] .section-title {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.25em;
-}
-
-[data-theme="f1"] .section-title::before {
-  content: "";
-  display: block;
-  flex-shrink: 0;
-  width: 3em;
-  height: 2.35em;
-  background-image: url("/assets/tyre.svg");
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-  filter: brightness(4.5) drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5));
-}
-
-/* ================================================================
-   F1 — Architecture block gets a faint carbon-weave texture
-   ================================================================ */
-[data-theme="f1"] .project-detail-architecture {
-  background-image:
-    repeating-linear-gradient(
-      45deg,
-      rgba(255, 255, 255, 0.02) 0 2px,
-      transparent 2px 4px
-    );
-  border-left-color: var(--accent);
 }
 
 /* ================================================================
@@ -457,48 +251,6 @@ button {
   display: none;
 }
 
-[data-theme="f1"] .preloader {
-  background: radial-gradient(ellipse at center, #0a0204 0%, #000 80%);
-}
-
-[data-theme="f1"] .preloader-word {
-  color: var(--color-white);
-  text-shadow: 0 0 18px rgba(225, 6, 0, 0.35);
-}
-
-[data-theme="f1"] .preloader-bar {
-  display: none;
-}
-
-[data-theme="f1"] .preloader-lights {
-  display: inline-flex;
-  align-items: center;
-  gap: 14px;
-  padding: 14px 22px;
-  background: linear-gradient(180deg, #0b0406 0%, #140608 100%);
-  border: 1px solid rgba(225, 6, 0, 0.4);
-  border-radius: 8px;
-  box-shadow:
-    0 0 0 1px rgba(0, 0, 0, 0.6) inset,
-    0 6px 30px -8px rgba(225, 6, 0, 0.5);
-}
-
-[data-theme="f1"] .preloader-lights-pillar {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
-
-[data-theme="f1"] .preloader-lights-lamp {
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  background-color: #2a0506;
-  box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.85);
-  animation: preloaderRaceLights 2.1s ease-in-out forwards;
-  animation-delay: calc(var(--i) * 0.22s + 0.2s);
-}
-
 @keyframes preloaderRaceLights {
   0%   { background-color: #2a0506; box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.85); }
   25%, 75% {
@@ -509,5 +261,4 @@ button {
   }
   100% { background-color: #2a0506; box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.85); }
 }
-
 

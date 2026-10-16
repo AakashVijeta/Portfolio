@@ -17,25 +17,6 @@
   --glow-strong: 0 0 16px rgba(0, 255, 65, 0.3), 0 0 32px rgba(0, 255, 65, 0.12);
 }
 
-/* ── F1 Carbon Speed ────────────────────────────────────────── */
-[data-theme="f1"] {
-  --color-bg:       #0a0a0a;
-  --color-surface:  #111111;
-  --color-accent:   #e10600;
-  --color-text:     #ffffff;
-  --color-muted:    #444444;
-  --color-border:   #1e1e1e;
-  --color-white:    #ffffff;
-
-  --font-display: 'Rethink Sans', 'Inter', 'Segoe UI', system-ui, sans-serif;
-  --font-body:    'Rethink Sans', 'Inter', 'Segoe UI', system-ui, sans-serif;
-  --font-mono:    'JetBrains Mono', 'Consolas', monospace;
-  --font-serif:   'Cormorant Garamond', Georgia, 'Times New Roman', serif;
-
-  --glow: 0 0 8px rgba(225, 6, 0, 0.5);
-  --glow-strong: 0 0 16px rgba(225, 6, 0, 0.4), 0 0 32px rgba(225, 6, 0, 0.2);
-}
-
 /* ── Terminal: scanlines + CRT vignette overlays ─────────────── */
 body::before {
   content: '';
@@ -73,11 +54,6 @@ body::before {
   99% { opacity: 1; }
 }
 
-[data-theme="f1"] body::before {
-  opacity: 0 !important;
-  animation: none !important;
-}
-
 body::after {
   content: '';
   position: fixed;
@@ -89,51 +65,9 @@ body::after {
   transition: opacity 0.4s;
 }
 
-[data-theme="f1"] body::after {
-  opacity: 0;
-}
-
-/* ── F1: carbon fiber background ─────────────────────────────── */
-[data-theme="f1"] .App,
-[data-theme="f1"] .section {
-  background-color: #0a0a0a;
-  background-image: repeating-linear-gradient(
-    45deg,
-    rgba(255, 255, 255, 0.04) 0px,
-    rgba(255, 255, 255, 0.04) 1px,
-    transparent 1px,
-    transparent 3px,
-    rgba(0, 0, 0, 0.5) 3px,
-    rgba(0, 0, 0, 0.5) 4px,
-    transparent 4px,
-    transparent 6px
-  );
-}
-
 /* ── Terminal: base App background (both themes via variable) ─── */
 .App {
   background-color: var(--color-bg);
-}
-
-/* ── F1: corner accents on sections ──────────────────────────── */
-[data-theme="f1"] .section-stripe::after {
-  content: '';
-  position: absolute;
-  top: 16px;
-  right: 16px;
-  width: 32px;
-  height: 32px;
-  border-top: 2px solid var(--color-accent);
-  border-right: 2px solid var(--color-accent);
-  pointer-events: none;
-}
-
-/* ── F1: speed line under section headers ────────────────────── */
-[data-theme="f1"] .speed-line {
-  display: block;
-  height: 2px;
-  background: linear-gradient(to right, var(--color-accent), transparent);
-  margin-top: 8px;
 }
 
 /* ── Terminal: phosphor glow on headings and accent text ─────── */

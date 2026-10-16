@@ -10,7 +10,6 @@ const INTERACTIVE_SEL = [
   'label[for]',
   '.project-bar:not(.project-bar-classified)',
   '.nav-dot-btn',
-  '.theme-toggle',
   '[data-cursor]',
 ].join(',');
 
@@ -32,7 +31,6 @@ function hintFor(el) {
   if (el.classList.contains('nav-dot-btn')) {
     return aria ? `// JUMP · ${aria.toUpperCase()}` : '// JUMP TO SECTION';
   }
-  if (el.classList.contains('theme-toggle')) return '// SWITCH THEME';
 
   if (tag === 'a') {
     if (el.classList.contains('pane-link-btn-secondary')) {

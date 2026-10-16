@@ -2,17 +2,14 @@ import { useCallback, useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { useSectionContext, SECTIONS } from '../context/SectionContext';
 import { useSectionManager } from '../hooks/useSectionManager';
-import WipeTransition from './WipeTransition';
 import GlitchTransition from './GlitchTransition';
 import SectionCounter from './SectionCounter';
 import { playEntrance, hideEntrance } from '../utils/entranceAnimation';
 
-const isF1 = () => document.documentElement.getAttribute('data-theme') === 'f1';
 const isMobile = () => window.innerWidth <= 768;
 
 export default function SectionManager({ sections }) {
   const { activeIndex, isTransitioning, setIsTransitioning, goTo, navigateToRef } = useSectionContext();
-  const wipeRef   = useRef(null);
   const glitchRef = useRef(null);
   const sectionRefs = useRef([]);
 
@@ -43,9 +40,6 @@ export default function SectionManager({ sections }) {
         goTo(nextIndex);
         gsap.set(next, { opacity: 1 });
         await new Promise(r => setTimeout(r, 50));
-      } else if (isF1()) {
-        await wipeRef.current.play();
-        goTo(nextIndex);
       } else {
         await glitchRef.current.play(sectionRefs.current[activeIndexRef.current]);
         goTo(nextIndex);
@@ -84,9 +78,6 @@ export default function SectionManager({ sections }) {
           goTo(nextIndex);
           gsap.set(next, { opacity: 1 });
           await new Promise(r => setTimeout(r, 50));
-        } else if (isF1()) {
-          await wipeRef.current.play();
-          goTo(nextIndex);
         } else {
           await glitchRef.current.play(sectionRefs.current[activeIndexRef.current]);
           goTo(nextIndex);
@@ -108,7 +99,6 @@ export default function SectionManager({ sections }) {
 
   return (
     <>
-      <WipeTransition ref={wipeRef} />
       <GlitchTransition ref={glitchRef} />
       <SectionCounter />
 

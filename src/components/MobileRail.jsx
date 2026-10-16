@@ -1,9 +1,8 @@
 import { useSectionContext, SECTIONS, SECTION_LABELS } from '../context/SectionContext';
-import ThemeToggle from './ThemeToggle';
 
 const pad = (n) => String(n).padStart(2, '0');
 
-// Mobile-only top bar: section index with scroll-spy highlight + theme toggle.
+// Mobile-only top bar: section index with scroll-spy highlight.
 export default function MobileRail() {
   const { activeIndex } = useSectionContext();
 
@@ -32,7 +31,6 @@ export default function MobileRail() {
           </li>
         ))}
       </ol>
-      <ThemeToggle />
     </nav>
   );
 }

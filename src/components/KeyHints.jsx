@@ -32,8 +32,6 @@ export default function KeyHints({ revealDelay = 1500 }) {
       }}
     >
       <span>[↑][↓] navigate</span>
-      <span style={{ color: 'var(--color-border)' }}>·</span>
-      <span>[T] toggle mode</span>
     </div>
   );
 }

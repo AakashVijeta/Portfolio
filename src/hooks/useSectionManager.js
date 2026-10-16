@@ -54,13 +54,6 @@ export function useSectionManager({ activeIndex, isTransitioning, advance }) {
       if (isTransitioning) return;
       if (e.key === 'ArrowDown' || e.key === 'PageDown') advance(1);
       if (e.key === 'ArrowUp' || e.key === 'PageUp') advance(-1);
-      if (e.key === 't' || e.key === 'T') {
-        const current = document.documentElement.getAttribute('data-theme');
-        document.documentElement.setAttribute(
-          'data-theme',
-          current === 'f1' ? 'terminal' : 'f1'
-        );
-      }
     };
 
     window.addEventListener('wheel', onWheel, { passive: true });
