@@ -1,0 +1,92 @@
+/* ================================================================
+   DESKTOP SECTION CHROME (≥ 901px)
+   One spec for every section's header, title and footer so the four
+   screens read as one system. Mobile (html.is-flow) never matches.
+   ================================================================ */
+@media (min-width: 901px) {
+  html:not(.is-flow) {
+    --d-gutter: clamp(32px, 5vw, 72px);
+    --d-head-h: 96px;
+    --d-foot-h: 52px;
+    --d-chrome-font: 0.7rem;
+    --d-chrome-ls: 0.3em;
+  }
+
+  /* ── Header bars ───────────────────────────────────────────── */
+  html:not(.is-flow) .projects-topbar,
+  html:not(.is-flow) .about-profiler .profiler-head,
+  html:not(.is-flow) .contact-topbar {
+    flex: 0 0 auto;
+    height: var(--d-head-h);
+    min-height: var(--d-head-h);
+    padding: 0 var(--d-gutter) 12px;
+    gap: 12px;
+    justify-content: flex-end;
+  }
+
+  /* ── Section titles ────────────────────────────────────────── */
+  html:not(.is-flow) .projects-title,
+  html:not(.is-flow) .about-profiler .profiler-title,
+  html:not(.is-flow) .contact-title-main {
+    font-family: var(--font-display);
+    font-size: clamp(1.6rem, 2.7vw, 2.4rem);
+    font-weight: 300;
+    letter-spacing: 0.14em;
+    line-height: 1;
+  }
+
+  /* ── Header meta (right-hand labels) ───────────────────────── */
+  html:not(.is-flow) .projects-topmeta,
+  html:not(.is-flow) .about-profiler .profiler-head-meta,
+  html:not(.is-flow) .contact-topmeta {
+    font-family: var(--font-display);
+    font-size: var(--d-chrome-font);
+    letter-spacing: var(--d-chrome-ls);
+  }
+
+  /* ── Intro chrome: same type and margins as the other sections ── */
+  html:not(.is-flow) .ihyb-topbar,
+  html:not(.is-flow) .ihyb-bottombar,
+  html:not(.is-flow) .ihyb-clock {
+    font-family: var(--font-display);
+    font-size: var(--d-chrome-font);
+    letter-spacing: var(--d-chrome-ls);
+  }
+  html:not(.is-flow) .ihyb-topbar { padding-left: var(--d-gutter); padding-right: var(--d-gutter); }
+  html:not(.is-flow) .ihyb-topbar::after,
+  html:not(.is-flow) .ihyb-bottombar::before { left: var(--d-gutter); right: var(--d-gutter); }
+
+  /* ── Footer bars ───────────────────────────────────────────── */
+  html:not(.is-flow) .ihyb-bottombar,
+  html:not(.is-flow) .projects-bottombar,
+  html:not(.is-flow) .about-profiler .profiler-foot,
+  html:not(.is-flow) .contact-bottombar {
+    flex: 0 0 auto;
+    height: var(--d-foot-h);
+    min-height: var(--d-foot-h);
+    padding: 10px var(--d-gutter) 0;
+    font-family: var(--font-display);
+    font-size: var(--d-chrome-font);
+    letter-spacing: var(--d-chrome-ls);
+  }
+  /* Intro footer has no rule element of its own; keep its text on the same line as the others */
+  html:not(.is-flow) .ihyb-bottombar { align-items: flex-start; padding-top: 22px; }
+  html:not(.is-flow) .about-profiler .profiler-foot-inner,
+  html:not(.is-flow) .about-profiler .foot-version {
+    font-size: var(--d-chrome-font);
+    letter-spacing: var(--d-chrome-ls);
+  }
+  /* The version label was a boxed badge; the other footers use plain text */
+  html:not(.is-flow) .about-profiler .foot-version {
+    border: 0;
+    padding: 0;
+    background: none;
+    color: var(--color-muted);
+  }
+
+  /* ── Profile content sits on the same side margins as its header ── */
+  html:not(.is-flow) .about-profiler .profiler-main-scroll {
+    padding-left: var(--d-gutter);
+    padding-right: var(--d-gutter);
+  }
+}
