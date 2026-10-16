@@ -57,6 +57,21 @@ export default function AboutSection({ isActive }) {
     if (!isActive) return;
   }, [isActive]);
 
+  const availability = (
+    <div className="status-wrapper">
+      <div className="status-bg-scroll" />
+      <div className="status-header">
+        <span className="status-dot" />
+        AVAILABILITY
+      </div>
+      <div className="status-main">OPEN TO WORK</div>
+      <div className="status-footer">
+        <span>// CONTRACTS: ENABLED</span>
+        <span>[REMOTE_READY]</span>
+      </div>
+    </div>
+  );
+
   return (
     <section
       ref={rootRef}
@@ -108,20 +123,13 @@ export default function AboutSection({ isActive }) {
             <div className="id-cell"><span className="id-key">LEVEL:</span><span className="id-val">UNDERGRADUATE</span></div>
             <div className="id-cell"><span className="id-key">LANG_1:</span><span className="id-val">Hindi (Native)</span></div>
             <div className="id-cell"><span className="id-key">LANG_2:</span><span className="id-val">English (Fluent)</span></div>
-            <div className="status-wrapper">
-              <div className="status-bg-scroll" />
-              <div className="status-header">
-                <span className="status-dot" />
-                AVAILABILITY
-              </div>
-              <div className="status-main">OPEN TO WORK</div>
-              <div className="status-footer">
-                <span>// CONTRACTS: ENABLED</span>
-                <span>[REMOTE_READY]</span>
-              </div>
-            </div>
+            {mode === 'paged' && availability}
           </div>
         </div>
+
+        {mode === 'flow' && (
+          <div className="profiler-module col-availability section-enter-item">{availability}</div>
+        )}
 
         {/* MIDDLE — BEHAVIOR */}
         <div className="profiler-module col-behavior section-enter-item">
