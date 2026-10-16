@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import gsap from 'gsap';
 import { useSectionContext } from '../context/SectionContext';
+import { EASE_OUT } from '../utils/motion';
 
 export default function ProjectOverlay() {
   const { overlayProject, setOverlayProject } = useSectionContext();
@@ -13,8 +14,8 @@ export default function ProjectOverlay() {
   useEffect(() => {
     if (!overlayProject) return;
     gsap.fromTo('.project-overlay-inner',
-      { opacity: 0, y: 30 },
-      { opacity: 1, y: 0, duration: 0.35, ease: 'power2.out' }
+      { opacity: 0, y: 16 },
+      { opacity: 1, y: 0, duration: 0.3, ease: EASE_OUT }
     );
     const onKey = (e) => { if (e.key === 'Escape') setOverlayProject(null); };
     window.addEventListener('keydown', onKey);

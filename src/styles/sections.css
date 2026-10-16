@@ -1443,7 +1443,7 @@
   color: var(--color-text);
   background: rgba(0, 0, 0, 0.3);
   text-align: center;
-  transition: all 0.3s;
+  transition: color var(--dur-ui) ease, border-color var(--dur-ui) ease, background-color var(--dur-ui) ease;
 }
 
 .tech-chip-primary {
@@ -2217,7 +2217,7 @@
   min-height: 0;
   max-height: 76vh;
   overflow: hidden;
-  transition: grid-template-columns 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: grid-template-columns 0.4s var(--ease-in-out);
   padding: 0 clamp(20px, 3vw, 48px);
 }
 
@@ -2245,7 +2245,7 @@
   max-height: 75vh;
   padding: 24px 20px;
   /* Reduced horizontal padding to shrink distance */
-  transition: width 0.55s cubic-bezier(0.22, 1, 0.36, 1), max-width 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: width 0.4s var(--ease-in-out), max-width 0.4s var(--ease-in-out);
 }
 
 .projects-layout.is-active .projects-stack {
@@ -2263,7 +2263,7 @@
   cursor: pointer;
   contain: layout paint;
   transform: translateZ(0);
-  transition: flex 0.55s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.3s ease;
+  transition: flex 0.4s var(--ease-in-out), opacity 0.25s ease;
 }
 
 .project-bar:disabled {
@@ -2336,7 +2336,7 @@
   transform: scale(1.15) translateZ(0);
   will-change: transform, opacity;
   backface-visibility: hidden;
-  transition: transform 0.6s cubic-bezier(0.4, 0, 0.6, 1), opacity 0.4s ease;
+  transition: transform 0.4s var(--ease-out), opacity 0.25s ease;
 }
 
 .project-bar.is-active .bg-img {
@@ -2355,7 +2355,7 @@
   align-items: center;
   padding: 1.5rem 1.5rem;
   pointer-events: none;
-  transition: padding 0.45s cubic-bezier(0.25, 1, 0.5, 1);
+  transition: padding 0.4s var(--ease-in-out);
 }
 
 .projects-layout.is-active .project-bar:not(.is-active) .strip-content {
@@ -2366,7 +2366,7 @@
 .strip-left,
 .strip-right {
   transform: translateZ(0);
-  transition: transform 0.45s cubic-bezier(0.25, 1, 0.5, 1);
+  transition: transform 0.4s var(--ease-in-out);
   will-change: transform;
 }
 
@@ -2434,7 +2434,7 @@
   text-transform: uppercase;
   will-change: transform;
   transform: translateZ(0);
-  transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+  transition: transform 0.4s var(--ease-in-out);
 }
 
 .project-bar.is-active .strip-id {
@@ -2453,7 +2453,7 @@
   transform-origin: left center;
   transform: translateZ(0);
   will-change: transform;
-  transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s ease;
+  transition: transform 0.4s var(--ease-in-out), opacity 0.25s ease;
 }
 
 .project-bar.is-active .strip-title {
@@ -2505,10 +2505,10 @@
   justify-content: flex-start;
   padding: 20px 20px 20px 10px;
   opacity: 0;
-  transform: translateX(72px);
+  transform: translateX(24px);
   transition:
-    opacity 0.45s ease,
-    transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+    opacity 0.3s ease,
+    transform 0.4s var(--ease-out);
   pointer-events: none;
   min-height: 0;
   min-width: 0;
@@ -2598,7 +2598,7 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  transition: background 0.3s ease, color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  transition: background-color var(--dur-ui) ease, color var(--dur-ui) ease, border-color var(--dur-ui) ease, box-shadow var(--dur-ui) ease, transform var(--dur-press) var(--ease-out);
   font-weight: 600;
 }
 

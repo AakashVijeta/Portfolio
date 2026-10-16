@@ -1,4 +1,5 @@
 import gsap from 'gsap';
+import { EASE_OUT, prefersReducedMotion } from './motion';
 
 // Rise-and-fade every .section-enter-item inside `el`.
 export function playEntrance(el) {
@@ -6,8 +7,7 @@ export function playEntrance(el) {
   const items = el.querySelectorAll('.section-enter-item');
   if (!items.length) return;
 
-  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (prefersReduced) {
+  if (prefersReducedMotion()) {
     gsap.set(items, { opacity: 1, y: 0 });
     return;
   }
@@ -18,13 +18,13 @@ export function playEntrance(el) {
   // fights GSAP frame-by-frame and causes jank. Restore on complete.
   items.forEach(item => item.style.setProperty('transition', 'none'));
   gsap.fromTo(items,
-    { opacity: 0, y: 28 },
+    { opacity: 0, y: 16 },
     {
       opacity: 1,
       y: 0,
-      duration: 0.68,
-      stagger: { each: 0.07, from: 'start' },
-      ease: 'power3.out',
+      duration: 0.55,
+      stagger: { each: 0.06, from: 'start' },
+      ease: EASE_OUT,
       force3D: true,
       onComplete: () => {
         gsap.set(items, { clearProps: 'transform,opacity' });
@@ -37,5 +37,5 @@ export function playEntrance(el) {
 export function hideEntrance(el) {
   if (!el) return;
   const items = el.querySelectorAll('.section-enter-item');
-  if (items.length) gsap.set(items, { opacity: 0, y: 28 });
+  if (items.length) gsap.set(items, { opacity: 0, y: 16 });
 }

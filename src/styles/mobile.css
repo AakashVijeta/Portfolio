@@ -328,9 +328,15 @@
     background: var(--color-bg);
     font-family: var(--font-body);
     color: var(--color-text);
-    animation: pv-in 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    animation: pv-in 300ms var(--ease-out);
   }
   @keyframes pv-in { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+  /* Exit mirrors the entrance, a little faster */
+  html.is-flow .pv.pv--out { animation: pv-out 200ms var(--ease-out) forwards; }
+  @keyframes pv-out { to { opacity: 0; transform: translateY(16px); } }
+  /* Stepping between projects crossfades the file contents */
+  html.is-flow .pv-content { animation: pv-swap 220ms var(--ease-out); }
+  @keyframes pv-swap { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
   html.is-flow .pv-bg {
     position: absolute;
     inset: 0;
@@ -505,9 +511,37 @@
   html.is-flow .pv-prev { left: var(--flow-gutter); }
   html.is-flow .pv-next { right: var(--flow-gutter); }
   html.is-flow .pv-nav:active { border-color: var(--color-accent); color: var(--color-accent); }
-  @media (prefers-reduced-motion: reduce) {
-    html.is-flow .pv { animation: none; }
+  /* Press feedback: a quick, small push on every tappable control */
+  html.is-flow .pm-card,
+  html.is-flow .pm-arrow,
+  html.is-flow .cm-primary,
+  html.is-flow .cm-secondary a,
+  html.is-flow .pv-link,
+  html.is-flow .pv-close,
+  html.is-flow .pv-nav {
+    transition: transform var(--dur-press) var(--ease-out), background-color var(--dur-ui) ease, color var(--dur-ui) ease, border-color var(--dur-ui) ease;
   }
+  html.is-flow .pm-card:active { transform: scale(0.985); }
+  html.is-flow .pm-arrow:not(:disabled):active,
+  html.is-flow .cm-primary:active,
+  html.is-flow .cm-secondary a:active,
+  html.is-flow .pv-link:active,
+  html.is-flow .pv-close:active,
+  html.is-flow .pv-nav:active { transform: scale(0.97); }
+
+  @media (prefers-reduced-motion: reduce) {
+    html.is-flow .pv,
+    html.is-flow .pv-content { animation: none; }
+    html.is-flow .pv.pv--out { animation: pv-fade-out 120ms ease forwards; }
+    html.is-flow .pm-card:active,
+    html.is-flow .pm-arrow:active,
+    html.is-flow .cm-primary:active,
+    html.is-flow .cm-secondary a:active,
+    html.is-flow .pv-link:active,
+    html.is-flow .pv-close:active,
+    html.is-flow .pv-nav:active { transform: none; }
+  }
+  @keyframes pv-fade-out { to { opacity: 0; } }
 
   /* ── About: the desktop's bordered modules, stacked in one column ── */
   html.is-flow .profiler-main-scroll {

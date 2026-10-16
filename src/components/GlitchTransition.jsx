@@ -1,8 +1,10 @@
 import { forwardRef, useImperativeHandle, useRef } from 'react';
 import gsap from 'gsap';
+import { EASE_OUT } from '../utils/motion';
 
-// RGB channel split: 3 stacked clones of the outgoing section offset ±4px,
-// two random scan bands displace, hard cut, green flash.
+// RGB channel split: 3 stacked clones of the outgoing section offset a few px,
+// two hairline scan bands displace, hard cut under a faint accent flash.
+// Tuned to stay quiet: it bridges the section swap, it isn't the show.
 const GlitchTransition = forwardRef(function GlitchTransition(_, ref) {
   const containerRef = useRef(null);
 
@@ -51,13 +53,13 @@ const GlitchTransition = forwardRef(function GlitchTransition(_, ref) {
 
         // 3-clone RGB split: red left, green center, blue right
         if (clones.length === 3) {
-          tl.set(clones[0], { opacity: 1, x: -12 }, 0)
-            .set(clones[1], { opacity: 1, x: 0 }, 0)
-            .set(clones[2], { opacity: 1, x: 12 }, 0)
-            .to(clones[0], { x: -22, duration: 0.1, ease: 'none' }, 0)
-            .to(clones[2], { x: 22, duration: 0.1, ease: 'none' }, 0)
-            .to(clones[0], { x: -8, duration: 0.05, ease: 'none' }, 0.1)
-            .to(clones[2], { x: 8, duration: 0.05, ease: 'none' }, 0.1);
+          tl.set(clones[0], { opacity: 0.9, x: -6 }, 0)
+            .set(clones[1], { opacity: 0.9, x: 0 }, 0)
+            .set(clones[2], { opacity: 0.9, x: 6 }, 0)
+            .to(clones[0], { x: -10, duration: 0.1, ease: 'none' }, 0)
+            .to(clones[2], { x: 10, duration: 0.1, ease: 'none' }, 0)
+            .to(clones[0], { x: -3, duration: 0.05, ease: 'none' }, 0.1)
+            .to(clones[2], { x: 3, duration: 0.05, ease: 'none' }, 0.1);
         }
 
         // Two scan bands displace laterally
@@ -65,15 +67,15 @@ const GlitchTransition = forwardRef(function GlitchTransition(_, ref) {
         const y2 = `${55 + Math.random() * 25}%`;
         tl.set(band1, { top: y1, opacity: 1, x: 0 }, 0.06)
           .set(band2, { top: y2, opacity: 1, x: 0 }, 0.06)
-          .to(band1, { x: 38, duration: 0.08, ease: 'power2.out' }, 0.06)
-          .to(band2, { x: -30, duration: 0.08, ease: 'power2.out' }, 0.06);
+          .to(band1, { x: 18, duration: 0.08, ease: EASE_OUT }, 0.06)
+          .to(band2, { x: -14, duration: 0.08, ease: EASE_OUT }, 0.06);
 
         // Hard cut — caller swaps section
         tl.call(resolve, null, 0.14);
 
-        // Scanline flash: bright green overlay
+        // Faint accent flash masks the cut
         tl.set(flash, { opacity: 1 }, 0.14)
-          .to(flash, { opacity: 0, duration: 0.08, ease: 'power2.out' }, 0.14)
+          .to(flash, { opacity: 0, duration: 0.1, ease: EASE_OUT }, 0.14)
           .to(clones, { opacity: 0, duration: 0.06 }, 0.14)
           .to(band1, { opacity: 0, duration: 0.06 }, 0.14)
           .to(band2, { opacity: 0, duration: 0.06 }, 0.14);
@@ -87,16 +89,16 @@ const GlitchTransition = forwardRef(function GlitchTransition(_, ref) {
       style={{ position: 'fixed', inset: 0, zIndex: 10000, display: 'none', pointerEvents: 'none' }}
     >
       <div className="glitch-band-1" style={{
-        position: 'absolute', left: 0, right: 0, height: '8px',
-        background: '#00ff41', boxShadow: '0 0 12px #00ff41', opacity: 0,
+        position: 'absolute', left: 0, right: 0, height: '2px',
+        background: 'var(--color-accent)', boxShadow: '0 0 6px var(--color-accent)', opacity: 0,
       }} />
       <div className="glitch-band-2" style={{
-        position: 'absolute', left: 0, right: 0, height: '5px',
-        background: '#00ff41', boxShadow: '0 0 10px #00ff41', opacity: 0,
+        position: 'absolute', left: 0, right: 0, height: '1px',
+        background: 'var(--color-accent)', boxShadow: '0 0 4px var(--color-accent)', opacity: 0,
       }} />
       <div className="glitch-flash" style={{
         position: 'absolute', inset: 0,
-        background: 'rgba(0,255,65,0.25)',
+        background: 'color-mix(in srgb, var(--color-accent) 8%, transparent)',
         opacity: 0,
       }} />
     </div>

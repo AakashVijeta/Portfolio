@@ -4,6 +4,7 @@ import { projectDetails } from '../../data/projects';
 import { useSectionContext } from '../../context/SectionContext';
 import KeyHints from '../KeyHints';
 import { useLayoutMode } from '../../hooks/useLayoutMode';
+import { EASE_OUT, prefersReducedMotion } from '../../utils/motion';
 
 const isTouch = () => window.matchMedia('(hover: none)').matches;
 
@@ -44,19 +45,19 @@ export default function ProjectsSection({ isActive }) {
 
   useLayoutEffect(() => {
     if (!displayProject || !paneRef.current) return;
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (prefersReducedMotion()) return;
 
     const pane = paneRef.current;
     const ctx = gsap.context(() => {
-      const tl = gsap.timeline({ defaults: { ease: 'power3.out', force3D: true } });
+      const tl = gsap.timeline({ defaults: { ease: EASE_OUT, force3D: true } });
 
-      tl.from(pane, { opacity: 0, x: 56, duration: 0.5, clearProps: 'transform,opacity' });
-      tl.from('.pane-title',    { y: 16, opacity: 0, duration: 0.3, clearProps: 'transform,opacity' }, '<0.08');
-      tl.from('.pane-subtitle', { y: 12, opacity: 0, duration: 0.28, clearProps: 'transform,opacity' }, '<0.06');
+      tl.from(pane, { opacity: 0, x: 24, duration: 0.4, clearProps: 'transform,opacity' });
+      tl.from('.pane-title',    { y: 10, opacity: 0, duration: 0.3, clearProps: 'transform,opacity' }, '<0.08');
+      tl.from('.pane-subtitle', { y: 8, opacity: 0, duration: 0.28, clearProps: 'transform,opacity' }, '<0.06');
       tl.from('.pane-link-btn', { y: 8,  opacity: 0, stagger: 0.06, duration: 0.24, clearProps: 'transform,opacity' }, '<0.05');
-      tl.from('.pane-tag',      { scale: 0.78, opacity: 0, stagger: 0.03, duration: 0.2, clearProps: 'transform,opacity' }, '<0.04');
+      tl.from('.pane-tag',      { scale: 0.95, opacity: 0, stagger: 0.03, duration: 0.2, clearProps: 'transform,opacity' }, '<0.04');
       tl.from('.pane-heading',  { opacity: 0, duration: 0.26, clearProps: 'opacity' }, '<0.08');
-      tl.from('.pane-feature',  { x: 18, opacity: 0, stagger: 0.05, duration: 0.28, clearProps: 'transform,opacity' }, '<0.04');
+      tl.from('.pane-feature',  { x: 10, opacity: 0, stagger: 0.05, duration: 0.28, clearProps: 'transform,opacity' }, '<0.04');
     }, pane);
 
     return () => ctx.revert();

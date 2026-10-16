@@ -256,3 +256,14 @@
   html:not(.is-flow) .about-profiler .psych-bio { font-size: 0.86rem; }
   html:not(.is-flow) .about-profiler .history-line { font-size: 0.78rem; }
 }
+
+/* ── Desktop press feedback ─────────────────────────────────────── */
+@media (min-width: 901px) and (prefers-reduced-motion: no-preference) {
+  html:not(.is-flow) .pane-link-btn:active,
+  html:not(.is-flow) .contact-bracket-box:active,
+  html:not(.is-flow) .overlay-link:active { transform: scale(0.97); }
+  html:not(.is-flow) .contact-bracket-box,
+  html:not(.is-flow) .overlay-link {
+    transition: transform var(--dur-press) var(--ease-out), background-color var(--dur-ui) ease, color var(--dur-ui) ease, border-color var(--dur-ui) ease, box-shadow var(--dur-ui) ease;
+  }
+}
