@@ -42,10 +42,12 @@
       #seo-fallback h2 { font-size: 1.1rem; margin: 40px 0 8px; }
       #seo-fallback h3 { font-size: 1rem; margin: 24px 0 4px; }
       #seo-fallback a { color: #3dff7a; }
+      /* Hide for JS-enabled visitors so it doesn't flash before the preloader */
+      html.js #seo-fallback { display: none; }
     </style>
 
     <script>
-      (function(){try{var t=localStorage.getItem('portfolio-theme');if(t==='f1')document.documentElement.setAttribute('data-theme','f1');}catch(e){}})();
+      (function(){document.documentElement.classList.add('js');try{var t=localStorage.getItem('portfolio-theme');if(t==='f1')document.documentElement.setAttribute('data-theme','f1');}catch(e){}})();
     </script>
   </head>
   <body>
