@@ -174,4 +174,69 @@
   @media (min-width: 480px) {
     html.is-flow .mobile-rail-label { display: inline; }
   }
+
+  /* ── Intro ────────────────────────────────────────────────────── */
+  html.is-flow .intro-hero {
+    height: calc(100svh - var(--rail-h) - env(safe-area-inset-top));
+    min-height: 0;
+    overflow: hidden;
+    justify-content: space-between;
+  }
+  html.is-flow .ihyb-topbar {
+    padding: 14px var(--flow-gutter) 10px;
+    font-size: 0.56rem;
+    letter-spacing: 0.16em;
+  }
+  html.is-flow .ihyb-topbar::after,
+  html.is-flow .ihyb-bottombar::before { left: var(--flow-gutter); right: var(--flow-gutter); }
+  html.is-flow .ihyb-topbar-left { gap: 8px; flex-wrap: wrap; }
+
+  /* Name anchored to the lower third, dossier directly beneath */
+  html.is-flow .ihyb-center {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: stretch;
+    gap: clamp(16px, 3svh, 28px);
+    padding: 0 var(--flow-gutter) clamp(20px, 6svh, 56px);
+  }
+  html.is-flow .ihyb-namewrap { width: 100%; }
+  html.is-flow .ihyb-name-a,
+  html.is-flow .ihyb-name-b {
+    /* AAKASH (≈3.83em, the wider line) + F1 italic overhang fills the content width */
+    font-size: min(calc((100vw - 2 * var(--flow-gutter)) / 4.1), 22svh);
+    white-space: nowrap;
+  }
+  html.is-flow[data-theme="f1"] .ihyb-name-a,
+  html.is-flow[data-theme="f1"] .ihyb-name-b { padding-right: 0.12em; }
+
+  html.is-flow .ihyb-dossier {
+    width: 100%;
+    font-size: clamp(0.62rem, 2.8vw, 0.8rem);
+    letter-spacing: 0.08em;
+  }
+  html.is-flow .ihyb-dossier::before {
+    left: 0; right: 0;
+    top: -10px; bottom: auto;
+    width: auto; height: 1px;
+  }
+
+  html.is-flow .ihyb-bottombar {
+    padding: 10px var(--flow-gutter) max(14px, env(safe-area-inset-bottom));
+    font-size: 0.56rem;
+    letter-spacing: 0.16em;
+  }
+  html.is-flow .ihyb-scroll-cue { color: var(--color-accent); }
+  html.is-flow .ihyb-scroll-cue > span {
+    display: inline-block;
+    animation: ihyb-cue 1.6s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+  }
+  @keyframes ihyb-cue {
+    0%, 100% { transform: translateY(0); opacity: 1; }
+    50% { transform: translateY(4px); opacity: 0.5; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html.is-flow .ihyb-scroll-cue > span { animation: none; }
+  }
 }

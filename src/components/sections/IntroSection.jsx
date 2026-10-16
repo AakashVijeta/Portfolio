@@ -1,6 +1,7 @@
 import { useLayoutEffect, useRef, useState, useEffect } from 'react';
 import gsap from 'gsap';
 import KeyHints from '../KeyHints';
+import { useLayoutMode } from '../../hooks/useLayoutMode';
 
 const STATUS_WORDS    = ['ON TRACK', 'BUILDING', 'SHIPPING', 'TRAINING', 'COMPILING'];
 const TYPE_SPEED      = 80;
@@ -35,6 +36,7 @@ function useTheme() {
 export default function IntroSection({ isActive }) {
   const rootRef = useRef(null);
   const isF1 = useTheme();
+  const mode = useLayoutMode();
 
   const [preloaderDone, setPreloaderDone] = useState(() => !!sessionStorage.getItem('preloaded'));
 
@@ -188,7 +190,9 @@ export default function IntroSection({ isActive }) {
       <footer className="ihyb-bottombar">
         <span className="ihyb-clock">SYS_TIME · {timeStr}</span>
         <KeyHints revealDelay={0} />
-        <span className="ihyb-clock">USE ARROW KEYS OR SCROLL TO NAVIGATE</span>
+        {mode === 'flow'
+          ? <span className="ihyb-clock ihyb-scroll-cue">SCROLL <span aria-hidden="true">↓</span></span>
+          : <span className="ihyb-clock">USE ARROW KEYS OR SCROLL TO NAVIGATE</span>}
       </footer>
 
     </section>
