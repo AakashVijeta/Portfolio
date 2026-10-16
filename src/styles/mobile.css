@@ -63,7 +63,6 @@
   /* Desktop chrome that has no meaning on touch/scroll */
   html.is-flow .key-hints,
   html.is-flow .cc-dot,
-  html.is-flow .cc-ring,
   html.is-flow .cc-label { display: none !important; }
 
   /* Project sheet open: hold the page still behind it */

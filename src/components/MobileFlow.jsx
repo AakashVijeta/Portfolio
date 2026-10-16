@@ -30,7 +30,7 @@ export default function MobileFlow({ sections }) {
     }
     playEntrance(els[startIndexRef.current]);
 
-    // Fires as soon as any part of a section is on screen — works for any section height.
+    // Fires once a section is 40px into view (not merely touching the edge) — works for any height.
     const enterObs = new IntersectionObserver((entries) => {
       entries.forEach((e) => {
         if (!e.isIntersecting) return;
@@ -39,7 +39,7 @@ export default function MobileFlow({ sections }) {
         if (i !== 0 && i !== startIndexRef.current) playEntrance(e.target);
         setEntered((prev) => (prev[i] ? prev : prev.map((v, j) => (j === i ? true : v))));
       });
-    }, { rootMargin: '0px' });
+    }, { rootMargin: '0px 0px -40px 0px' });
 
     // Scroll-spy: the section crossing the 40% line is "current".
     const spyObs = new IntersectionObserver((entries) => {

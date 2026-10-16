@@ -76,6 +76,7 @@ export default function AboutSection({ isActive }) {
     <section
       ref={rootRef}
       className="section section-stripe about-profiler"
+      data-enter-stagger="0.09"
       style={mode === 'paged' ? {
         flexDirection: 'column',
         alignItems: 'stretch',

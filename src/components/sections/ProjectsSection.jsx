@@ -118,6 +118,7 @@ export default function ProjectsSection({ isActive }) {
     <section
       ref={rootRef}
       className="section section-stripe projects-section"
+      data-enter-stagger="0.09"
       style={mode === 'paged' ? { flexDirection: 'column', alignItems: 'stretch', padding: 0, overflow: 'hidden' } : undefined}
     >
       <header className="projects-topbar section-enter-item">
@@ -139,7 +140,7 @@ export default function ProjectsSection({ isActive }) {
               <button
                 type="button"
                 key={project.slug}
-                className="pm-card"
+                className="pm-card section-enter-item"
                 onClick={() => setOverlayProject(project)}
                 aria-label={`Open ${project.title}`}
               >
@@ -182,7 +183,7 @@ export default function ProjectsSection({ isActive }) {
               return (
                 <div
                   key={project.slug}
-                  className={`project-bar ${isClassified ? 'project-bar-classified' : ''} ${isProjActive ? 'is-active' : ''}`}
+                  className={`project-bar section-enter-item ${isClassified ? 'project-bar-classified' : ''} ${isProjActive ? 'is-active' : ''}`}
                   onMouseEnter={() => !isClassified && !isTouch() && handleMouseEnter(project)}
                   onMouseMove={() => !isClassified && !isTouch() && handleMouseEnter(project)}
                   onClick={() => !isClassified && isTouch() && setOverlayProject(project)}

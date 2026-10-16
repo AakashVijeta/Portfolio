@@ -1,7 +1,8 @@
 import gsap from 'gsap';
 import { EASE_OUT, prefersReducedMotion } from './motion';
 
-// Rise-and-fade every .section-enter-item inside `el`.
+// Rise-and-fade every .section-enter-item inside `el`, in DOM order.
+// A section can slow its stagger with data-enter-stagger="<seconds>".
 export function playEntrance(el) {
   if (!el) return;
   const items = el.querySelectorAll('.section-enter-item');
@@ -11,6 +12,9 @@ export function playEntrance(el) {
     gsap.set(items, { opacity: 1, y: 0 });
     return;
   }
+
+  const custom = parseFloat(el.querySelector('[data-enter-stagger]')?.dataset.enterStagger);
+  const each = Number.isFinite(custom) ? custom : 0.06;
 
   // Kill any running tweens on these items before animating in
   gsap.killTweensOf(items);
@@ -23,7 +27,7 @@ export function playEntrance(el) {
       opacity: 1,
       y: 0,
       duration: 0.55,
-      stagger: { each: 0.06, from: 'start' },
+      stagger: { each, from: 'start' },
       ease: EASE_OUT,
       force3D: true,
       onComplete: () => {
