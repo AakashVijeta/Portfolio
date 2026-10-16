@@ -9,7 +9,7 @@
     /* Notch-safe side gutter (viewport-fit=cover lets content reach the sensor housing in landscape) */
     --flow-gutter: max(24px, env(safe-area-inset-left), env(safe-area-inset-right));
     /* Spacing scale: generous negative space is the point on a dark, dense brand */
-    --space-section: 96px;  /* top of each section */
+    --space-section: 128px; /* top of each section */
     --space-block: 56px;    /* between blocks inside a section */
     --space-item: 28px;     /* between items in a list */
     --rail-h: 44px;
@@ -20,6 +20,35 @@
     overflow-x: clip;
     height: auto;
   }
+  /* A real page background: without it the browser's white shows past the end of the
+     page (iOS bottom area / overscroll) and the scanline overlay turns it grey */
+  html.is-flow,
+  html.is-flow body { background-color: var(--color-bg); }
+
+  /* Texture on phones: fine fractal-noise grain + a faint 60px grid instead of the CRT
+     scanlines and vignette (stripes alias on high-DPR screens; blend modes and flicker
+     shimmer while scrolling). Both layers are fixed, static and pointer-transparent. */
+  html.is-flow body::before,
+  html.is-flow[data-theme="f1"] body::before {
+    background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E") 0 0 / 500px 500px;
+    mix-blend-mode: normal;
+    animation: none !important;
+    opacity: 0.06 !important;
+  }
+  /* Terminal: the grid sits BEHIND the page, so sections go transparent over the page
+     colour and the app is lifted above it. F1 keeps its carbon weave and gets no grid. */
+  html.is-flow:not([data-theme="f1"]) body::after {
+    background:
+      linear-gradient(var(--color-border) 1px, transparent 1px) 0 0 / 60px 60px,
+      linear-gradient(90deg, var(--color-border) 1px, transparent 1px) 0 0 / 60px 60px;
+    opacity: 0.35;
+    z-index: 0;
+  }
+  html.is-flow[data-theme="f1"] body::after { content: none; }
+  html.is-flow:not([data-theme="f1"]) .App,
+  html.is-flow:not([data-theme="f1"]) .section { background-color: transparent; }
+  html.is-flow .App { position: relative; z-index: 1; }
+
   html.is-flow body,
   html.is-flow #root {
     overflow: visible;
@@ -66,6 +95,9 @@
   html.is-flow .cc-ring,
   html.is-flow .cc-label { display: none !important; }
 
+  /* F1 section corner brackets read as clutter in a single scrolling column */
+  html.is-flow[data-theme="f1"] .section-stripe::after { content: none; }
+
   /* Project sheet open: hold the page still behind it */
   html.is-flow.overlay-open,
   html.is-flow.overlay-open body { overflow: hidden; }
@@ -79,9 +111,6 @@
     padding: var(--space-section) var(--flow-gutter) 0;
     gap: 16px;
   }
-  /* Projects follows the hero, whose own space already separates them; a small top pad
-     keeps its heading inside the bottom-of-screen peek */
-  html.is-flow .projects-topbar { padding-top: 20px; }
   html.is-flow .projects-title,
   html.is-flow .profiler-title,
   html.is-flow .contact-title-main {
@@ -89,7 +118,6 @@
     letter-spacing: 0.1em;
   }
   html.is-flow .projects-topbar-row,
-  html.is-flow .profiler-head-row,
   html.is-flow .contact-topbar-row {
     flex-direction: column;
     align-items: flex-start;
@@ -132,7 +160,7 @@
     align-items: stretch;
     justify-content: space-between;
     gap: 8px;
-    background: color-mix(in srgb, var(--color-bg) 92%, transparent);
+    background: var(--color-bg);
     border-bottom: 1px solid var(--color-border);
   }
   html.is-flow .mobile-rail-list {
@@ -200,47 +228,51 @@
     html.is-flow .mobile-rail-label { display: inline; }
   }
 
-  /* ── Intro ────────────────────────────────────────────────────── */
-  /* Slightly shorter than the screen so the Projects header peeks in below it */
+  /* ── Intro: one centred block (stamp, name, dossier) filling the first screen ── */
   html.is-flow .intro-hero {
     height: auto;
-    min-height: calc(100svh - var(--rail-h) - env(safe-area-inset-top) - 88px);
+    min-height: calc(100svh - var(--rail-h) - env(safe-area-inset-top));
     overflow: hidden;
-    justify-content: flex-start;
+    justify-content: center;
+    align-items: stretch;
+    padding: 48px var(--flow-gutter);
+    gap: clamp(28px, 5svh, 44px);
   }
+  /* The status line becomes a bordered case-file stamp */
   html.is-flow .ihyb-topbar {
-    padding: 14px var(--flow-gutter) 10px;
+    align-self: center;
+    justify-content: center;
+    padding: 9px 14px;
+    border: 1px solid var(--color-accent);
     font-size: 0.56rem;
-    letter-spacing: 0.16em;
+    letter-spacing: 0.18em;
+    color: var(--color-accent);
   }
-  html.is-flow .ihyb-topbar::after { left: var(--flow-gutter); right: var(--flow-gutter); }
-  html.is-flow .ihyb-topbar-left { gap: 8px; flex-wrap: wrap; }
+  html.is-flow .ihyb-topbar::after { content: none; }
+  html.is-flow .ihyb-topbar-left { gap: 8px; flex-wrap: wrap; justify-content: center; }
 
-  /* Name + dossier as one block, optically centred in the hero */
   html.is-flow .ihyb-center {
-    flex: 1;
+    flex: none;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: stretch;
-    gap: clamp(28px, 5svh, 48px);
-    padding: clamp(32px, 7svh, 64px) var(--flow-gutter);
+    gap: clamp(28px, 5svh, 44px);
+    padding: 0;
   }
   html.is-flow .ihyb-namewrap {
     width: 100%;
-    align-items: flex-start;
+    align-items: center;
   }
   html.is-flow .ihyb-name-a,
   html.is-flow .ihyb-name-b {
-    /* AAKASH (≈3.83em, the wider line) + F1 italic overhang fills the content width.
-       !important beats the shared short-landscape rule in sections.css. */
+    /* Fallback size; IntroSection fits each line to the exact content width */
     font-size: min(calc((100vw - 2 * var(--flow-gutter)) / 4.1), 22svh) !important;
     line-height: 0.92;
     white-space: nowrap;
   }
-  /* Both lines flush-left; the desktop diagonal does not survive a narrow column */
   html.is-flow .ihyb-name-b {
-    align-self: flex-start;
+    align-self: center;
     margin-top: 0;
   }
   html.is-flow[data-theme="f1"] .ihyb-name-a,
@@ -395,38 +427,49 @@
     html.is-flow .pm-card.is-seen .pm-scan { animation: none; }
   }
 
-  /* ── About: one column, one left edge, no boxes ───────────────── */
-  /* The identity/behaviour wrappers dissolve (display: contents) so their pieces
-     can be re-ordered by importance: bio → availability → facts → history → skills. */
+  /* ── About: the desktop's bordered modules, stacked in one column ── */
   html.is-flow .profiler-main-scroll {
     flex: none;
     height: auto;
     overflow: visible !important;
     padding: 40px var(--flow-gutter) var(--space-section);
   }
+  /* Profile header: title left, case meta right, rule below */
+  html.is-flow .about-profiler .profiler-head-row {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 16px;
+  }
+  html.is-flow .about-profiler .profiler-title {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow-wrap: normal;
+    word-break: normal;
+  }
+  html.is-flow .about-profiler .profiler-head-meta {
+    flex: 0 1 40%;
+    text-align: right;
+    line-height: 1.6;
+  }
   html.is-flow .profiler-container {
     display: flex;
     flex-direction: column;
-    gap: var(--space-block);
+    gap: 48px;
     width: 100%;
-    max-width: 640px;
     height: auto;
     max-height: none;
     overflow: visible;
     padding: 0;
   }
-  html.is-flow .col-identity,
-  html.is-flow .col-behavior,
-  html.is-flow .psych-report { display: contents; }
   html.is-flow .profiler-module {
-    padding: 0;
-    border: 0;
-    background: none;
-    box-shadow: none;
+    height: auto;
+    max-height: none;
+    padding: 24px 20px;
     overflow: visible;
   }
-  html.is-flow .profiler-module::before,
-  html.is-flow .profiler-module::after { content: none; }
+  html.is-flow .col-behavior,
+  html.is-flow .psych-report,
   html.is-flow .col-capabilities-wrapper,
   html.is-flow .cap-top {
     height: auto;
@@ -436,95 +479,99 @@
     overflow: visible !important;
   }
 
-  /* Decorative or redundant on a phone (name is in the hero, label is chrome) */
-  html.is-flow .identity-name,
-  html.is-flow .fingerprint-scanner,
-  html.is-flow .analysis-header { display: none !important; }
-
-  /* 1. Bio leads */
-  html.is-flow .psych-bio {
-    order: 1;
+  /* Identity: name plate, scanner frame, facts, availability */
+  html.is-flow .col-identity {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    height: auto;
+  }
+  html.is-flow .identity-name {
     display: block;
-    font-size: 1.05rem;
-    line-height: 1.75;
-    max-width: 60ch;
+    width: 100%;
+    font-size: 1rem;
+    padding-bottom: 16px;
+    text-align: center !important;
   }
-  html.is-flow .psych-bio .hl-1,
-  html.is-flow .psych-bio .hl-2 {
-    border: 0;
-    padding: 0;
-    background: none;
-    color: var(--color-accent);
+  html.is-flow .fingerprint-scanner {
+    width: 100%;
+    max-width: 320px;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    margin: 0 auto;
   }
-
-  /* 2. Availability: the one framed element in the section */
-  html.is-flow .col-availability { order: 2; }
-  html.is-flow .col-availability .status-wrapper { margin: 0; padding: 24px; gap: 10px; }
+  html.is-flow .id-data-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px 16px;
+    font-size: 0.8rem;
+  }
+  html.is-flow .id-cell { display: flex; flex-direction: column; gap: 6px; }
+  html.is-flow .id-key { font-size: 0.6rem; }
+  html.is-flow .id-val { font-size: 0.8rem; }
+  html.is-flow .id-data-grid > .status-wrapper { grid-column: 1 / -1; margin-top: 8px; padding: 20px; gap: 10px; }
   html.is-flow .status-main { font-size: clamp(1.15rem, 5.4vw, 1.5rem); }
   html.is-flow .status-header,
   html.is-flow .status-footer { font-size: 0.58rem; }
 
-  /* 3. Facts: plain 2×2 key/value grid */
-  html.is-flow .id-data-grid {
-    order: 3;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 28px 20px;
-    font-size: 0.8rem;
+  /* Behaviour: report header, bio, history */
+  html.is-flow .analysis-header { font-size: 0.58rem; margin-bottom: 20px; padding-bottom: 12px; gap: 12px; }
+  html.is-flow .psych-report { padding-right: 0; }
+  html.is-flow .psych-bio {
+    display: block;
+    font-size: 1rem;
+    line-height: 1.75;
   }
-  html.is-flow .id-cell { display: flex; flex-direction: column; gap: 6px; }
-  html.is-flow .id-key { font-size: 0.6rem; color: var(--color-muted); }
-  html.is-flow .id-val { font-size: 0.8rem; }
-
-  /* 4. History: title and date on one line, description below, one rail */
-  html.is-flow .dossier-history { order: 4; display: flex; flex-direction: column; gap: var(--space-block); margin: 0; }
-  html.is-flow .history-block-title { font-size: 0.62rem; margin-bottom: 24px; }
-  html.is-flow .history-item { margin: 0 0 var(--space-item); padding-left: 16px; font-size: 0.9rem; line-height: 1.6; }
+  /* Keep the desktop's boxed highlight, but let it wrap cleanly across lines */
+  html.is-flow .psych-bio .hl-1,
+  html.is-flow .psych-bio .hl-2 {
+    padding: 1px 6px;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+  }
+  html.is-flow .dossier-history { display: flex; flex-direction: column; gap: 40px; margin-top: 40px; }
+  html.is-flow .history-block-title { font-size: 0.62rem; margin-bottom: 20px; }
+  html.is-flow .history-item { margin: 0 0 24px; padding-left: 14px; font-size: 0.9rem; line-height: 1.6; }
   html.is-flow .history-item:last-child { margin-bottom: 0; }
   html.is-flow .history-header {
     flex-direction: row;
     justify-content: space-between;
-    align-items: baseline;
-    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px 12px;
     margin-bottom: 8px;
   }
-  html.is-flow .history-period {
-    display: block;
-    flex-shrink: 0;
-    border: 0;
-    background: none;
-    padding: 0;
-    font-size: 0.62rem;
-    color: var(--color-muted);
-  }
-  html.is-flow .history-line { display: block; -webkit-line-clamp: unset; overflow: visible; font-size: 0.9rem; line-height: 1.5; }
+  html.is-flow .history-period { display: inline-block; flex-shrink: 0; font-size: 0.6rem; }
+  html.is-flow .history-line { display: block; -webkit-line-clamp: unset; overflow: visible; font-size: 0.9rem; line-height: 1.6; }
 
-  /* 5. Skills: one chip size; primary chips are marked by colour, not scale */
-  html.is-flow .col-capabilities-wrapper { order: 5; }
-  html.is-flow .cap-top { display: flex; flex-direction: column; gap: 40px; }
-  html.is-flow .cap-inv-label { display: none; }
-  html.is-flow .tech-category { display: flex; flex-direction: row; flex-wrap: wrap; align-items: center; gap: 10px; }
-  html.is-flow .tech-category .cat-title { flex-basis: 100%; font-size: 0.62rem; margin: 0 0 6px; }
-  html.is-flow .tech-category .cat-rule { display: none; }
+  /* Capabilities: the desktop's two-column chip grid */
+  html.is-flow .cap-top { display: flex; flex-direction: column; gap: 32px; }
+  html.is-flow .cap-inv-label { font-size: 0.58rem; text-align: left; }
+  html.is-flow .tech-category { display: flex; flex-direction: column; gap: 12px; }
+  html.is-flow .cat-title { font-size: 0.62rem; }
   html.is-flow .chips-primary,
-  html.is-flow .chips-grid { display: contents; }
-  html.is-flow .tech-category:last-child .chips-grid { display: contents; }
+  html.is-flow .chips-grid,
+  html.is-flow .tech-category:last-child .chips-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    max-height: none;
+    overflow: visible;
+    margin: 0;
+  }
   html.is-flow .tech-chip,
   html.is-flow .tech-chip-primary {
     box-sizing: border-box;
-    min-height: 32px;
-    display: inline-flex;
+    min-height: 48px;
+    display: flex;
     align-items: center;
+    justify-content: center;
+    text-align: center;
     width: auto;
-    font-size: 0.74rem;
-    font-weight: 400;
-    padding: 0 12px;
     flex: none !important;
+    font-size: 0.74rem;
+    padding: 6px 10px;
     transform: none !important;
-  }
-  html.is-flow .tech-chip-primary {
-    color: var(--color-accent);
-    border-color: var(--color-accent);
   }
 
   /* ── Contact: closing screen, CTAs in thumb reach ─────────────── */
@@ -534,7 +581,17 @@
     justify-content: flex-start;
     padding: 40px var(--flow-gutter) var(--space-section);
   }
-  html.is-flow .contact-content-inner { max-width: none; }
+  html.is-flow .contact-content-inner {
+    max-width: 480px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  html.is-flow .contact-topbar { align-items: center; }
+  html.is-flow .contact-topbar-row { align-items: center; text-align: center; }
+  html.is-flow .contact-topmeta { text-align: center; }
   html.is-flow .contact-title-wrap {
     font-size: clamp(0.72rem, 3.4vw, 0.95rem) !important;
     letter-spacing: 0.32em !important;
@@ -544,9 +601,11 @@
   html.is-flow .contact-command {
     font-size: clamp(0.95rem, 4.6vw, 1.5rem);
     gap: 8px;
+    justify-content: center;
     overflow-wrap: anywhere;
   }
   html.is-flow .cm-actions {
+    width: 100%;
     display: flex;
     flex-direction: column;
     gap: 16px;
@@ -573,22 +632,6 @@
     font-weight: 700;
   }
   html.is-flow .cm-primary:active { filter: brightness(0.85); }
-  html.is-flow .cm-copy {
-    all: unset;
-    box-sizing: border-box;
-    align-self: center;
-    min-height: 44px;
-    padding: 0 16px;
-    display: inline-flex;
-    align-items: center;
-    font-family: var(--font-mono);
-    font-size: 0.66rem;
-    letter-spacing: 0.24em;
-    color: var(--color-muted);
-    text-decoration: underline;
-    text-underline-offset: 4px;
-    cursor: pointer;
-  }
   html.is-flow .cm-secondary {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -601,10 +644,10 @@
   }
   html.is-flow .cm-secondary a:active { border-color: var(--color-accent); color: var(--color-accent); }
   html.is-flow .cm-primary:focus-visible,
-  html.is-flow .cm-secondary a:focus-visible,
-  html.is-flow .cm-copy:focus-visible { outline: 1px solid var(--color-accent); outline-offset: 3px; }
+  html.is-flow .cm-secondary a:focus-visible { outline: 1px solid var(--color-accent); outline-offset: 3px; }
 
-  html.is-flow .contact-dossier { margin-top: var(--space-block) !important; }
+  html.is-flow .contact-dossier { margin-top: var(--space-block) !important; padding-left: 0; border-left: 0; }
+  html.is-flow .contact-dossier .intro-dossier-line { justify-content: center; }
   html.is-flow .contact-dossier .intro-dossier-line { gap: 16px; font-size: 0.7rem; letter-spacing: 0.18em; }
   html.is-flow .contact-bottombar { padding-bottom: max(24px, env(safe-area-inset-bottom)); }
 }

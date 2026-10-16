@@ -1,6 +1,7 @@
 import { useLayoutEffect, useRef, useState, useEffect } from 'react';
 import gsap from 'gsap';
 import KeyHints from '../KeyHints';
+import { useLayoutMode } from '../../hooks/useLayoutMode';
 
 const STATUS_WORDS    = ['ON TRACK', 'BUILDING', 'SHIPPING', 'TRAINING', 'COMPILING'];
 const TYPE_SPEED      = 80;
@@ -34,7 +35,9 @@ function useTheme() {
 
 export default function IntroSection({ isActive }) {
   const rootRef = useRef(null);
+  const nameRef = useRef(null);
   const isF1 = useTheme();
+  const mode = useLayoutMode();
 
   const [preloaderDone, setPreloaderDone] = useState(() => !!sessionStorage.getItem('preloaded'));
 
@@ -147,6 +150,32 @@ export default function IntroSection({ isActive }) {
     return () => ctx.revert();
   }, [isActive, preloaderDone]);
 
+  // Mobile: one size for both lines, set so AAKASH (the wider word) spans 85% of the content.
+  useLayoutEffect(() => {
+    if (mode !== 'flow' || !preloaderDone || !nameRef.current) return;
+    const wrap = nameRef.current;
+    const lines = wrap.querySelectorAll('.ihyb-name-a, .ihyb-name-b');
+    const fit = () => {
+      const target = wrap.clientWidth;
+      const cap = window.innerHeight * 0.26;
+      lines.forEach((el) => el.style.setProperty('font-size', '100px', 'important'));
+      const range = document.createRange();
+      range.selectNodeContents(lines[0]);
+      const width = range.getBoundingClientRect().width;
+      if (!width) return;
+      const size = `${Math.min((100 * target * 0.85) / width, cap)}px`;
+      lines.forEach((el) => el.style.setProperty('font-size', size, 'important'));
+    };
+    fit();
+    document.fonts?.ready.then(fit);
+    const ro = new ResizeObserver(fit);
+    ro.observe(wrap);
+    return () => {
+      ro.disconnect();
+      lines.forEach((el) => el.style.removeProperty('font-size'));
+    };
+  }, [mode, preloaderDone, isF1]);
+
   if (!preloaderDone) return <section className="section intro-hero" />;
 
   const dosRows = isF1 ? DOS_F1 : DOS_TERMINAL;
@@ -164,7 +193,7 @@ export default function IntroSection({ isActive }) {
       </header>
 
       <div className="ihyb-center">
-        <h1 className="ihyb-namewrap" aria-label="Aakash Vijeta">
+        <h1 ref={nameRef} className="ihyb-namewrap" aria-label="Aakash Vijeta">
           <span className="ihyb-name-a">AAKASH</span>
           <span className="ihyb-name-b">VIJETA</span>
         </h1>

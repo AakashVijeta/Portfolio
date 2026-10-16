@@ -123,13 +123,9 @@ export default function AboutSection({ isActive }) {
             <div className="id-cell"><span className="id-key">LEVEL:</span><span className="id-val">UNDERGRADUATE</span></div>
             <div className="id-cell"><span className="id-key">LANG_1:</span><span className="id-val">Hindi (Native)</span></div>
             <div className="id-cell"><span className="id-key">LANG_2:</span><span className="id-val">English (Fluent)</span></div>
-            {mode === 'paged' && availability}
+            {availability}
           </div>
         </div>
-
-        {mode === 'flow' && (
-          <div className="profiler-module col-availability section-enter-item">{availability}</div>
-        )}
 
         {/* MIDDLE — BEHAVIOR */}
         <div className="profiler-module col-behavior section-enter-item">
