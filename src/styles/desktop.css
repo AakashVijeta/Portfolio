@@ -92,32 +92,32 @@
 }
 
 /* ── Profile (desktop): full-width three-column dossier ───────────
-   Spans the page edge to edge on the shared 32px margins, with 32px
-   column gaps and roomy modules. Content keeps its natural height and
-   scrolls inside the section (the wheel finishes the section first,
-   then moves on), instead of being squeezed into one screen. */
+   Spans the page on the shared margins with 32px column gaps, and fits
+   one screen: vertical spacing, the scanner, type and chips scale with
+   the window height (full size on tall screens, tighter on short ones). */
 @media (min-width: 1041px) {
+  html:not(.is-flow) .about-profiler {
+    --v-pad: clamp(16px, 2.6vh, 32px);
+    --v-gap: clamp(12px, 2.4vh, 32px);
+    --v-sm: clamp(8px, 1.4vh, 18px);
+  }
   html:not(.is-flow) .about-profiler .profiler-main-scroll {
     flex: 1 1 auto;
     min-height: 0;
-    display: block;
-    overflow-x: hidden !important;
-    overflow-y: auto !important;
-    overscroll-behavior: contain;
-    padding: 32px var(--d-gutter) 48px;
-    scrollbar-width: none;
+    display: flex;
+    overflow: hidden !important;
+    padding: var(--v-pad) var(--d-gutter);
   }
-  html:not(.is-flow) .about-profiler .profiler-main-scroll::-webkit-scrollbar { display: none; }
 
   html:not(.is-flow) .about-profiler .profiler-container {
     display: grid;
-    grid-template-columns: minmax(300px, 24%) minmax(0, 1fr) minmax(280px, 22%);
-    grid-template-rows: auto;
+    grid-template-columns: minmax(280px, 24%) minmax(0, 1fr) minmax(260px, 22%);
+    grid-template-rows: minmax(0, 1fr);
     gap: 32px;
     align-items: stretch;
     width: 100%;
     max-width: none;
-    height: auto;
+    height: 100%;
     max-height: none;
     overflow: visible;
     padding: 0;
@@ -127,8 +127,8 @@
     height: auto;
     min-height: 0;
     max-height: none;
-    padding: 32px;
-    overflow: visible;
+    padding: var(--v-pad);
+    overflow: hidden;
   }
   html:not(.is-flow) .about-profiler .col-behavior,
   html:not(.is-flow) .about-profiler .psych-report,
@@ -139,47 +139,56 @@
     min-height: 0;
     overflow: visible !important;
   }
+  html:not(.is-flow) .about-profiler .col-capabilities-wrapper { display: flex; flex-direction: column; }
+  html:not(.is-flow) .about-profiler .cap-top { flex: 1 1 auto; }
 
   /* Identity */
-  html:not(.is-flow) .about-profiler .col-identity { display: flex; flex-direction: column; gap: 32px; }
-  html:not(.is-flow) .about-profiler .identity-name { font-size: 1.2rem; letter-spacing: 0.06em; padding-bottom: 16px; }
-  html:not(.is-flow) .about-profiler .fingerprint-scanner { width: 100%; max-width: none; aspect-ratio: 1 / 1; height: auto; margin: 0; }
-  html:not(.is-flow) .about-profiler .id-data-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px 12px; font-size: 0.85rem; }
-  html:not(.is-flow) .about-profiler .id-key { font-size: 0.7rem; }
-  html:not(.is-flow) .about-profiler .id-val { font-size: 0.85rem; }
-  html:not(.is-flow) .about-profiler .id-data-grid > .status-wrapper { grid-column: 1 / -1; margin-top: 8px; padding: 16px; }
-  html:not(.is-flow) .about-profiler .status-main { font-size: 1.4rem; }
-  html:not(.is-flow) .about-profiler .status-footer { display: flex; justify-content: space-between; gap: 12px; }
+  html:not(.is-flow) .about-profiler .col-identity { display: flex; flex-direction: column; gap: var(--v-gap); }
+  html:not(.is-flow) .about-profiler .identity-name { font-size: 1.15rem; letter-spacing: 0.06em; padding-bottom: var(--v-sm); }
+  html:not(.is-flow) .about-profiler .fingerprint-scanner {
+    width: min(100%, 26vh);
+    max-width: none;
+    aspect-ratio: 1 / 1;
+    height: auto;
+    margin: 0 auto;
+    flex-shrink: 0;
+  }
+  html:not(.is-flow) .about-profiler .id-data-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--v-sm) 12px; font-size: 0.82rem; }
+  html:not(.is-flow) .about-profiler .id-key { font-size: 0.66rem; }
+  html:not(.is-flow) .about-profiler .id-val { font-size: 0.82rem; }
+  html:not(.is-flow) .about-profiler .id-data-grid > .status-wrapper { grid-column: 1 / -1; margin-top: 4px; padding: clamp(10px, 1.8vh, 16px); }
+  html:not(.is-flow) .about-profiler .status-main { font-size: clamp(1.1rem, 2.2vh, 1.4rem); }
   html:not(.is-flow) .about-profiler .status-header,
-  html:not(.is-flow) .about-profiler .status-footer { font-size: 0.62rem; }
+  html:not(.is-flow) .about-profiler .status-footer { font-size: 0.6rem; }
+  html:not(.is-flow) .about-profiler .status-footer { display: flex; justify-content: space-between; gap: 12px; }
 
-  /* Behaviour: report header, bio, history */
-  html:not(.is-flow) .about-profiler .analysis-header { font-size: 0.8rem; padding-bottom: 16px; margin-bottom: 32px; }
+  /* Behaviour: report header, bio, then the two logs side by side */
+  html:not(.is-flow) .about-profiler .analysis-header { font-size: 0.78rem; padding-bottom: var(--v-sm); margin-bottom: var(--v-gap); }
   html:not(.is-flow) .about-profiler .psych-report { padding-right: 0; }
-  html:not(.is-flow) .about-profiler .psych-bio { display: block; font-size: 1.1rem; line-height: 1.6; max-width: 68ch; }
+  html:not(.is-flow) .about-profiler .psych-bio { display: block; font-size: clamp(0.95rem, 1.9vh, 1.1rem); line-height: 1.6; max-width: 72ch; }
   html:not(.is-flow) .about-profiler .psych-bio .hl-1,
-  html:not(.is-flow) .about-profiler .psych-bio .hl-2 { padding: 2px 6px; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+  html:not(.is-flow) .about-profiler .psych-bio .hl-2 { padding: 1px 6px; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
   html:not(.is-flow) .about-profiler .dossier-history {
-    display: flex;
-    flex-direction: column;
-    gap: 40px;
-    margin-top: 48px;
-    padding-top: 32px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    margin-top: var(--v-gap);
+    padding-top: var(--v-gap);
     border-top: 1px solid var(--color-border);
   }
-  html:not(.is-flow) .about-profiler .history-block-title { font-size: 0.75rem; letter-spacing: 0.16em; margin-bottom: 20px; }
-  html:not(.is-flow) .about-profiler .history-item { margin-bottom: 24px; padding-left: 12px; font-size: 0.95rem; line-height: 1.6; }
+  html:not(.is-flow) .about-profiler .history-block-title { font-size: 0.72rem; letter-spacing: 0.16em; margin-bottom: var(--v-sm); }
+  html:not(.is-flow) .about-profiler .history-item { margin-bottom: var(--v-sm); padding-left: 12px; font-size: 0.9rem; line-height: 1.5; }
   html:not(.is-flow) .about-profiler .history-item:last-child { margin-bottom: 0; }
-  html:not(.is-flow) .about-profiler .history-header { gap: 12px; margin-bottom: 8px; }
-  html:not(.is-flow) .about-profiler .history-date { font-size: 1rem; }
-  html:not(.is-flow) .about-profiler .history-period { display: inline-block; font-size: 0.72rem; }
-  html:not(.is-flow) .about-profiler .history-line { display: block; -webkit-line-clamp: unset; overflow: visible; font-size: 0.95rem; line-height: 1.6; }
+  html:not(.is-flow) .about-profiler .history-header { gap: 10px; margin-bottom: 4px; flex-wrap: wrap; }
+  html:not(.is-flow) .about-profiler .history-date { font-size: 0.92rem; }
+  html:not(.is-flow) .about-profiler .history-period { display: inline-block; font-size: 0.68rem; }
+  html:not(.is-flow) .about-profiler .history-line { display: block; -webkit-line-clamp: unset; overflow: visible; font-size: clamp(0.82rem, 1.6vh, 0.92rem); line-height: 1.5; }
 
   /* Capabilities: chips sized to their text, wrapping */
-  html:not(.is-flow) .about-profiler .cap-top { display: flex; flex-direction: column; gap: 32px; }
-  html:not(.is-flow) .about-profiler .cap-inv-label { font-size: 0.7rem; }
-  html:not(.is-flow) .about-profiler .tech-category { display: flex; flex-direction: column; gap: 12px; }
-  html:not(.is-flow) .about-profiler .cat-title { font-size: 0.66rem; }
+  html:not(.is-flow) .about-profiler .cap-top { display: flex; flex-direction: column; gap: var(--v-gap); }
+  html:not(.is-flow) .about-profiler .cap-inv-label { font-size: 0.68rem; }
+  html:not(.is-flow) .about-profiler .tech-category { display: flex; flex-direction: column; gap: var(--v-sm); }
+  html:not(.is-flow) .about-profiler .cat-title { font-size: 0.64rem; }
   html:not(.is-flow) .about-profiler .chips-primary,
   html:not(.is-flow) .about-profiler .chips-grid,
   html:not(.is-flow) .about-profiler .tech-category:last-child .chips-grid {
@@ -195,11 +204,46 @@
   html:not(.is-flow) .about-profiler .tech-chip-primary {
     flex: 0 0 auto !important;
     width: auto;
-    min-height: 38px;
+    min-height: clamp(30px, 4.2vh, 38px);
     display: inline-flex;
     align-items: center;
-    padding: 8px 14px;
-    font-size: 0.85rem;
+    padding: 0 12px;
+    font-size: 0.8rem;
     letter-spacing: 0.03em;
   }
+}
+
+/* Profile on short screens (laptops ≤ 820px tall): one notch tighter */
+@media (min-width: 1041px) and (max-height: 820px) {
+  html:not(.is-flow) .about-profiler {
+    --v-pad: clamp(12px, 2vh, 20px);
+    --v-gap: clamp(10px, 1.8vh, 18px);
+    --v-sm: clamp(6px, 1vh, 10px);
+  }
+  html:not(.is-flow) .about-profiler .identity-name { font-size: 1rem; }
+  html:not(.is-flow) .about-profiler .id-key { font-size: 0.6rem; }
+  html:not(.is-flow) .about-profiler .id-val { font-size: 0.76rem; }
+  html:not(.is-flow) .about-profiler .status-main { font-size: 1.05rem; }
+  html:not(.is-flow) .about-profiler .psych-bio { font-size: 0.9rem; line-height: 1.5; }
+  html:not(.is-flow) .about-profiler .history-date { font-size: 0.82rem; }
+  html:not(.is-flow) .about-profiler .history-line { font-size: 0.8rem; line-height: 1.45; }
+  html:not(.is-flow) .about-profiler .tech-chip,
+  html:not(.is-flow) .about-profiler .tech-chip-primary { min-height: 28px; font-size: 0.74rem; padding: 0 10px; }
+}
+
+/* Profile on narrower desktops: give the middle report more of the width */
+@media (min-width: 1041px) and (max-width: 1240px) {
+  html:not(.is-flow) .about-profiler .profiler-container {
+    grid-template-columns: minmax(220px, 21%) minmax(0, 1fr) minmax(210px, 20%);
+    gap: 20px;
+  }
+}
+
+/* Very short desktop windows (≤ 720px tall) */
+@media (min-width: 1041px) and (max-height: 720px) {
+  html:not(.is-flow) .about-profiler {
+    --v-gap: clamp(8px, 1.4vh, 12px);
+  }
+  html:not(.is-flow) .about-profiler .psych-bio { font-size: 0.86rem; }
+  html:not(.is-flow) .about-profiler .history-line { font-size: 0.78rem; }
 }
