@@ -151,7 +151,6 @@ export default function ProjectsSection({ isActive }) {
                     decoding="async"
                   />
                 )}
-                <span className="pm-card-scan" aria-hidden="true" />
                 <span className="pm-card-num" aria-hidden="true">{pad2(idx + 1)}</span>
                 <span className="pm-card-body">
                   <span className="pm-card-id">EVIDENCE #{pad2(idx + 1)}</span>
