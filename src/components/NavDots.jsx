@@ -1,7 +1,5 @@
 import { useState } from 'react';
-import { useSectionContext, SECTIONS } from '../context/SectionContext';
-
-const LABELS = ['INTRO', 'PROJECTS', 'PROFILE', 'SOCIALS'];
+import { useSectionContext, SECTIONS, SECTION_LABELS } from '../context/SectionContext';
 
 export default function NavDots() {
   const { activeIndex, isTransitioning, navigateTo } = useSectionContext();
@@ -30,7 +28,7 @@ export default function NavDots() {
           <button
             key={i}
             className="nav-dot-btn"
-            aria-label={`Go to ${LABELS[i]}`}
+            aria-label={`Go to ${SECTION_LABELS[i]}`}
             disabled={isTransitioning}
             onClick={() => navigateTo(i)}
             onMouseEnter={() => setHoveredIndex(i)}
@@ -77,7 +75,7 @@ export default function NavDots() {
               pointerEvents: 'none',
               whiteSpace: 'nowrap',
             }}>
-              {LABELS[i]}
+              {SECTION_LABELS[i]}
             </span>
           </button>
         );

@@ -3,6 +3,7 @@ import { createContext, useContext, useState, useCallback, useRef } from 'react'
 const SectionContext = createContext(null);
 
 export const SECTIONS = ['intro', 'projects', 'about', 'socials'];
+export const SECTION_LABELS = ['INTRO', 'PROJECTS', 'PROFILE', 'SOCIALS'];
 
 export function SectionProvider({ children }) {
   const [activeIndex, setActiveIndex] = useState(0);

@@ -1,3 +1,5 @@
+import { useLayoutEffect } from 'react';
+import { useLayoutMode } from './hooks/useLayoutMode';
 import { SectionProvider } from './context/SectionContext';
 import SectionManager from './components/SectionManager';
 import ProjectOverlay from './components/ProjectOverlay';
@@ -19,6 +21,12 @@ const SECTION_COMPONENTS = [
 ];
 
 function App() {
+  const mode = useLayoutMode();
+
+  useLayoutEffect(() => {
+    document.documentElement.classList.toggle('is-flow', mode === 'flow');
+  }, [mode]);
+
   return (
     <SectionProvider>
       <div className="App">
