@@ -20,33 +20,6 @@
     overflow-x: clip;
     height: auto;
   }
-  /* A real page background: without it the browser's white shows past the end of the
-     page (iOS bottom area / overscroll) and the scanline overlay turns it grey */
-  html.is-flow,
-  html.is-flow body { background-color: var(--color-bg); }
-
-  /* Texture on phones: fine fractal-noise grain + a faint 60px grid instead of the CRT
-     scanlines and vignette (stripes alias on high-DPR screens; blend modes and flicker
-     shimmer while scrolling). Both layers are fixed, static and pointer-transparent. */
-  html.is-flow body::before {
-    background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E") 0 0 / 500px 500px;
-    mix-blend-mode: normal;
-    animation: none !important;
-    opacity: 0.06 !important;
-  }
-  /* The grid sits BEHIND the page, so sections go transparent over the page
-     colour and the app is lifted above it. */
-  html.is-flow:not([data-theme="f1"]) body::after {
-    background:
-      linear-gradient(var(--color-border) 1px, transparent 1px) 0 0 / 60px 60px,
-      linear-gradient(90deg, var(--color-border) 1px, transparent 1px) 0 0 / 60px 60px;
-    opacity: 0.35;
-    z-index: 0;
-  }
-  html.is-flow:not([data-theme="f1"]) .App,
-  html.is-flow:not([data-theme="f1"]) .section { background-color: transparent; }
-  html.is-flow .App { position: relative; z-index: 1; }
-
   html.is-flow body,
   html.is-flow #root {
     overflow: visible;
