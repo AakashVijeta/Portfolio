@@ -86,26 +86,32 @@ export default function ProjectsSection({ isActive }) {
     gsap.to(dummy, { v: 1, duration: 0.01, onComplete: () => gsap.killTweensOf(dummy) });
   }, []);
 
-  const listRef = useRef(null);
+  // Flow mode: swipeable card slider (native scroll-snap) with prev/next arrows.
+  const trackRef = useRef(null);
+  const [slide, setSlide] = useState(0);
 
-  // Flow mode: mark each card once it scrolls into view (drives rise + scan reveal).
-  useEffect(() => {
-    if (mode !== 'flow' || !listRef.current) return;
-    const cards = listRef.current.querySelectorAll('.pm-card');
-    if (typeof IntersectionObserver === 'undefined') {
-      cards.forEach((c) => c.classList.add('is-seen'));
-      return;
-    }
-    const obs = new IntersectionObserver((entries) => {
-      entries.forEach((e) => {
-        if (!e.isIntersecting) return;
-        e.target.classList.add('is-seen');
-        obs.unobserve(e.target);
-      });
-    }, { rootMargin: '0px 0px -5% 0px' });
-    cards.forEach((c) => obs.observe(c));
-    return () => obs.disconnect();
-  }, [mode]);
+  const goTo = (i) => {
+    const track = trackRef.current;
+    const card = track?.children[i];
+    if (!card) return;
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    track.scrollTo({ left: card.offsetLeft - (track.clientWidth - card.offsetWidth) / 2, behavior: reduced ? 'auto' : 'smooth' });
+  };
+
+  const onTrackScroll = () => {
+    const track = trackRef.current;
+    if (!track) return;
+    const centre = track.scrollLeft + track.clientWidth / 2;
+    let best = 0;
+    [...track.children].forEach((c, i) => {
+      const d = Math.abs(c.offsetLeft + c.offsetWidth / 2 - centre);
+      const bd = Math.abs(track.children[best].offsetLeft + track.children[best].offsetWidth / 2 - centre);
+      if (d < bd) best = i;
+    });
+    if (best !== slide) setSlide(best);
+  };
+
+  const pad2 = (n) => String(n).padStart(2, '0');
 
   return (
     <section
@@ -126,41 +132,41 @@ export default function ProjectsSection({ isActive }) {
       </header>
 
       {mode === 'flow' ? (
-        <div className="pm-list" ref={listRef}>
-          {projectDetails.map((project, idx) => (
-            <article key={project.slug} className="pm-card">
+        <div className="pm-slider">
+          <div className="pm-track" ref={trackRef} onScroll={onTrackScroll}>
+            {projectDetails.map((project, idx) => (
               <button
                 type="button"
-                className="pm-media"
+                key={project.slug}
+                className="pm-card"
                 onClick={() => setOverlayProject(project)}
                 aria-label={`Open ${project.title}`}
               >
                 {project.image && (
                   <img
+                    className="pm-card-img"
                     src={project.image}
                     alt={`${project.title} — ${project.tag} project screenshot`}
                     loading="lazy"
                     decoding="async"
                   />
                 )}
-                <span className="pm-scan" aria-hidden="true" />
+                <span className="pm-card-scan" aria-hidden="true" />
+                <span className="pm-card-num" aria-hidden="true">{pad2(idx + 1)}</span>
+                <span className="pm-card-body">
+                  <span className="pm-card-id">EVIDENCE #{pad2(idx + 1)}</span>
+                  <span className="pm-card-title">{project.title}</span>
+                  <span className="pm-card-tag">{project.tag}</span>
+                  <span className="pm-card-cta">[ OPEN FILE <span aria-hidden="true">→</span> ]</span>
+                </span>
               </button>
-              <div className="pm-body">
-                <div className="pm-meta">
-                  <span className="pm-id">EVIDENCE #{String(idx + 1).padStart(2, '0')}</span>
-                  <span className="pm-tag">{project.tag}</span>
-                </div>
-                <h3 className="pm-title">{project.title}</h3>
-                <p className="pm-subtitle">{project.subtitle}</p>
-                <ul className="pm-tech">
-                  {project.techStack.slice(0, 4).map((t) => <li key={t}>{t}</li>)}
-                </ul>
-                <button type="button" className="pm-open" onClick={() => setOverlayProject(project)}>
-                  [ OPEN FILE <span aria-hidden="true">→</span> ]
-                </button>
-              </div>
-            </article>
-          ))}
+            ))}
+          </div>
+          <div className="pm-controls">
+            <button type="button" className="pm-arrow pm-arrow-prev" disabled={slide === 0} onClick={() => goTo(slide - 1)} aria-label="Previous project">‹</button>
+            <span className="pm-count" aria-live="polite">{pad2(slide + 1)} / {pad2(projectDetails.length)}</span>
+            <button type="button" className="pm-arrow pm-arrow-next" disabled={slide === projectDetails.length - 1} onClick={() => goTo(slide + 1)} aria-label="Next project">›</button>
+          </div>
         </div>
       ) : (
       <div

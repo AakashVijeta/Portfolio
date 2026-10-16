@@ -284,139 +284,359 @@
   }
   html.is-flow .ihyb-dos-row { padding: 8px 0; }
 
-  /* ── Projects: evidence file stack ────────────────────────────── */
-  html.is-flow .pm-list {
+  /* ── Projects: swipeable evidence cards ───────────────────────── */
+  html.is-flow .pm-slider {
+    --card-w: 78vw;
+    --card-h: min(64svh, 560px);
+    padding: 40px 0 var(--space-section);
+  }
+  /* Native horizontal scroll + snap: real touch momentum, never fights the page scroll */
+  html.is-flow .pm-track {
     display: flex;
-    flex-direction: column;
-    gap: var(--space-block);
-    padding: 40px var(--flow-gutter) var(--space-section);
-  }
-  html.is-flow .pm-card {
-    border: 1px solid var(--color-border);
-    background: var(--color-surface);
-    opacity: 0;
-    transform: translateY(24px);
-    transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1), transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-  }
-  html.is-flow .pm-card.is-seen { opacity: 1; transform: none; }
-
-  html.is-flow .pm-media {
-    all: unset;
-    display: block;
-    position: relative;
-    width: 100%;
-    aspect-ratio: 16 / 10;
-    overflow: hidden;
-    background: #020202;
-    cursor: pointer;
-    -webkit-tap-highlight-color: transparent;
-  }
-  html.is-flow .pm-media img {
-    width: 100%;
-    height: 100%;
-    max-width: none;
-    object-fit: cover;
-    object-position: top left;
-    display: block;
-    clip-path: inset(0 100% 0 0);
-    transition: clip-path 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.1s;
-  }
-  html.is-flow .pm-card.is-seen .pm-media img { clip-path: inset(0 0 0 0); }
-  /* Scan line sweeps with the reveal */
-  html.is-flow .pm-scan {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    width: 2px;
-    background: var(--color-accent);
-    box-shadow: var(--glow-strong);
-    opacity: 0;
-    pointer-events: none;
-  }
-  html.is-flow .pm-card.is-seen .pm-scan { animation: pm-scan 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.1s both; }
-  @keyframes pm-scan {
-    0% { left: 0; opacity: 1; }
-    90% { opacity: 1; }
-    100% { left: calc(100% - 2px); opacity: 0; }
-  }
-
-  html.is-flow .pm-body {
-    display: flex;
-    flex-direction: column;
     gap: 16px;
-    padding: 24px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    overscroll-behavior-x: contain;
+    padding: 0 calc((100vw - var(--card-w)) / 2);
+    scrollbar-width: none;
   }
-  html.is-flow .pm-meta {
-    display: flex;
-    justify-content: space-between;
-    gap: 12px;
-    font-family: var(--font-mono);
-    font-size: 0.62rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-  }
-  html.is-flow .pm-id { color: var(--color-accent); }
-  html.is-flow .pm-tag { color: var(--color-muted); text-align: right; }
-  html.is-flow .pm-title {
-    font-family: var(--font-body);
-    font-size: clamp(1.25rem, 5.6vw, 1.6rem);
-    font-weight: 500;
-    line-height: 1.15;
-    color: var(--color-text);
-  }
-  html.is-flow .pm-subtitle {
-    font-size: 0.88rem;
-    line-height: 1.5;
-    color: var(--color-muted);
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-    overflow: hidden;
-  }
-  html.is-flow .pm-tech {
-    list-style: none;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-  }
-  html.is-flow .pm-tech li {
-    font-family: var(--font-mono);
-    font-size: 0.62rem;
-    letter-spacing: 0.08em;
-    padding: 4px 8px;
-    border: 1px solid var(--color-border);
-    color: var(--color-text);
-  }
-  html.is-flow .pm-open {
+  html.is-flow .pm-track::-webkit-scrollbar { display: none; }
+
+  html.is-flow .pm-card {
     all: unset;
     box-sizing: border-box;
-    margin-top: 12px;
-    min-height: 48px;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: var(--font-mono);
-    font-size: 0.72rem;
-    letter-spacing: 0.24em;
-    color: var(--color-accent);
+    position: relative;
+    flex: 0 0 var(--card-w);
+    height: var(--card-h);
+    scroll-snap-align: center;
+    overflow: hidden;
+    background: #020202;
     border: 1px solid var(--color-accent);
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
   }
-  html.is-flow .pm-open:active { background: var(--color-accent); color: var(--color-bg); }
-  html.is-flow .pm-open:focus-visible,
-  html.is-flow .pm-media:focus-visible { outline: 1px solid var(--color-accent); outline-offset: 3px; }
-
-  @media (min-width: 640px) {
-    html.is-flow .pm-list { display: grid; grid-template-columns: 1fr 1fr; }
+  html.is-flow .pm-card:focus-visible { outline: 1px solid var(--color-accent); outline-offset: 4px; }
+  html.is-flow .pm-card:active { transform: scale(0.99); }
+  html.is-flow .pm-card-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    object-fit: cover;
+    object-position: top center;
+    opacity: 0.55;
+  }
+  /* Darken the lower half so the file label reads over any screenshot */
+  html.is-flow .pm-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 30%, color-mix(in srgb, var(--color-bg) 92%, transparent) 78%);
+    pointer-events: none;
+  }
+  /* A scan line sweeps the file on a loop */
+  html.is-flow .pm-card-scan {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 1px;
+    z-index: 2;
+    background: var(--color-accent);
+    box-shadow: 0 0 12px var(--color-accent);
+    opacity: 0.7;
+    animation: pm-scan-down 3.2s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+    pointer-events: none;
+  }
+  @keyframes pm-scan-down {
+    0% { transform: translateY(0); opacity: 0; }
+    10% { opacity: 0.7; }
+    90% { opacity: 0.7; }
+    100% { transform: translateY(var(--card-h)); opacity: 0; }
+  }
+  html.is-flow .pm-card-num {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    z-index: 1;
+    font-family: var(--font-display);
+    font-size: 5rem;
+    font-weight: 700;
+    line-height: 1;
+    color: transparent;
+    -webkit-text-stroke: 1px color-mix(in srgb, var(--color-accent) 45%, transparent);
+  }
+  html.is-flow .pm-card-body {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 24px;
+  }
+  html.is-flow .pm-card-id {
+    font-family: var(--font-mono);
+    font-size: 0.64rem;
+    letter-spacing: 0.24em;
+    color: var(--color-accent);
+  }
+  html.is-flow .pm-card-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 7vw, 2rem);
+    font-weight: 500;
+    line-height: 1.1;
+    color: var(--color-text);
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--color-accent);
+  }
+  html.is-flow .pm-card-tag {
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+  html.is-flow .pm-card-cta {
+    margin-top: 6px;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.22em;
+    color: var(--color-text);
   }
 
+  html.is-flow .pm-controls {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: stretch;
+    margin: 28px var(--flow-gutter) 0;
+    border: 1px solid var(--color-border);
+  }
+  html.is-flow .pm-arrow {
+    all: unset;
+    box-sizing: border-box;
+    min-height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: var(--color-text);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  html.is-flow .pm-arrow:active { background: color-mix(in srgb, var(--color-accent) 12%, transparent); color: var(--color-accent); }
+  html.is-flow .pm-arrow:disabled { color: var(--color-border); cursor: default; }
+  html.is-flow .pm-arrow:focus-visible { outline: 1px solid var(--color-accent); outline-offset: -4px; }
+  html.is-flow .pm-count {
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    border-left: 1px solid var(--color-border);
+    border-right: 1px solid var(--color-border);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    color: var(--color-muted);
+  }
+
+  @media (min-width: 640px) {
+    html.is-flow .pm-slider { --card-w: 46vw; }
+  }
   @media (prefers-reduced-motion: reduce) {
-    html.is-flow .pm-card { opacity: 1; transform: none; transition: none; }
-    html.is-flow .pm-media img { clip-path: none; transition: none; }
-    html.is-flow .pm-card.is-seen .pm-scan { animation: none; }
+    html.is-flow .pm-card-scan { animation: none; opacity: 0; }
+  }
+
+  /* ── Project file: full-screen case view ──────────────────────── */
+  html.is-flow .pv {
+    position: fixed;
+    inset: 0;
+    z-index: 10001;
+    background: var(--color-bg);
+    font-family: var(--font-body);
+    color: var(--color-text);
+    animation: pv-in 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  @keyframes pv-in { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+  html.is-flow .pv-bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    object-fit: cover;
+    opacity: 0.07;
+    filter: grayscale(1);
+    pointer-events: none;
+  }
+  html.is-flow .pv-scroll {
+    position: absolute;
+    inset: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: calc(24px + env(safe-area-inset-top)) var(--flow-gutter) calc(120px + env(safe-area-inset-bottom));
+  }
+  html.is-flow .pv-close {
+    all: unset;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+    margin: 0 auto 56px;
+    padding: 0 28px;
+    width: fit-content;
+    border: 1px solid var(--color-border);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.22em;
+    color: var(--color-text);
+    cursor: pointer;
+  }
+  html.is-flow .pv-close:active { border-color: var(--color-accent); color: var(--color-accent); }
+  html.is-flow .pv-head {
+    padding-bottom: 28px;
+    margin-bottom: 32px;
+    border-bottom: 1px solid var(--color-text);
+  }
+  html.is-flow .pv-kicker {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.22em;
+    color: var(--color-accent);
+    margin-bottom: 14px;
+  }
+  html.is-flow .pv-idrow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  html.is-flow .pv-id {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.22em;
+    color: var(--color-accent);
+  }
+  html.is-flow .pv-tag {
+    padding: 6px 10px;
+    background: var(--color-text);
+    color: var(--color-bg);
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  html.is-flow .pv-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.9rem, 9vw, 2.6rem);
+    font-weight: 500;
+    line-height: 1.05;
+    color: var(--color-text);
+    margin-bottom: 16px;
+  }
+  html.is-flow .pv-subtitle { font-size: 0.98rem; line-height: 1.65; color: var(--color-muted); }
+  html.is-flow .pv-img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    object-position: top center;
+    border: 1px solid var(--color-border);
+    margin-bottom: 28px;
+  }
+  html.is-flow .pv-links { display: flex; flex-direction: column; gap: 12px; }
+  html.is-flow .pv-link {
+    box-sizing: border-box;
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--color-border);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    color: var(--color-text);
+    text-decoration: none;
+  }
+  html.is-flow .pv-link-primary {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+    color: var(--color-bg);
+    font-weight: 700;
+  }
+  html.is-flow .pv-panel {
+    margin: 48px 0;
+    padding: 24px 20px;
+    border: 1px solid var(--color-border);
+    background: color-mix(in srgb, var(--color-surface) 70%, transparent);
+  }
+  html.is-flow .pv-panel-title {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 400;
+    letter-spacing: 0.22em;
+    color: var(--color-accent);
+    padding-bottom: 14px;
+    margin-bottom: 18px;
+    border-bottom: 1px solid var(--color-border);
+  }
+  html.is-flow .pv-chips { list-style: none; display: flex; flex-wrap: wrap; gap: 8px; }
+  html.is-flow .pv-chip {
+    min-height: 36px;
+    display: inline-flex;
+    align-items: center;
+    padding: 0 12px;
+    border: 1px solid var(--color-border);
+    font-size: 0.76rem;
+    color: var(--color-text);
+  }
+  html.is-flow .pv-section { margin-top: 48px; }
+  html.is-flow .pv-section-title {
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    font-weight: 400;
+    letter-spacing: 0.22em;
+    color: var(--color-muted);
+    margin-bottom: 18px;
+  }
+  html.is-flow .pv-overview p { font-size: 0.95rem; line-height: 1.75; color: var(--color-text); margin-bottom: 16px; }
+  html.is-flow .pv-features { list-style: none; display: flex; flex-direction: column; gap: 18px; }
+  html.is-flow .pv-feature {
+    padding-left: 14px;
+    border-left: 1px solid var(--color-accent);
+    font-size: 0.92rem;
+    line-height: 1.65;
+    color: var(--color-muted);
+  }
+  html.is-flow .pv-feature strong { color: var(--color-text); font-weight: 600; }
+  html.is-flow .pv-nav {
+    all: unset;
+    box-sizing: border-box;
+    position: fixed;
+    bottom: calc(16px + env(safe-area-inset-bottom));
+    z-index: 2;
+    width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    font-size: 1.5rem;
+    color: var(--color-text);
+    cursor: pointer;
+  }
+  html.is-flow .pv-prev { left: var(--flow-gutter); }
+  html.is-flow .pv-next { right: var(--flow-gutter); }
+  html.is-flow .pv-nav:active { border-color: var(--color-accent); color: var(--color-accent); }
+  @media (prefers-reduced-motion: reduce) {
+    html.is-flow .pv { animation: none; }
   }
 
   /* ── About: the desktop's bordered modules, stacked in one column ── */

@@ -5,6 +5,7 @@ import SectionManager from './components/SectionManager';
 import MobileFlow from './components/MobileFlow';
 import MobileRail from './components/MobileRail';
 import ProjectOverlay from './components/ProjectOverlay';
+import ProjectViewer from './components/ProjectViewer';
 import Preloader from './components/Preloader';
 import NavDots from './components/NavDots';
 import CustomCursor from './components/CustomCursor';
@@ -37,7 +38,7 @@ function App() {
         {mode === 'paged'
           ? <SectionManager sections={SECTION_COMPONENTS} />
           : <MobileFlow sections={SECTION_COMPONENTS} />}
-        <ProjectOverlay />
+        {mode === 'paged' ? <ProjectOverlay /> : <ProjectViewer />}
       </div>
     </SectionProvider>
   );
