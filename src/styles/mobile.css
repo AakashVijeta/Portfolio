@@ -1,0 +1,99 @@
+/* ================================================================
+   MOBILE FLOW LAYOUT (≤ 900px)
+   Natural document scroll; all sections stacked. Desktop (≥ 901px)
+   never matches this file. Selectors are scoped under html.is-flow,
+   which App sets in sync with the media query.
+   ================================================================ */
+@media (max-width: 900px) {
+  html.is-flow {
+    --flow-gutter: 16px;
+    --rail-h: 44px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    height: auto;
+  }
+  html.is-flow body {
+    overflow: visible;
+    overscroll-behavior: auto;
+    height: auto;
+  }
+
+  html.is-flow .layout-flow {
+    position: relative;
+    width: 100%;
+    padding-top: calc(var(--rail-h) + env(safe-area-inset-top));
+  }
+
+  html.is-flow .flow-section {
+    position: relative;
+    scroll-margin-top: calc(var(--rail-h) + env(safe-area-inset-top));
+  }
+
+  /* Sections: from absolute full-screen slides to flowing blocks */
+  html.is-flow .section {
+    position: relative;
+    inset: auto;
+    height: auto;
+    min-height: calc(100svh - var(--rail-h) - env(safe-area-inset-top));
+    max-width: 100vw;
+    overflow: visible;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    padding: 0;
+  }
+  html.is-flow .about-profiler,
+  html.is-flow .contact-section {
+    overflow: visible !important;
+    padding: 0 !important;
+  }
+
+  /* Desktop chrome that has no meaning on touch/scroll */
+  html.is-flow .key-hints,
+  html.is-flow .cc-dot,
+  html.is-flow .cc-ring,
+  html.is-flow .cc-label { display: none !important; }
+
+  /* Shared section header/footer rhythm */
+  html.is-flow .projects-topbar,
+  html.is-flow .profiler-head,
+  html.is-flow .contact-topbar {
+    height: auto;
+    padding: 32px var(--flow-gutter) 12px;
+    gap: 10px;
+  }
+  html.is-flow .projects-title,
+  html.is-flow .profiler-title,
+  html.is-flow .contact-title-main {
+    font-size: clamp(1.6rem, 8vw, 2.4rem);
+    letter-spacing: 0.1em;
+  }
+  html.is-flow .projects-topbar-row,
+  html.is-flow .profiler-head-row,
+  html.is-flow .contact-topbar-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+  html.is-flow .projects-topmeta,
+  html.is-flow .profiler-head-meta,
+  html.is-flow .contact-topmeta {
+    text-align: left;
+    font-size: 0.62rem;
+  }
+  html.is-flow .projects-bottombar,
+  html.is-flow .profiler-foot,
+  html.is-flow .contact-bottombar {
+    height: auto;
+    padding: 16px var(--flow-gutter) 24px;
+    font-size: 0.6rem;
+  }
+  html.is-flow .projects-bottombar-inner,
+  html.is-flow .profiler-foot-inner,
+  html.is-flow .contact-bottombar-inner {
+    flex-wrap: wrap;
+    gap: 8px 16px;
+    justify-content: space-between;
+  }
+}

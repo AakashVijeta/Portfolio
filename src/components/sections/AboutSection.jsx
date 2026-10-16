@@ -1,5 +1,6 @@
 import { useLayoutEffect, useRef } from 'react';
 import KeyHints from '../KeyHints';
+import { useLayoutMode } from '../../hooks/useLayoutMode';
 
 
 const CORE_PRIMARY = ['Python', 'FastAPI'];
@@ -49,6 +50,7 @@ const EXPERIENCES = [
 ];
 
 export default function AboutSection({ isActive }) {
+  const mode = useLayoutMode();
   const rootRef = useRef(null);
 
   useLayoutEffect(() => {
@@ -59,13 +61,13 @@ export default function AboutSection({ isActive }) {
     <section
       ref={rootRef}
       className="section section-stripe about-profiler"
-      style={{
+      style={mode === 'paged' ? {
         flexDirection: 'column',
         alignItems: 'stretch',
         justifyContent: 'center',
         padding: 0,
         overflow: 'hidden',
-      }}
+      } : undefined}
     >
       <header className="profiler-head section-enter-item">
         <div className="profiler-head-row">

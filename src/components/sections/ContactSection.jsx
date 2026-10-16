@@ -1,5 +1,6 @@
 import { useLayoutEffect, useRef } from 'react';
 import KeyHints from '../KeyHints';
+import { useLayoutMode } from '../../hooks/useLayoutMode';
 
 
 const EMAIL = 'aakashvijeta2@gmail.com';
@@ -7,6 +8,7 @@ const GITHUB = 'https://github.com/AakashVijeta';
 const LINKEDIN = 'https://www.linkedin.com/in/aakash-vijeta-1bb42b2b9';
 
 export default function ContactSection({ isActive }) {
+  const mode = useLayoutMode();
   const rootRef = useRef(null);
 
   useLayoutEffect(() => {
@@ -17,13 +19,13 @@ export default function ContactSection({ isActive }) {
     <section
       ref={rootRef}
       className="section section-stripe contact-section"
-      style={{
+      style={mode === 'paged' ? {
         flexDirection: 'column',
         alignItems: 'stretch',
         justifyContent: 'center',
         padding: 0,
         overflow: 'hidden',
-      }}
+      } : undefined}
     >
       {/* Top classification */}
       <header className="contact-topbar section-enter-item">

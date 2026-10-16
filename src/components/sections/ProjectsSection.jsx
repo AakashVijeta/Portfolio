@@ -3,6 +3,7 @@ import gsap from 'gsap';
 import { projectDetails } from '../../data/projects';
 import { useSectionContext } from '../../context/SectionContext';
 import KeyHints from '../KeyHints';
+import { useLayoutMode } from '../../hooks/useLayoutMode';
 
 const isTouch = () => window.matchMedia('(hover: none)').matches;
 
@@ -13,6 +14,7 @@ const CLASSIFIED_SLOTS = [
 ];
 
 export default function ProjectsSection({ isActive }) {
+  const mode = useLayoutMode();
   const rootRef = useRef(null);
   const paneRef = useRef(null);
   const { setOverlayProject } = useSectionContext();
@@ -85,7 +87,7 @@ export default function ProjectsSection({ isActive }) {
     <section
       ref={rootRef}
       className="section section-stripe projects-section"
-      style={{ flexDirection: 'column', alignItems: 'stretch', padding: 0, overflow: 'hidden' }}
+      style={mode === 'paged' ? { flexDirection: 'column', alignItems: 'stretch', padding: 0, overflow: 'hidden' } : undefined}
     >
       <header className="projects-topbar section-enter-item">
         <div className="projects-topbar-row">

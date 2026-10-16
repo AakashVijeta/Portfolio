@@ -2,6 +2,7 @@ import { useLayoutEffect } from 'react';
 import { useLayoutMode } from './hooks/useLayoutMode';
 import { SectionProvider } from './context/SectionContext';
 import SectionManager from './components/SectionManager';
+import MobileFlow from './components/MobileFlow';
 import ProjectOverlay from './components/ProjectOverlay';
 import Preloader from './components/Preloader';
 import BottomBar from './components/BottomBar';
@@ -34,7 +35,9 @@ function App() {
         <Preloader />
         <BottomBar />
         <NavDots />
-        <SectionManager sections={SECTION_COMPONENTS} />
+        {mode === 'paged'
+          ? <SectionManager sections={SECTION_COMPONENTS} />
+          : <MobileFlow sections={SECTION_COMPONENTS} />}
         <ProjectOverlay />
       </div>
     </SectionProvider>
