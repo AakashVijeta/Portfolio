@@ -25,12 +25,16 @@ export default function ProjectsSection({ isActive }) {
   const [isHovered, setIsHovered] = useState(false);
   const [animKey, setAnimKey] = useState(0);
 
-  // Ignore hover until the cursor actually moves after the section opens,
-  // so cards don't activate just because they slid in under a still cursor.
+  // Hover intent: a row only opens when the user deliberately points at it.
+  // Scrolling disarms hover (rows sliding under a still cursor must not open);
+  // real pointer movement after the scroll settles re-arms it; a short dwell
+  // keeps a quick sweep across the board from flashing panels open.
   const pointerArmedRef = useRef(false);
+  const dwellRef = useRef({ timer: 0, slug: null });
+  const DWELL_MS = 90;
+  const SCROLL_SETTLE_MS = 150;
 
-  const handleMouseEnter = (project) => {
-    if (!pointerArmedRef.current) return;
+  const openProject = (project) => {
     if (isHovered && activeProject?.slug === project.slug) return;
     setIsHovered(true);
     setActiveProject(project);
@@ -38,7 +42,22 @@ export default function ProjectsSection({ isActive }) {
     setAnimKey(k => k + 1);
   };
 
+  const handleMouseEnter = (project) => {
+    if (!pointerArmedRef.current) return;
+    if (isHovered && activeProject?.slug === project.slug) return;
+    const dwell = dwellRef.current;
+    if (dwell.slug === project.slug && dwell.timer) return;
+    clearTimeout(dwell.timer);
+    dwell.slug = project.slug;
+    dwell.timer = setTimeout(() => {
+      dwell.timer = 0;
+      if (pointerArmedRef.current) openProject(project);
+    }, DWELL_MS);
+  };
+
   const handleMouseLeave = () => {
+    clearTimeout(dwellRef.current.timer);
+    dwellRef.current = { timer: 0, slug: null };
     setIsHovered(false);
   };
 
@@ -65,11 +84,29 @@ export default function ProjectsSection({ isActive }) {
   useEffect(() => {
     pointerArmedRef.current = false;
     if (!isActive) return;
-    const arm = () => { pointerArmedRef.current = true; };
-    window.addEventListener('mousemove', arm, { once: true });
+    let lastScroll = 0;
+    const onScroll = () => {
+      lastScroll = performance.now();
+      pointerArmedRef.current = false;
+      clearTimeout(dwellRef.current.timer);
+      dwellRef.current = { timer: 0, slug: null };
+    };
+    // Browsers synthesise mouse events at the same coordinates when content scrolls
+    // under the pointer; only a real change of position after the scroll settles
+    // counts as intent.
+    let last = null;
+    const onMove = (e) => {
+      const moved = last && (Math.abs(e.clientX - last.x) > 1 || Math.abs(e.clientY - last.y) > 1);
+      last = { x: e.clientX, y: e.clientY };
+      if (moved && performance.now() - lastScroll > SCROLL_SETTLE_MS) pointerArmedRef.current = true;
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('mousemove', onMove, { passive: true });
     // Leaving the section clears any hover state left behind
     return () => {
-      window.removeEventListener('mousemove', arm);
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('mousemove', onMove);
+      clearTimeout(dwellRef.current.timer);
       setIsHovered(false);
     };
   }, [isActive]);
