@@ -231,10 +231,12 @@
     overflow: hidden;
     text-overflow: ellipsis;
   }
-  /* Main skills are marked by colour, not weight, so every label has the same room */
+  /* Every skill box looks the same: no special treatment for the first two */
   html.is-flow .about-profiler .tech-chip-primary {
-    color: var(--color-accent);
-    border-color: color-mix(in srgb, var(--color-accent) 55%, transparent);
+    color: var(--color-text);
+    border-color: var(--color-border);
+    background: rgba(0, 0, 0, 0.3);
+    font-weight: 400;
   }
 }
 

@@ -657,7 +657,9 @@
     font-size: 0.74rem;
     padding: 6px 10px;
     transform: none !important;
-  }
+  }  /* Every skill box looks the same */
+  html.is-flow .tech-chip-primary { font-weight: 400; color: var(--color-text); border-color: var(--color-border); }
+
 
   /* ── Contact: closing screen, CTAs in thumb reach ─────────────── */
   html.is-flow .contact-main {
