@@ -1,5 +1,6 @@
 import { useLayoutEffect, useRef } from 'react';
 import { useLayoutMode } from '../../hooks/useLayoutMode';
+import RollText from '../RollText';
 
 
 const EMAIL = 'aakashvijeta2@gmail.com';
@@ -70,9 +71,9 @@ export default function ContactSection({ isActive }) {
             </div>
           ) : (
             <div className="section-enter-item" style={{ display: 'flex', gap: '16px', alignItems: 'center', flexWrap: 'wrap', marginTop: '32px' }}>
-              <a href={`mailto:${EMAIL}`} className="contact-bracket-box">[ INITIATE CONTACT ]</a>
-              <a href={GITHUB} target="_blank" rel="noopener noreferrer" className="contact-bracket-box">[ GITHUB ]</a>
-              <a href={LINKEDIN} target="_blank" rel="noopener noreferrer" className="contact-bracket-box">[ LINKEDIN ]</a>
+              <a href={`mailto:${EMAIL}`} className="contact-bracket-box" aria-label="[ INITIATE CONTACT ]"><RollText text="[ INITIATE CONTACT ]" /></a>
+              <a href={GITHUB} target="_blank" rel="noopener noreferrer" className="contact-bracket-box" aria-label="[ GITHUB ]"><RollText text="[ GITHUB ]" /></a>
+              <a href={LINKEDIN} target="_blank" rel="noopener noreferrer" className="contact-bracket-box" aria-label="[ LINKEDIN ]"><RollText text="[ LINKEDIN ]" /></a>
             </div>
           )}
 

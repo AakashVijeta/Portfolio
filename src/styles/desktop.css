@@ -258,3 +258,21 @@
     transition: transform var(--dur-press) var(--ease-out), background-color var(--dur-ui) ease, color var(--dur-ui) ease, border-color var(--dur-ui) ease, box-shadow var(--dur-ui) ease;
   }
 }
+
+/* ── Letter roll on buttons (desktop pointers) ─────────────────────
+   Each character slides up and is replaced by its copy from below,
+   staggered left to right; it rolls back on leave. */
+.roll { display: inline-flex; overflow: hidden; line-height: 1.25; vertical-align: bottom; }
+.roll-char { display: inline-block; position: relative; }
+.roll-char::after {
+  content: attr(data-ch);
+  position: absolute;
+  left: 0;
+  top: 100%;
+}
+@media (min-width: 901px) and (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .roll-char { transition: transform 0.35s var(--ease-in-out); transition-delay: calc(var(--i) * 16ms); }
+  a:hover > .roll .roll-char,
+  button:hover > .roll .roll-char,
+  a:focus-visible > .roll .roll-char { transform: translateY(-100%); }
+}

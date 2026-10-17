@@ -4,6 +4,7 @@ import { projectDetails } from '../../data/projects';
 import { useSectionContext } from '../../context/SectionContext';
 import { useLayoutMode } from '../../hooks/useLayoutMode';
 import { EASE_OUT, prefersReducedMotion } from '../../utils/motion';
+import RollText from '../RollText';
 
 const isTouch = () => window.matchMedia('(hover: none)').matches;
 
@@ -278,13 +279,13 @@ export default function ProjectsSection({ isActive }) {
 
                <div className="pane-links">
                  {displayProject.liveDemo && (
-                   <a href={displayProject.liveDemo} target="_blank" rel="noreferrer" className="pane-link-btn">
-                     Launch App <span className="arrow">↗</span>
+                   <a href={displayProject.liveDemo} target="_blank" rel="noreferrer" className="pane-link-btn" aria-label="Launch App">
+                     <RollText text="Launch App" /> <span className="arrow" aria-hidden="true">↗</span>
                    </a>
                  )}
                  {displayProject.repos?.map(repo => (
-                   <a key={repo.label} href={repo.href} target="_blank" rel="noreferrer" className="pane-link-btn pane-link-btn-secondary">
-                     {repo.label} <span className="arrow">↗</span>
+                   <a key={repo.label} href={repo.href} target="_blank" rel="noreferrer" className="pane-link-btn pane-link-btn-secondary" aria-label={repo.label}>
+                     <RollText text={repo.label} /> <span className="arrow" aria-hidden="true">↗</span>
                    </a>
                  ))}
                </div>
