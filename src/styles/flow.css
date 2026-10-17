@@ -1,0 +1,44 @@
+/* ================================================================
+   SCROLL LAYOUT (all widths)
+   One natural-scroll page: every section stacked in document flow.
+   desktop.css and mobile.css then style each section per width.
+   ================================================================ */
+
+/* The viewport is the only vertical scroller. overflow-x: clip guards against
+   horizontal bleed without creating a scroll container (hidden/auto would, and a
+   nested scroller swallows the first swipe on touch). */
+html.is-flow {
+  overflow: visible;
+  overflow-x: clip;
+  height: auto;
+}
+html.is-flow body,
+html.is-flow #root {
+  overflow: visible;
+  overflow-x: clip;
+  overscroll-behavior: auto;
+  max-width: none;
+  height: auto;
+}
+
+html.is-flow .layout-flow {
+  position: relative;
+  width: 100%;
+  padding-top: env(safe-area-inset-top);
+}
+
+html.is-flow .flow-section {
+  position: relative;
+  scroll-margin-top: env(safe-area-inset-top);
+}
+
+/* Sections were absolutely stacked slides; now they flow */
+html.is-flow .section {
+  position: relative;
+  inset: auto;
+}
+
+/* Project panel open: hold the page still behind it */
+html.is-flow.overlay-open,
+html.is-flow.overlay-open body { overflow: hidden; }
+html.is-flow .project-overlay-inner { overscroll-behavior: contain; }

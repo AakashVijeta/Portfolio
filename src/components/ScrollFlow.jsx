@@ -4,9 +4,9 @@ import { playEntrance, hideEntrance } from '../utils/entranceAnimation';
 
 const hasIO = typeof IntersectionObserver !== 'undefined';
 
-// Mobile (≤ 900px): every section in normal document flow with native scroll.
-export default function MobileFlow({ sections }) {
-  const { activeIndex, goTo } = useSectionContext();
+// Every section in normal document flow with native scroll (desktop and mobile).
+export default function ScrollFlow({ sections }) {
+  const { activeIndex, goTo, navigateToRef } = useSectionContext();
   const refs = useRef([]);
   const startIndexRef = useRef(activeIndex);
   // Without IntersectionObserver every section counts as entered up front.
@@ -21,6 +21,15 @@ export default function MobileFlow({ sections }) {
     refs.current.forEach((el, i) => { if (i !== 0 && i !== start) hideEntrance(el); });
     if (start > 0) refs.current[start]?.scrollIntoView({ block: 'start' });
   }, []);
+
+  // Section dots (desktop) smooth-scroll to a section
+  useEffect(() => {
+    navigateToRef.current = (i) => {
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      refs.current[i]?.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' });
+    };
+    return () => { navigateToRef.current = null; };
+  }, [navigateToRef]);
 
   useEffect(() => {
     const els = refs.current.filter(Boolean);

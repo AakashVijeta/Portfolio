@@ -16,7 +16,7 @@ export function SectionProvider({ children }) {
     setActiveIndex(index);
   }, []);
 
-  // Called by NavDots — routes through SectionManager's full transition logic
+  // Called by NavDots — ScrollFlow registers a smooth scroll to the section
   const navigateTo = useCallback((index) => {
     if (navigateToRef.current) navigateToRef.current(index);
   }, []);

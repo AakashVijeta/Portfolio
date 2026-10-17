@@ -1,6 +1,5 @@
 import { useLayoutEffect, useRef, useState, useEffect } from 'react';
 import gsap from 'gsap';
-import KeyHints from '../KeyHints';
 import { useLayoutMode } from '../../hooks/useLayoutMode';
 
 const STATUS_WORDS    = ['ON TRACK', 'BUILDING', 'SHIPPING', 'TRAINING', 'COMPILING'];
@@ -196,7 +195,6 @@ export default function IntroSection({ isActive }) {
 
       <footer className="ihyb-bottombar">
         <span className="ihyb-clock">SYS_TIME · {timeStr}</span>
-        <KeyHints revealDelay={0} />
         <span className="ihyb-clock">USE ARROW KEYS OR SCROLL TO NAVIGATE</span>
       </footer>
 

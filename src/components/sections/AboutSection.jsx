@@ -1,5 +1,4 @@
 import { useLayoutEffect, useRef } from 'react';
-import KeyHints from '../KeyHints';
 import { useLayoutMode } from '../../hooks/useLayoutMode';
 
 
@@ -216,7 +215,6 @@ export default function AboutSection({ isActive }) {
         <hr className="profiler-rule" />
         <div className="profiler-foot-inner">
           <div className="foot-version">SYSTEMS_REPORT_V.2.0.46</div>
-          <KeyHints />
           <div className="profiler-head-meta">S/N: 2005-10-11-AAK</div>
         </div>
       </footer>

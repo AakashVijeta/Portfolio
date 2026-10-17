@@ -2,7 +2,6 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { projectDetails } from '../../data/projects';
 import { useSectionContext } from '../../context/SectionContext';
-import KeyHints from '../KeyHints';
 import { useLayoutMode } from '../../hooks/useLayoutMode';
 import { EASE_OUT, prefersReducedMotion } from '../../utils/motion';
 
@@ -282,7 +281,6 @@ export default function ProjectsSection({ isActive }) {
         <hr className="profiler-rule" />
         <div className="projects-bottombar-inner">
           <span>{projectDetails.length.toString().padStart(2, '0')} ACTIVE · {CLASSIFIED_SLOTS.length.toString().padStart(2, '0')} CLASSIFIED</span>
-          <KeyHints />
           {mode === 'paged' && (
             <span>{window.matchMedia('(hover: none)').matches ? '◁  SWIPE · TAP TO VIEW  ▷' : '◁  HOVER · NAVIGATE  ▷'}</span>
           )}

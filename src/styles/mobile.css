@@ -1,8 +1,7 @@
 /* ================================================================
-   MOBILE FLOW LAYOUT (≤ 900px)
-   Natural document scroll; all sections stacked. Desktop (≥ 901px)
-   never matches this file. Selectors are scoped under html.is-flow,
-   which App sets in sync with the media query.
+   MOBILE DESIGN (≤ 900px)
+   Phone/tablet styling of the scroll layout (see flow.css). Desktop
+   (≥ 901px) never matches this file.
    ================================================================ */
 @media (max-width: 900px) {
   html.is-flow {
@@ -13,31 +12,6 @@
     --space-block: 56px;    /* between blocks inside a section */
     --space-item: 28px;     /* between items in a list */
     --rail-h: 0px;  /* no top bar on mobile */
-    /* The viewport is the only vertical scroller. overflow-x: clip guards against
-       horizontal bleed without creating a scroll container (hidden/auto would, and a
-       nested scroller swallows the first swipe). */
-    overflow: visible;
-    overflow-x: clip;
-    height: auto;
-  }
-  html.is-flow body,
-  html.is-flow #root {
-    overflow: visible;
-    overflow-x: clip;
-    overscroll-behavior: auto;
-    max-width: none;
-    height: auto;
-  }
-
-  html.is-flow .layout-flow {
-    position: relative;
-    width: 100%;
-    padding-top: calc(var(--rail-h) + env(safe-area-inset-top));
-  }
-
-  html.is-flow .flow-section {
-    position: relative;
-    scroll-margin-top: calc(var(--rail-h) + env(safe-area-inset-top));
   }
 
   /* Sections: from absolute full-screen slides to flowing blocks */
@@ -65,10 +39,6 @@
   html.is-flow .cc-dot,
   html.is-flow .cc-label { display: none !important; }
 
-  /* Project sheet open: hold the page still behind it */
-  html.is-flow.overlay-open,
-  html.is-flow.overlay-open body { overflow: hidden; }
-  html.is-flow .project-overlay-inner { overscroll-behavior: contain; }
 
   /* Shared section header/footer rhythm */
   html.is-flow .projects-topbar,

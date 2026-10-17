@@ -1,10 +1,11 @@
 /* ================================================================
-   DESKTOP SECTION CHROME (≥ 901px)
-   One spec for every section's header, title and footer so the four
-   screens read as one system. Mobile (html.is-flow) never matches.
+   DESKTOP DESIGN (≥ 901px)
+   Every section is one screen tall in the scrolling page; one spec for
+   headers and titles so the screens read as one system. Only the last
+   section keeps a footer bar. Mobile never matches this file.
    ================================================================ */
 @media (min-width: 901px) {
-  html:not(.is-flow) {
+  html.is-flow {
     --d-gutter: 48px;  /* clear of the fixed section dots */
     --d-head-h: 84px;
     --d-foot-h: 44px;
@@ -12,10 +13,18 @@
     --d-chrome-ls: 0.3em;
   }
 
+  /* Breathing room between Profile and Socials so the two read as separate sections */
+  html.is-flow #sec-about { padding-bottom: 192px; }  /* inside the wrapper so scroll-spy still sees Profile */
+
+  /* Like mobile: footers only on the last section */
+  html.is-flow .ihyb-bottombar,
+  html.is-flow .projects-bottombar,
+  html.is-flow .about-profiler .profiler-foot { display: none; }
+
   /* ── Header bars ───────────────────────────────────────────── */
-  html:not(.is-flow) .projects-topbar,
-  html:not(.is-flow) .about-profiler .profiler-head,
-  html:not(.is-flow) .contact-topbar {
+  html.is-flow .projects-topbar,
+  html.is-flow .about-profiler .profiler-head,
+  html.is-flow .contact-topbar {
     flex: 0 0 auto;
     height: var(--d-head-h);
     min-height: var(--d-head-h);
@@ -25,9 +34,9 @@
   }
 
   /* ── Section titles ────────────────────────────────────────── */
-  html:not(.is-flow) .projects-title,
-  html:not(.is-flow) .about-profiler .profiler-title,
-  html:not(.is-flow) .contact-title-main {
+  html.is-flow .projects-title,
+  html.is-flow .about-profiler .profiler-title,
+  html.is-flow .contact-title-main {
     font-family: var(--font-display);
     font-size: clamp(1.6rem, 2.7vw, 2.4rem);
     font-weight: 300;
@@ -36,31 +45,31 @@
   }
 
   /* ── Header meta (right-hand labels) ───────────────────────── */
-  html:not(.is-flow) .projects-topmeta,
-  html:not(.is-flow) .about-profiler .profiler-head-meta,
-  html:not(.is-flow) .contact-topmeta {
+  html.is-flow .projects-topmeta,
+  html.is-flow .about-profiler .profiler-head-meta,
+  html.is-flow .contact-topmeta {
     font-family: var(--font-display);
     font-size: var(--d-chrome-font);
     letter-spacing: var(--d-chrome-ls);
   }
 
   /* ── Intro chrome: same type and margins as the other sections ── */
-  html:not(.is-flow) .ihyb-topbar,
-  html:not(.is-flow) .ihyb-bottombar,
-  html:not(.is-flow) .ihyb-clock {
+  html.is-flow .ihyb-topbar,
+  html.is-flow .ihyb-bottombar,
+  html.is-flow .ihyb-clock {
     font-family: var(--font-display);
     font-size: var(--d-chrome-font);
     letter-spacing: var(--d-chrome-ls);
   }
-  html:not(.is-flow) .ihyb-topbar { padding-left: var(--d-gutter); padding-right: var(--d-gutter); }
-  html:not(.is-flow) .ihyb-topbar::after,
-  html:not(.is-flow) .ihyb-bottombar::before { left: var(--d-gutter); right: var(--d-gutter); }
+  html.is-flow .ihyb-topbar { padding-left: var(--d-gutter); padding-right: var(--d-gutter); }
+  html.is-flow .ihyb-topbar::after,
+  html.is-flow .ihyb-bottombar::before { left: var(--d-gutter); right: var(--d-gutter); }
 
   /* ── Footer bars ───────────────────────────────────────────── */
-  html:not(.is-flow) .ihyb-bottombar,
-  html:not(.is-flow) .projects-bottombar,
-  html:not(.is-flow) .about-profiler .profiler-foot,
-  html:not(.is-flow) .contact-bottombar {
+  html.is-flow .ihyb-bottombar,
+  html.is-flow .projects-bottombar,
+  html.is-flow .about-profiler .profiler-foot,
+  html.is-flow .contact-bottombar {
     flex: 0 0 auto;
     height: var(--d-foot-h);
     min-height: var(--d-foot-h);
@@ -70,14 +79,14 @@
     letter-spacing: var(--d-chrome-ls);
   }
   /* Intro footer has no rule element of its own; keep its text on the same line as the others */
-  html:not(.is-flow) .ihyb-bottombar { align-items: flex-start; padding-top: 18px; }
-  html:not(.is-flow) .about-profiler .profiler-foot-inner,
-  html:not(.is-flow) .about-profiler .foot-version {
+  html.is-flow .ihyb-bottombar { align-items: flex-start; padding-top: 18px; }
+  html.is-flow .about-profiler .profiler-foot-inner,
+  html.is-flow .about-profiler .foot-version {
     font-size: var(--d-chrome-font);
     letter-spacing: var(--d-chrome-ls);
   }
   /* The version label was a boxed badge; the other footers use plain text */
-  html:not(.is-flow) .about-profiler .foot-version {
+  html.is-flow .about-profiler .foot-version {
     border: 0;
     padding: 0;
     background: none;
@@ -85,136 +94,125 @@
   }
 
   /* ── Profile content sits on the same side margins as its header ── */
-  html:not(.is-flow) .about-profiler .profiler-main-scroll {
+  html.is-flow .about-profiler .profiler-main-scroll {
     padding-left: var(--d-gutter);
     padding-right: var(--d-gutter);
   }
 }
 
 /* ── Profile (desktop): full-width three-column dossier ───────────
-   Spans the page on the shared margins with 32px column gaps, and fits
-   one screen: vertical spacing, the scanner, type and chips scale with
-   the window height (full size on tall screens, tighter on short ones). */
+   Modelled on the reference: spans the page on the shared margins with
+   32px column gaps, roomy modules, and its natural height (the page
+   scrolls, so nothing is squeezed into one screen). */
 @media (min-width: 1041px) {
-  html:not(.is-flow) .about-profiler {
-    --v-pad: clamp(16px, 2.6vh, 32px);
-    --v-gap: clamp(12px, 2.4vh, 32px);
-    --v-sm: clamp(8px, 1.4vh, 18px);
+  html.is-flow .about-profiler {
+    height: auto;
+    min-height: 100dvh;
+    overflow: visible !important;
   }
-  html:not(.is-flow) .about-profiler .profiler-main-scroll {
-    flex: 1 1 auto;
+  html.is-flow .about-profiler .profiler-main-scroll {
+    flex: none;
+    height: auto;
     min-height: 0;
-    display: flex;
-    overflow: hidden !important;
-    padding: var(--v-pad) var(--d-gutter);
+    display: block;
+    overflow: visible !important;
+    padding: 32px var(--d-gutter) 0;
   }
 
-  html:not(.is-flow) .about-profiler .profiler-container {
+  html.is-flow .about-profiler .profiler-container {
     display: grid;
-    grid-template-columns: minmax(280px, 24%) minmax(0, 1fr) minmax(260px, 22%);
-    grid-template-rows: minmax(0, 1fr);
+    grid-template-columns: minmax(300px, 24%) minmax(0, 1fr) minmax(280px, 22%);
+    grid-template-rows: auto;
     gap: 32px;
     align-items: stretch;
     width: 100%;
     max-width: none;
-    height: 100%;
+    height: auto;
     max-height: none;
     overflow: visible;
     padding: 0;
   }
 
-  html:not(.is-flow) .about-profiler .profiler-module {
+  html.is-flow .about-profiler .profiler-module {
     height: auto;
     min-height: 0;
     max-height: none;
-    padding: var(--v-pad);
-    overflow: hidden;
+    padding: 32px;
+    overflow: visible;
   }
-  html:not(.is-flow) .about-profiler .col-behavior,
-  html:not(.is-flow) .about-profiler .psych-report,
-  html:not(.is-flow) .about-profiler .col-capabilities-wrapper,
-  html:not(.is-flow) .about-profiler .cap-top {
+  html.is-flow .about-profiler .col-behavior,
+  html.is-flow .about-profiler .psych-report,
+  html.is-flow .about-profiler .col-capabilities-wrapper,
+  html.is-flow .about-profiler .cap-top {
     height: auto;
     max-height: none;
     min-height: 0;
     overflow: visible !important;
   }
-  html:not(.is-flow) .about-profiler .col-capabilities-wrapper { display: flex; flex-direction: column; }
-  html:not(.is-flow) .about-profiler .cap-top { flex: 1 1 auto; }
+  html.is-flow .about-profiler .col-capabilities-wrapper { display: flex; flex-direction: column; }
+  html.is-flow .about-profiler .cap-top { flex: 1 1 auto; }
 
   /* Identity */
-  html:not(.is-flow) .about-profiler .col-identity { display: flex; flex-direction: column; gap: var(--v-gap); }
-  html:not(.is-flow) .about-profiler .identity-name { font-size: 1.15rem; letter-spacing: 0.06em; padding-bottom: var(--v-sm); }
-  html:not(.is-flow) .about-profiler .fingerprint-scanner {
-    width: min(100%, 26vh);
-    max-width: none;
-    aspect-ratio: 1 / 1;
-    height: auto;
-    margin: 0 auto;
-    flex-shrink: 0;
-  }
-  html:not(.is-flow) .about-profiler .id-data-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--v-sm) 12px; font-size: 0.82rem; }
-  html:not(.is-flow) .about-profiler .id-key { font-size: 0.66rem; }
-  html:not(.is-flow) .about-profiler .id-val { font-size: 0.82rem; }
-  html:not(.is-flow) .about-profiler .id-data-grid > .status-wrapper { grid-column: 1 / -1; margin-top: 4px; padding: clamp(10px, 1.8vh, 16px); }
-  html:not(.is-flow) .about-profiler .status-main { font-size: clamp(1.1rem, 2.2vh, 1.4rem); }
-  html:not(.is-flow) .about-profiler .status-header,
-  html:not(.is-flow) .about-profiler .status-footer { font-size: 0.6rem; }
-  html:not(.is-flow) .about-profiler .status-footer { display: flex; justify-content: space-between; gap: 12px; }
+  html.is-flow .about-profiler .col-identity { display: flex; flex-direction: column; gap: 32px; }
+  html.is-flow .about-profiler .identity-name { font-size: 1.2rem; letter-spacing: 0.06em; padding-bottom: 16px; }
+  html.is-flow .about-profiler .fingerprint-scanner { width: 100%; max-width: none; aspect-ratio: 1 / 1; height: auto; margin: 0; flex-shrink: 0; }
+  html.is-flow .about-profiler .id-data-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px 12px; font-size: 0.85rem; }
+  html.is-flow .about-profiler .id-key { font-size: 0.7rem; }
+  html.is-flow .about-profiler .id-val { font-size: 0.85rem; }
+  html.is-flow .about-profiler .id-data-grid > .status-wrapper { grid-column: 1 / -1; margin-top: 8px; padding: 16px; }
+  html.is-flow .about-profiler .status-main { font-size: 1.4rem; }
+  html.is-flow .about-profiler .status-header,
+  html.is-flow .about-profiler .status-footer { font-size: 0.62rem; }
+  html.is-flow .about-profiler .status-footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 12px; }
+  html.is-flow .about-profiler .status-footer > span { white-space: nowrap; }
 
-  /* Behaviour: report header, bio, then the two logs side by side */
-  html:not(.is-flow) .about-profiler .analysis-header { font-size: 0.78rem; padding-bottom: var(--v-sm); margin-bottom: var(--v-gap); }
-  html:not(.is-flow) .about-profiler .psych-report { padding-right: 0; }
-  html:not(.is-flow) .about-profiler .psych-bio { display: block; font-size: clamp(0.95rem, 1.9vh, 1.1rem); line-height: 1.6; max-width: 72ch; }
-  html:not(.is-flow) .about-profiler .psych-bio .hl-1,
-  html:not(.is-flow) .about-profiler .psych-bio .hl-2 { padding: 1px 6px; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
-  html:not(.is-flow) .about-profiler .dossier-history {
+  /* Behaviour: report header, bio, history */
+  html.is-flow .about-profiler .analysis-header { font-size: 0.8rem; padding-bottom: 16px; margin-bottom: 32px; }
+  html.is-flow .about-profiler .psych-report { padding-right: 0; }
+  html.is-flow .about-profiler .psych-bio { display: block; font-size: 1.1rem; line-height: 1.6; max-width: 72ch; }
+  html.is-flow .about-profiler .psych-bio .hl-1,
+  html.is-flow .about-profiler .psych-bio .hl-2 { padding: 2px 6px; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+  html.is-flow .about-profiler .dossier-history {
     display: flex;
     flex-direction: column;
-    gap: var(--v-gap);
-    margin-top: var(--v-gap);
-    padding-top: var(--v-gap);
+    gap: 40px;
+    margin-top: 48px;
+    padding-top: 32px;
     border-top: 1px solid var(--color-border);
   }
-  html:not(.is-flow) .about-profiler .history-block-title { font-size: 0.72rem; letter-spacing: 0.16em; margin-bottom: var(--v-sm); }
-  html:not(.is-flow) .about-profiler .history-item { margin-bottom: var(--v-sm); padding-left: 12px; font-size: 0.9rem; line-height: 1.5; }
-  html:not(.is-flow) .about-profiler .history-item:last-child { margin-bottom: 0; }
-  html:not(.is-flow) .about-profiler .history-header { gap: 10px; margin-bottom: 4px; flex-wrap: wrap; }
-  html:not(.is-flow) .about-profiler .history-date { font-size: 0.92rem; }
-  html:not(.is-flow) .about-profiler .history-period { display: inline-block; font-size: 0.68rem; }
-  html:not(.is-flow) .about-profiler .history-line { display: block; -webkit-line-clamp: unset; overflow: visible; font-size: clamp(0.82rem, 1.6vh, 0.92rem); line-height: 1.5; }
+  html.is-flow .about-profiler .history-block-title { font-size: 0.75rem; letter-spacing: 0.16em; margin-bottom: 20px; }
+  html.is-flow .about-profiler .history-item { margin-bottom: 24px; padding-left: 12px; font-size: 0.95rem; line-height: 1.6; }
+  html.is-flow .about-profiler .history-item:last-child { margin-bottom: 0; }
+  html.is-flow .about-profiler .history-header { gap: 12px; margin-bottom: 8px; flex-wrap: wrap; }
+  html.is-flow .about-profiler .history-date { font-size: 1rem; }
+  html.is-flow .about-profiler .history-period { display: inline-block; font-size: 0.72rem; }
+  html.is-flow .about-profiler .history-line { display: block; -webkit-line-clamp: unset; overflow: visible; font-size: 0.95rem; line-height: 1.6; }
 
-  /* Capabilities: chips sized to their text, wrapping */
-  html:not(.is-flow) .about-profiler .cap-top { display: flex; flex-direction: column; gap: var(--v-gap); }
-  html:not(.is-flow) .about-profiler .cap-inv-label { font-size: 0.68rem; }
-  /* Each category is one two-column grid: primary chips first, then the rest,
-     every chip the same width and height with centred labels */
-  html:not(.is-flow) .about-profiler .tech-category {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-  }
-  html:not(.is-flow) .about-profiler .tech-category > .cat-title,
-  html:not(.is-flow) .about-profiler .tech-category > .cat-rule { grid-column: 1 / -1; margin: 0; }
-  html:not(.is-flow) .about-profiler .tech-category > .cat-rule { margin-bottom: 4px; }
-  html:not(.is-flow) .about-profiler .cat-title { font-size: 0.64rem; }
-  html:not(.is-flow) .about-profiler .chips-primary,
-  html:not(.is-flow) .about-profiler .chips-grid,
-  html:not(.is-flow) .about-profiler .tech-category:last-child .chips-grid { display: contents; }
-  html:not(.is-flow) .about-profiler .tech-chip,
-  html:not(.is-flow) .about-profiler .tech-chip-primary {
+  /* Capabilities: each category a two-column grid of equal chips */
+  html.is-flow .about-profiler .cap-top { display: flex; flex-direction: column; gap: 32px; }
+  html.is-flow .about-profiler .cap-inv-label { font-size: 0.7rem; }
+  html.is-flow .about-profiler .tech-category { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  html.is-flow .about-profiler .tech-category > .cat-title,
+  html.is-flow .about-profiler .tech-category > .cat-rule { grid-column: 1 / -1; margin: 0; }
+  html.is-flow .about-profiler .tech-category > .cat-rule { margin-bottom: 4px; }
+  html.is-flow .about-profiler .cat-title { font-size: 0.66rem; }
+  html.is-flow .about-profiler .chips-primary,
+  html.is-flow .about-profiler .chips-grid,
+  html.is-flow .about-profiler .tech-category:last-child .chips-grid { display: contents; }
+  html.is-flow .about-profiler .tech-chip,
+  html.is-flow .about-profiler .tech-chip-primary {
     flex: none !important;
     box-sizing: border-box;
     width: 100%;
     min-width: 0;
-    height: clamp(30px, 4.2vh, 38px);
+    height: 38px;
     min-height: 0;
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
     padding: 0 8px;
-    font-size: 0.8rem;
+    font-size: 0.85rem;
     letter-spacing: 0.03em;
     white-space: nowrap;
     overflow: hidden;
@@ -222,48 +220,21 @@
   }
 }
 
-/* Profile on short screens (laptops ≤ 820px tall): one notch tighter */
-@media (min-width: 1041px) and (max-height: 820px) {
-  html:not(.is-flow) .about-profiler {
-    --v-pad: clamp(12px, 2vh, 20px);
-    --v-gap: clamp(10px, 1.8vh, 18px);
-    --v-sm: clamp(6px, 1vh, 10px);
-  }
-  html:not(.is-flow) .about-profiler .identity-name { font-size: 1rem; }
-  html:not(.is-flow) .about-profiler .id-key { font-size: 0.6rem; }
-  html:not(.is-flow) .about-profiler .id-val { font-size: 0.76rem; }
-  html:not(.is-flow) .about-profiler .status-main { font-size: 1.05rem; }
-  html:not(.is-flow) .about-profiler .psych-bio { font-size: 0.9rem; line-height: 1.5; }
-  html:not(.is-flow) .about-profiler .history-date { font-size: 0.82rem; }
-  html:not(.is-flow) .about-profiler .history-line { font-size: 0.8rem; line-height: 1.45; }
-  html:not(.is-flow) .about-profiler .tech-chip,
-  html:not(.is-flow) .about-profiler .tech-chip-primary { height: 28px; font-size: 0.74rem; padding: 0 6px; }
-}
-
 /* Profile on narrower desktops: give the middle report more of the width */
 @media (min-width: 1041px) and (max-width: 1240px) {
-  html:not(.is-flow) .about-profiler .profiler-container {
-    grid-template-columns: minmax(220px, 21%) minmax(0, 1fr) minmax(210px, 20%);
-    gap: 20px;
+  html.is-flow .about-profiler .profiler-container {
+    grid-template-columns: minmax(240px, 22%) minmax(0, 1fr) minmax(220px, 21%);
+    gap: 24px;
   }
-}
-
-/* Very short desktop windows (≤ 720px tall) */
-@media (min-width: 1041px) and (max-height: 720px) {
-  html:not(.is-flow) .about-profiler {
-    --v-gap: clamp(8px, 1.4vh, 12px);
-  }
-  html:not(.is-flow) .about-profiler .psych-bio { font-size: 0.86rem; }
-  html:not(.is-flow) .about-profiler .history-line { font-size: 0.78rem; }
 }
 
 /* ── Desktop press feedback ─────────────────────────────────────── */
 @media (min-width: 901px) and (prefers-reduced-motion: no-preference) {
-  html:not(.is-flow) .pane-link-btn:active,
-  html:not(.is-flow) .contact-bracket-box:active,
-  html:not(.is-flow) .overlay-link:active { transform: scale(0.97); }
-  html:not(.is-flow) .contact-bracket-box,
-  html:not(.is-flow) .overlay-link {
+  html.is-flow .pane-link-btn:active,
+  html.is-flow .contact-bracket-box:active,
+  html.is-flow .overlay-link:active { transform: scale(0.97); }
+  html.is-flow .contact-bracket-box,
+  html.is-flow .overlay-link {
     transition: transform var(--dur-press) var(--ease-out), background-color var(--dur-ui) ease, color var(--dur-ui) ease, border-color var(--dur-ui) ease, box-shadow var(--dur-ui) ease;
   }
 }

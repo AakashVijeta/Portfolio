@@ -1,8 +1,7 @@
 import { useLayoutEffect } from 'react';
 import { useLayoutMode } from './hooks/useLayoutMode';
 import { SectionProvider } from './context/SectionContext';
-import SectionManager from './components/SectionManager';
-import MobileFlow from './components/MobileFlow';
+import ScrollFlow from './components/ScrollFlow';
 import CustomCursor from './components/CustomCursor';
 import ProjectOverlay from './components/ProjectOverlay';
 import ProjectViewer from './components/ProjectViewer';
@@ -24,9 +23,11 @@ const SECTION_COMPONENTS = [
 function App() {
   const mode = useLayoutMode();
 
+  // The page always scrolls; is-flow marks the scroll layout (mobile.css / desktop.css
+  // choose the design by viewport width)
   useLayoutEffect(() => {
-    document.documentElement.classList.toggle('is-flow', mode === 'flow');
-  }, [mode]);
+    document.documentElement.classList.add('is-flow');
+  }, []);
 
   return (
     <SectionProvider>
@@ -34,9 +35,7 @@ function App() {
         <CustomCursor />
         <Preloader />
         {mode === 'paged' && <NavDots />}
-        {mode === 'paged'
-          ? <SectionManager sections={SECTION_COMPONENTS} />
-          : <MobileFlow sections={SECTION_COMPONENTS} />}
+        <ScrollFlow sections={SECTION_COMPONENTS} />
         {mode === 'paged' ? <ProjectOverlay /> : <ProjectViewer />}
       </div>
     </SectionProvider>

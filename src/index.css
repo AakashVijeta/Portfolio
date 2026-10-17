@@ -5,7 +5,7 @@
 }
 
 html {
-  /* GSAP owns all scroll — no native smooth scroll */
+  /* Smooth scrolling is requested explicitly (section dots) */
   scroll-behavior: auto;
   /* Base 16px on 14" MacBook (~1440px); scales up proportionally on larger monitors.
      Decreased scaling by 10%: at 2560px → ~17.7px, caps at 20px on ultrawide. */
@@ -13,7 +13,5 @@ html {
 }
 
 body {
-  overscroll-behavior: none;
-  overflow: hidden; /* SectionManager controls what's visible */
   -webkit-font-smoothing: antialiased;
 }

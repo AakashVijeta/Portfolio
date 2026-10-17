@@ -1,5 +1,4 @@
 import { useLayoutEffect, useRef } from 'react';
-import KeyHints from '../KeyHints';
 import { useLayoutMode } from '../../hooks/useLayoutMode';
 
 
@@ -95,7 +94,6 @@ export default function ContactSection({ isActive }) {
         <hr className="profiler-rule" />
         <div className="contact-bottombar-inner">
           <span>END · TRANSMISSION</span>
-          <KeyHints />
           <span>PROTOCOL · SMTP</span>
         </div>
       </footer>
