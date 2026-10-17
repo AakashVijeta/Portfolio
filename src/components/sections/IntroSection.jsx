@@ -1,12 +1,11 @@
 import { useLayoutEffect, useRef, useState, useEffect } from 'react';
 import gsap from 'gsap';
 import { useLayoutMode } from '../../hooks/useLayoutMode';
+import { prefersReducedMotion } from '../../utils/motion';
+import { scrambleTo } from '../../utils/scramble';
 
 const STATUS_WORDS    = ['ON TRACK', 'BUILDING', 'SHIPPING', 'TRAINING', 'COMPILING'];
-const TYPE_SPEED      = 80;
-const DELETE_SPEED    = 45;
-const HOLD_DURATION   = 2200;
-const PAUSE_BEFORE_TYPE = 400;
+const STATUS_HOLD_S   = 2.2;   // seconds each status word stays decoded
 
 const DOS_TERMINAL = [
   { key: 'BASE',  val: 'IIT GUWAHATI · IND' },
@@ -37,42 +36,18 @@ export default function IntroSection({ isActive }) {
     return () => cancelAnimationFrame(reqId);
   }, []);
 
-  const [statusText, setStatusText] = useState('');
-  const wordIdxRef    = useRef(0);
-  const charIdxRef    = useRef(0);
-  const isDeletingRef = useRef(false);
-  const twTimerRef    = useRef(null);
-
+  // STATUS line: scramble-decode from one word to the next, on a loop
+  const statusRef = useRef(null);
   useEffect(() => {
-    const typewriterTick = () => {
-      const word = STATUS_WORDS[wordIdxRef.current];
-      if (!isDeletingRef.current) {
-        charIdxRef.current += 1;
-        setStatusText(word.slice(0, charIdxRef.current));
-        if (charIdxRef.current >= word.length) {
-          twTimerRef.current = setTimeout(() => {
-            isDeletingRef.current = true;
-            typewriterTick();
-          }, HOLD_DURATION);
-          return;
-        }
-        twTimerRef.current = setTimeout(typewriterTick, TYPE_SPEED + Math.random() * 40);
-      } else {
-        charIdxRef.current -= 1;
-        setStatusText(word.slice(0, charIdxRef.current));
-        if (charIdxRef.current <= 0) {
-          isDeletingRef.current = false;
-          wordIdxRef.current = (wordIdxRef.current + 1) % STATUS_WORDS.length;
-          twTimerRef.current = setTimeout(typewriterTick, PAUSE_BEFORE_TYPE);
-          return;
-        }
-        twTimerRef.current = setTimeout(typewriterTick, DELETE_SPEED);
-      }
-    };
-
-    twTimerRef.current = setTimeout(typewriterTick, PAUSE_BEFORE_TYPE);
-    return () => clearTimeout(twTimerRef.current);
-  }, []);
+    const el = statusRef.current;
+    if (!el || prefersReducedMotion()) return;
+    const tl = gsap.timeline({ repeat: -1 });
+    STATUS_WORDS.forEach((_, i) => {
+      tl.to({}, { duration: STATUS_HOLD_S });
+      tl.add(scrambleTo(el, STATUS_WORDS[(i + 1) % STATUS_WORDS.length], { tweenLength: true }));
+    });
+    return () => tl.kill();
+  }, [preloaderDone]);
 
   useEffect(() => {
     if (preloaderDone) return;
@@ -187,7 +162,7 @@ export default function IntroSection({ isActive }) {
           <div className="ihyb-dos-row">
             <span className="ihyb-dos-key">STATUS</span>
             <span className="ihyb-dos-val ihyb-dos-live">
-              {statusText}<span className="ihyb-cursor">_</span>
+              <span ref={statusRef} className="ihyb-status-text">{STATUS_WORDS[0]}</span><span className="ihyb-cursor">_</span>
             </span>
           </div>
         </aside>
