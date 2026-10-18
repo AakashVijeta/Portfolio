@@ -104,20 +104,21 @@ export default function IntroSection({ isActive }) {
     return () => ctx.revert();
   }, [isActive, preloaderDone]);
 
-  // Mobile: one size for both lines, set so AAKASH (the wider word) spans 85% of the content.
+  // One size for both lines: AAKASH (the wider word) spans 85% of the content on phones,
+  // about half the screen on desktop.
   useLayoutEffect(() => {
-    if (mode !== 'flow' || !preloaderDone || !nameRef.current) return;
+    if (!preloaderDone || !nameRef.current) return;
     const wrap = nameRef.current;
     const lines = wrap.querySelectorAll('.ihyb-name-a, .ihyb-name-b');
     const fit = () => {
-      const target = wrap.clientWidth;
+      const target = mode === 'flow' ? wrap.clientWidth * 0.85 : Math.min(wrap.clientWidth, window.innerWidth * 0.48);
       const cap = window.innerHeight * 0.26;
       lines.forEach((el) => el.style.setProperty('font-size', '100px', 'important'));
       const range = document.createRange();
       range.selectNodeContents(lines[0]);
       const width = range.getBoundingClientRect().width;
       if (!width) return;
-      const size = `${Math.min((100 * target * 0.85) / width, cap)}px`;
+      const size = `${Math.min((100 * target) / width, cap)}px`;
       lines.forEach((el) => el.style.setProperty('font-size', size, 'important'));
     };
     fit();

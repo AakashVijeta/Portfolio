@@ -27,18 +27,6 @@ export default function ContactSection({ isActive }) {
         overflow: 'hidden',
       } : undefined}
     >
-      {/* Top classification */}
-      <header className="contact-topbar section-enter-item">
-        <div className="contact-topbar-row">
-          <h2 className="contact-title-main">SOCIALS</h2>
-          <div className="contact-topmeta">
-            <div style={{ color: 'var(--color-accent)' }}>
-              <span className="intro-dot" /> CHANNEL · OPEN
-            </div>
-          </div>
-        </div>
-        <hr className="profiler-rule" />
-      </header>
 
       {/* Center: command + target */}
       <div className="contact-main">
@@ -61,21 +49,13 @@ export default function ContactSection({ isActive }) {
             <span className="contact-cursor">_</span>
           </div>
 
-          {mode === 'flow' ? (
-            <div className="section-enter-item cm-actions">
-              <a href={`mailto:${EMAIL}`} className="cm-primary">[ SEND EMAIL <span aria-hidden="true">→</span> ]</a>
-              <div className="cm-secondary">
-                <a href={GITHUB} target="_blank" rel="noopener noreferrer">[ GITHUB ]</a>
-                <a href={LINKEDIN} target="_blank" rel="noopener noreferrer">[ LINKEDIN ]</a>
-              </div>
+          <div className="section-enter-item cm-actions">
+            <a href={`mailto:${EMAIL}`} className="cm-primary" aria-label="Send email"><RollText text="[ SEND EMAIL → ]" /></a>
+            <div className="cm-secondary">
+              <a href={GITHUB} target="_blank" rel="noopener noreferrer" aria-label="GitHub"><RollText text="[ GITHUB ]" /></a>
+              <a href={LINKEDIN} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><RollText text="[ LINKEDIN ]" /></a>
             </div>
-          ) : (
-            <div className="section-enter-item" style={{ display: 'flex', gap: '16px', alignItems: 'center', flexWrap: 'wrap', marginTop: '32px' }}>
-              <a href={`mailto:${EMAIL}`} className="contact-bracket-box" aria-label="[ INITIATE CONTACT ]"><RollText text="[ INITIATE CONTACT ]" /></a>
-              <a href={GITHUB} target="_blank" rel="noopener noreferrer" className="contact-bracket-box" aria-label="[ GITHUB ]"><RollText text="[ GITHUB ]" /></a>
-              <a href={LINKEDIN} target="_blank" rel="noopener noreferrer" className="contact-bracket-box" aria-label="[ LINKEDIN ]"><RollText text="[ LINKEDIN ]" /></a>
-            </div>
-          )}
+          </div>
 
           <div className="section-enter-item contact-dossier" style={{ marginTop: '48px' }}>
             <div className="intro-dossier-line">

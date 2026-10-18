@@ -1,0 +1,152 @@
+/* ================================================================
+   HERO + CONTACT (all widths)
+   One centred composition on desktop and mobile (modelled on the
+   reference portfolio's hero and contact): bordered status stamp,
+   name, details block; contact actions centred in a 480px column.
+   ================================================================ */
+
+/* ── Intro: one centred block (stamp, name, dossier) filling the first screen ── */
+html.is-flow .intro-hero {
+  height: auto;
+  min-height: calc(100svh - var(--rail-h, 0px) - env(safe-area-inset-top));
+  overflow: hidden;
+  justify-content: center;
+  align-items: stretch;
+  padding: 48px var(--flow-gutter, var(--d-gutter, 24px));
+  gap: clamp(28px, 5svh, 44px);
+}
+/* The status line becomes a bordered case-file stamp */
+html.is-flow .ihyb-topbar {
+  align-self: center;
+  justify-content: center;
+  padding: 9px 14px;
+  border: 1px solid var(--color-accent);
+  font-size: 0.56rem;
+  letter-spacing: 0.18em;
+  color: var(--color-accent);
+}
+html.is-flow .ihyb-topbar::after { content: none; }
+html.is-flow .ihyb-topbar-left { gap: 8px; flex-wrap: wrap; justify-content: center; }
+
+html.is-flow .ihyb-center {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: stretch;
+  gap: clamp(28px, 5svh, 44px);
+  padding: 0;
+}
+html.is-flow .ihyb-namewrap {
+  width: 100%;
+  align-items: center;
+}
+html.is-flow .ihyb-name-a,
+html.is-flow .ihyb-name-b {
+  /* Fallback size; IntroSection fits each line to the exact content width */
+  font-size: min(calc((100vw - 2 * var(--flow-gutter, var(--d-gutter, 24px))) / 4.1), 22svh) !important;
+  line-height: 0.92;
+  white-space: nowrap;
+}
+html.is-flow .ihyb-name-b {
+  align-self: center;
+  margin-top: 0;
+}
+
+html.is-flow .ihyb-dossier {
+  width: 100%;
+  font-size: clamp(0.66rem, 2.9vw, 0.82rem);
+  letter-spacing: 0.08em;
+  padding-top: 14px;
+}
+html.is-flow .ihyb-dossier::before {
+  left: 0; right: 0;
+  top: 0; bottom: auto;
+  width: auto; height: 1px;
+}
+html.is-flow .ihyb-dos-row { padding: 8px 0; }
+
+/* ── Contact: closing screen, CTAs in thumb reach ─────────────── */
+html.is-flow .contact-main {
+  flex: 1;
+  max-height: none;
+  justify-content: flex-start;
+  padding: 40px var(--flow-gutter, var(--d-gutter, 24px)) var(--space-section, 128px);
+}
+html.is-flow .contact-content-inner {
+  max-width: 480px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+html.is-flow .contact-topbar { align-items: center; }
+html.is-flow .contact-topbar-row { align-items: center; text-align: center; }
+html.is-flow .contact-topmeta { text-align: center; }
+html.is-flow .contact-title-wrap {
+  font-size: clamp(0.72rem, 3.4vw, 0.95rem) !important;
+  letter-spacing: 0.32em !important;
+  margin-bottom: 24px !important;
+  white-space: nowrap;
+}
+html.is-flow .contact-command {
+  font-size: clamp(0.95rem, 4.6vw, 1.5rem);
+  gap: 8px;
+  justify-content: center;
+  overflow-wrap: anywhere;
+}
+html.is-flow .cm-actions {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 40px;
+}
+html.is-flow .cm-primary,
+html.is-flow .cm-secondary a {
+  box-sizing: border-box;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  letter-spacing: 0.24em;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+}
+html.is-flow .cm-primary {
+  width: 100%;
+  font-size: 0.82rem;
+  color: var(--color-bg);
+  background: var(--color-accent);
+  border: 1px solid var(--color-accent);
+  font-weight: 700;
+}
+html.is-flow .cm-primary:active { filter: brightness(0.85); }
+html.is-flow .cm-secondary {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+html.is-flow .cm-secondary a {
+  font-size: 0.72rem;
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+}
+html.is-flow .cm-secondary a:active { border-color: var(--color-accent); color: var(--color-accent); }
+html.is-flow .cm-primary:focus-visible,
+html.is-flow .cm-secondary a:focus-visible { outline: 1px solid var(--color-accent); outline-offset: 3px; }
+
+html.is-flow .contact-dossier { margin-top: var(--space-block, 56px) !important; padding-left: 0; border-left: 0; }
+html.is-flow .contact-dossier .intro-dossier-line { justify-content: center; }
+html.is-flow .contact-dossier .intro-dossier-line { gap: 16px; font-size: 0.7rem; letter-spacing: 0.18em; }
+html.is-flow .contact-bottombar { padding-bottom: max(24px, env(safe-area-inset-bottom)); }
+
+/* Desktop sizing of the shared composition */
+@media (min-width: 901px) {
+  html.is-flow .ihyb-topbar { font-size: 0.7rem; padding: 10px 18px; }
+  html.is-flow .ihyb-dossier { max-width: 560px; align-self: center; font-size: 0.82rem; }
+  html.is-flow .contact-main { justify-content: center; padding-bottom: 40px; }
+}
+
