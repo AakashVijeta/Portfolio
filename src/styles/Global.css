@@ -13,6 +13,24 @@
   }
 }
 
+/* Page scrollbar: a thin accent thumb on a dark track with a hairline edge.
+   Chrome/Safari take the pseudo-elements; Firefox only understands the standard
+   properties, which would override the pseudo-elements in Chrome if set there too. */
+html::-webkit-scrollbar { width: 6px; }
+html::-webkit-scrollbar-track {
+  background: var(--color-bg);
+  border-left: 1px solid var(--color-border);
+}
+html::-webkit-scrollbar-thumb { background: var(--color-accent); border-radius: 999px; }
+html::-webkit-scrollbar-thumb:hover { background: var(--color-white); }
+@supports not selector(::-webkit-scrollbar) {
+  html { scrollbar-width: thin; scrollbar-color: var(--color-accent) var(--color-bg); }
+  html.is-preloading { scrollbar-color: transparent transparent; }
+}
+/* Hidden but still taking its width during the preloader, so nothing shifts when it appears */
+html.is-preloading::-webkit-scrollbar-track,
+html.is-preloading::-webkit-scrollbar-thumb { background: transparent; border-color: transparent; }
+
 /* Cursor: the native pointer is replaced by an accent dot + X/Y readout
    (pointer devices only). No hover or press states. */
 @media (hover: hover) and (pointer: fine) {

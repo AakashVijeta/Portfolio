@@ -64,19 +64,12 @@
   /* Only the last section keeps its footer; the rest read as one page */
   html.is-flow .ihyb-bottombar,
   html.is-flow .profiler-foot { display: none; }
-  /* Last section: no full-screen void; footer sits at its bottom */
-  html.is-flow .contact-section { min-height: 75svh; }
-  html.is-flow .contact-bottombar {
-    margin-top: auto;
-    height: auto;
-    padding: 24px var(--flow-gutter) 32px;
-    font-size: 0.68rem;
+  /* Last section: no full-screen void, and no footer; the signature line closes the page */
+  html.is-flow .contact-section {
+    min-height: 75svh;
+    padding-bottom: max(24px, env(safe-area-inset-bottom)) !important;
   }
-  html.is-flow .contact-bottombar-inner {
-    flex-wrap: wrap;
-    gap: 8px 16px;
-    justify-content: space-between;
-  }
+  html.is-flow .contact-bottombar { display: none; }
 
   /* ── Projects: swipeable evidence cards ───────────────────────── */
   /* Native horizontal scroll + snap: real touch momentum, never fights the page scroll */

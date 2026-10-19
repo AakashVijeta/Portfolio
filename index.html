@@ -3,7 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" href="/favicon.ico" sizes="48x48" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <meta name="theme-color" content="#020402" />
 
     <title>Aakash Vijeta</title>
@@ -49,7 +51,9 @@
     </style>
 
     <script>
-      (function(){document.documentElement.classList.add('js');document.documentElement.classList.add('is-flow');})();
+      (function(){document.documentElement.classList.add('js');document.documentElement.classList.add('is-flow');
+        /* Hide the page scrollbar from the first paint if the preloader will run (see Preloader.jsx) */
+        try{if(!sessionStorage.getItem('preloaded')&&!matchMedia('(prefers-reduced-motion: reduce)').matches)document.documentElement.classList.add('is-preloading');}catch(e){}})();
     </script>
   </head>
   <body>

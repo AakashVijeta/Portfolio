@@ -120,6 +120,11 @@ export default function Preloader() {
     return () => ctx.revert();
   }, []);
 
+  // ── Page scrollbar stays invisible behind the HUD; it appears as the halves part ──
+  useEffect(() => {
+    document.documentElement.classList.toggle('is-preloading', stage === 'active');
+  }, [stage]);
+
   // ── RAF: rebuild signal every frame (only while the HUD is up) ─────────────
   useEffect(() => {
     if (stage !== 'active' || !signalRef.current) return;
