@@ -73,7 +73,7 @@
   background: var(--color-text);
   color: var(--color-bg);
   font-family: var(--font-mono);
-  font-size: 0.6rem;
+  font-size: 0.68rem;
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -147,7 +147,7 @@
 .pv-section { margin-top: 48px; }
 .pv-section-title {
   font-family: var(--font-mono);
-  font-size: 0.66rem;
+  font-size: 0.68rem;
   font-weight: 400;
   letter-spacing: 0.22em;
   color: var(--color-muted);

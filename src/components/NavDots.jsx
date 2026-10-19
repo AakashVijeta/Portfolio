@@ -40,7 +40,7 @@ export default function NavDots() {
               flexDirection: 'column',
               alignItems: 'center',
               gap: isHovered ? '6px' : '0px',
-              // Fixed-width column so the dots hug the edge; the hover label overflows centred
+              // Fixed-width column so the dots hug the edge; the hover label overflows to the left
               width: '40px',
               boxSizing: 'border-box',
               padding: '11px 0',
@@ -66,7 +66,7 @@ export default function NavDots() {
             {/* Label — slides in below */}
             <span style={{
               fontFamily: 'var(--font-mono)',
-              fontSize: '0.55rem',
+              fontSize: '0.68rem',
               letterSpacing: '0.12em',
               color: isActive ? 'var(--color-accent)' : 'var(--color-text)',
               textTransform: 'uppercase',
@@ -77,6 +77,8 @@ export default function NavDots() {
               transition: 'max-height 0.22s ease, opacity 0.18s ease',
               pointerEvents: 'none',
               whiteSpace: 'nowrap',
+              // Grows leftward from the column's edge so long labels never leave the screen
+              alignSelf: 'flex-end',
             }}>
               {SECTION_LABELS[i]}
             </span>

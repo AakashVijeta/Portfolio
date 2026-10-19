@@ -73,7 +73,7 @@ html.is-flow .cases {
 .case-row-tag,
 .case-file-facts dt {
   font-family: var(--font-mono);
-  font-size: 0.66rem;
+  font-size: 0.68rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--color-muted);
@@ -104,7 +104,7 @@ html.is-flow .cases {
 }
 .case-file-stat-label {
   font-family: var(--font-mono);
-  font-size: 0.62rem;
+  font-size: 0.68rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--color-muted);

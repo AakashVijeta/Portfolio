@@ -161,7 +161,7 @@
   html.is-flow .about-profiler .id-data-grid > .status-wrapper { grid-column: 1 / -1; margin-top: 8px; padding: 16px; }
   html.is-flow .about-profiler .status-main { font-size: 1.4rem; }
   html.is-flow .about-profiler .status-header,
-  html.is-flow .about-profiler .status-footer { font-size: 0.62rem; }
+  html.is-flow .about-profiler .status-footer { font-size: 0.68rem; }
   html.is-flow .about-profiler .status-footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 12px; }
   html.is-flow .about-profiler .status-footer > span { white-space: nowrap; }
 
@@ -202,7 +202,7 @@
   html.is-flow .about-profiler .tech-category > .cat-title,
   html.is-flow .about-profiler .tech-category > .cat-rule { grid-column: 1 / -1; margin: 0; }
   html.is-flow .about-profiler .tech-category > .cat-rule { margin-bottom: 4px; }
-  html.is-flow .about-profiler .cat-title { font-size: 0.66rem; }
+  html.is-flow .about-profiler .cat-title { font-size: 0.68rem; }
   html.is-flow .about-profiler .chips-primary,
   html.is-flow .about-profiler .chips-grid,
   html.is-flow .about-profiler .tech-category:last-child .chips-grid { display: contents; }

@@ -58,7 +58,7 @@
   html.is-flow .projects-topmeta,
   html.is-flow .profiler-head-meta {
     text-align: left;
-    font-size: 0.62rem;
+    font-size: 0.68rem;
   }
   /* Only the last section keeps its footer; the rest read as one page */
   html.is-flow .ihyb-bottombar,
@@ -69,7 +69,7 @@
     margin-top: auto;
     height: auto;
     padding: 24px var(--flow-gutter) 32px;
-    font-size: 0.6rem;
+    font-size: 0.68rem;
   }
   html.is-flow .contact-bottombar-inner {
     flex-wrap: wrap;
@@ -174,15 +174,15 @@
     font-size: 0.8rem;
   }
   html.is-flow .id-cell { display: flex; flex-direction: column; gap: 6px; }
-  html.is-flow .id-key { font-size: 0.6rem; }
+  html.is-flow .id-key { font-size: 0.68rem; }
   html.is-flow .id-val { font-size: 0.8rem; }
   html.is-flow .id-data-grid > .status-wrapper { grid-column: 1 / -1; margin-top: 8px; padding: 20px; gap: 10px; }
   html.is-flow .status-main { font-size: clamp(1.15rem, 5.4vw, 1.5rem); }
   html.is-flow .status-header,
-  html.is-flow .status-footer { font-size: 0.58rem; }
+  html.is-flow .status-footer { font-size: 0.68rem; }
 
   /* Behaviour: report header, bio, history */
-  html.is-flow .analysis-header { font-size: 0.58rem; margin-bottom: 20px; padding-bottom: 12px; gap: 12px; }
+  html.is-flow .analysis-header { font-size: 0.68rem; margin-bottom: 20px; padding-bottom: 12px; gap: 12px; }
   html.is-flow .psych-report { padding-right: 0; }
   html.is-flow .psych-bio {
     display: block;
@@ -197,7 +197,7 @@
     box-decoration-break: clone;
   }
   html.is-flow .dossier-history { display: flex; flex-direction: column; gap: 40px; margin-top: 40px; }
-  html.is-flow .history-block-title { font-size: 0.62rem; margin-bottom: 20px; }
+  html.is-flow .history-block-title { font-size: 0.68rem; margin-bottom: 20px; }
   html.is-flow .history-item { margin: 0 0 24px; padding-left: 14px; font-size: 0.9rem; line-height: 1.6; }
   html.is-flow .history-item:last-child { margin-bottom: 0; }
   html.is-flow .history-header {
@@ -208,14 +208,14 @@
     gap: 8px 12px;
     margin-bottom: 8px;
   }
-  html.is-flow .history-period { display: inline-block; flex-shrink: 0; font-size: 0.6rem; }
+  html.is-flow .history-period { display: inline-block; flex-shrink: 0; font-size: 0.68rem; }
   html.is-flow .history-line { display: block; -webkit-line-clamp: unset; overflow: visible; font-size: 0.9rem; line-height: 1.6; }
 
   /* Capabilities: the desktop's two-column chip grid */
   html.is-flow .cap-top { display: flex; flex-direction: column; gap: 32px; }
-  html.is-flow .cap-inv-label { font-size: 0.58rem; text-align: left; }
+  html.is-flow .cap-inv-label { font-size: 0.68rem; text-align: left; }
   html.is-flow .tech-category { display: flex; flex-direction: column; gap: 12px; }
-  html.is-flow .cat-title { font-size: 0.62rem; }
+  html.is-flow .cat-title { font-size: 0.68rem; }
   html.is-flow .chips-primary,
   html.is-flow .chips-grid,
   html.is-flow .tech-category:last-child .chips-grid {
