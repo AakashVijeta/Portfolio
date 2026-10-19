@@ -3,12 +3,22 @@ import gsap from 'gsap';
 import '../styles/Preloader.css';
 
 const LOG_LINES = [
+  '> BOOT_SEQ_05',
+  '> MOUNTING_DATASETS...',
+  '> LOADING_MODEL_WEIGHTS',
+  '> WARMING_FEATURE_CACHE',
+  '> CALIBRATING_PROBABILITIES',
+  '> RESOLVING_HOST',
   '> PACKET_LOSS_0%',
   '> AWAITING_DATABASE...',
-  '> DOWNLOADING_ASSETS...',
   '> ESTABLISHING_SECURE_LINK',
   '> HANDSHAKE_COMPLETE',
 ];
+// Top-right readouts: jittering latitude around IIT Guwahati and a 4x4 block of noise
+const LAT_BASE = 26.18;
+const GRID_CELLS = 16;
+const rnd2 = () => String(Math.floor(Math.random() * 100));
+const pad2 = (n) => String(n).padStart(2, '0');
 
 const TOTAL_MS = 2400;
 const EXIT_MS  = 3000;
@@ -52,6 +62,8 @@ export default function Preloader() {
   const [pct, setPct]           = useState(0);
   const [logCount, setLogCount] = useState(0);
   const [freq, setFreq]         = useState(12.4);
+  const [lat, setLat]           = useState(LAT_BASE.toFixed(4));
+  const [grid, setGrid]         = useState(() => Array.from({ length: GRID_CELLS }, rnd2));
 
   const signalRef   = useRef(null);  // SVG <path> element
   const waveRafRef  = useRef(null);
@@ -62,7 +74,8 @@ export default function Preloader() {
   const edgeTRef    = useRef(null);
   const edgeBRef    = useRef(null);
 
-  // ── GSAP: amplitude collapse → curtain exit ────────────────────────────────
+  // ── GSAP: amplitude collapse → everything but the hairline fades → the hairline
+  // splits and the two halves slide apart, opening the site between them ─────────
   useEffect(() => {
     if (!signalRef.current) return;
     const ctx = gsap.context(() => {
@@ -72,21 +85,20 @@ export default function Preloader() {
           duration: TOTAL_MS / 1000,
           ease: 'power2.inOut',
         })
-        .to([edgeTRef.current, edgeBRef.current], {
-          opacity: 1, duration: 0.12, ease: 'none',
-        }, '<90%')
+        // the curtain edges sit exactly on the hairline, so swapping them in is invisible
+        .set([edgeTRef.current, edgeBRef.current], { opacity: 1 })
         .to(contentRef.current, {
-          opacity: 0, duration: 0.15, ease: 'none',
-        })
+          opacity: 0, duration: 0.3, ease: 'power1.out',
+        }, '+=0.05')
         .to(curtainTRef.current, {
-          yPercent: -100, duration: 0.6, ease: 'power2.inOut',
-        }, '<0.05')
+          yPercent: -100, duration: 0.7, ease: 'power3.inOut',
+        }, '+=0.05')
         .to(curtainBRef.current, {
-          yPercent:  100, duration: 0.6, ease: 'power2.inOut',
+          yPercent:  100, duration: 0.7, ease: 'power3.inOut',
         }, '<')
         .to([edgeTRef.current, edgeBRef.current], {
-          opacity: 0, duration: 0.3, ease: 'power2.in',
-        }, '>-0.25');
+          opacity: 0, duration: 0.25, ease: 'power2.in',
+        }, '>-0.2');
     });
     return () => ctx.revert();
   }, []);
@@ -123,6 +135,8 @@ export default function Preloader() {
       setPct(Math.floor(p * 100));
       if (now - lastFreqUpdate > 60) {
         setFreq(+(8 + Math.random() * 18).toFixed(1));
+        setLat((LAT_BASE + Math.random() * 0.01).toFixed(4));
+        setGrid(Array.from({ length: GRID_CELLS }, rnd2));
         lastFreqUpdate = now;
       }
       if (p < 1) pctRaf = requestAnimationFrame(tick);
@@ -172,10 +186,17 @@ export default function Preloader() {
           <div className="pl-radar">
             <div className="pl-radar-sweep" />
           </div>
+          <span className="pl-coord">LAT: {lat} N</span>
           <span className={`pl-badge ${done ? 'pl-badge--ok' : ''}`}>
             {done ? 'DECRYPTED' : 'ENCRYPTED'}
           </span>
+          <div className="pl-grid" aria-hidden="true">
+            {grid.map((n, i) => <span key={i}>{n}</span>)}
+          </div>
         </div>
+
+        {/* Hairline across the screen through the counter */}
+        <div className="pl-hairline" />
 
         <div className="pl-centerline">
           <div className="pl-freq-label">FREQ: {freq} Hz</div>
@@ -200,12 +221,13 @@ export default function Preloader() {
         </div>
 
         <div className="pl-pct-wrap">
-          <span className="pl-pct">{pct}%</span>
+          <span className="pl-pct">{pct === 100 ? 100 : pad2(pct)}%</span>
         </div>
 
         <div className="pl-log">
+          {/* Older lines fade back as new ones arrive */}
           {LOG_LINES.slice(0, logCount).map((line, i) => (
-            <div key={i} className="pl-log-line">{line}</div>
+            <div key={i} className="pl-log-line" style={{ '--age': logCount - 1 - i }}>{line}</div>
           ))}
         </div>
 

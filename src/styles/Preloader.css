@@ -4,14 +4,18 @@
   z-index: 99998;
   overflow: hidden;
   --pl-axis: 44%;
-  --pl-scan-half: 65px;
+  --pl-box-up: 100px;    /* frame top, above the signal line */
+  --pl-box-down: 200px;  /* frame bottom, below it (the counter sits inside) */
   --pl-gutter: 12vw;
+  /* The hairline through the counter: the seam the site opens along on exit */
+  --pl-seam: calc(var(--pl-axis) + 26px);
 }
 .pl--exit {
   pointer-events: none;
 }
 
-/* Two halves that ARE the dark bg — slide away from center on exit */
+/* Two halves that ARE the dark bg, meeting at the hairline; on exit the hairline
+   splits in two and each half slides away with its edge, opening the site between */
 .pl-curtain-t,
 .pl-curtain-b {
   position: absolute;
@@ -20,29 +24,22 @@
   background: var(--color-bg);
   z-index: 0;
 }
-.pl-curtain-t { top: 0;    height: 50%; }
-.pl-curtain-b { bottom: 0; height: 50%; }
+.pl-curtain-t { top: 0;    height: var(--pl-seam); }
+.pl-curtain-b { top: var(--pl-seam); bottom: 0; }
 
-/* Glowing edge that takes over from the flat signal line and rides
-   each curtain as it slides away — splits the line in two. */
+/* Each curtain's edge is drawn like the hairline, so when the HUD fades the hairline
+   is all that's left, and it is what splits and rides the two halves apart */
 .pl-curtain-edge {
   position: absolute;
   left: 0;
   right: 0;
-  height: 1.5px;
-  background: var(--color-accent);
+  height: 1px;
+  background: color-mix(in srgb, var(--color-text) 30%, var(--color-border));
   opacity: 0;
   pointer-events: none;
-  filter:
-    drop-shadow(0 0 3px var(--color-accent))
-    drop-shadow(0 0 6px color-mix(in srgb, var(--color-accent) 50%, transparent));
 }
-/* Signal center is at 44% of .pl (var(--pl-axis)), seam is at 50%.
-   Delta = 6% of .pl = 12% of each curtain (height: 50%).
-   Using % instead of vh avoids the layout-vs-visual viewport mismatch
-   on mobile browsers where vh != actual fixed-element height. */
-.pl-curtain-edge--t { bottom: 12%; }
-.pl-curtain-edge--b { top: -12%; }
+.pl-curtain-edge--t { bottom: 0; }
+.pl-curtain-edge--b { top: 0; }
 
 /* All HUD content sits above the curtains */
 .pl-content {
@@ -54,10 +51,10 @@
 /* ── Scan box outline ── */
 .pl-scan-box {
   position: absolute;
-  top: calc(var(--pl-axis) - var(--pl-scan-half));
+  top: calc(var(--pl-axis) - var(--pl-box-up));
   left: var(--pl-gutter);
   right: var(--pl-gutter);
-  height: calc(var(--pl-scan-half) * 2);
+  height: calc(var(--pl-box-up) + var(--pl-box-down));
   border: 1px solid color-mix(in srgb, var(--color-accent) 22%, transparent);
   pointer-events: none;
 }
@@ -70,13 +67,13 @@
   pointer-events: none;
 }
 .pl-corner--tl {
-  top: calc(var(--pl-axis) - var(--pl-scan-half));
+  top: calc(var(--pl-axis) - var(--pl-box-up));
   left: var(--pl-gutter);
   border-top:    1px solid var(--color-accent);
   border-left:   1px solid var(--color-accent);
 }
 .pl-corner--br {
-  top: calc(var(--pl-axis) + var(--pl-scan-half) - 28px);
+  top: calc(var(--pl-axis) + var(--pl-box-down) - 28px);
   right: var(--pl-gutter);
   border-bottom: 1px solid var(--color-accent);
   border-right:  1px solid var(--color-accent);
@@ -125,14 +122,43 @@
   font-size: 0.68rem;
   letter-spacing: 0.25em;
   text-transform: uppercase;
-  color: var(--color-bg);
-  background: var(--color-accent);
+  color: var(--color-accent);
+  border: 1px solid var(--color-accent);
   padding: 4px 12px;
+  transition: background 0.3s, color 0.3s;
 }
 .pl-badge--ok {
-  background: transparent;
-  color: #fff;
-  border: 1px solid #fff;
+  background: var(--color-accent);
+  color: var(--color-bg);
+}
+/* Latitude readout and a 4x4 block of shifting numbers under the radar */
+.pl-coord {
+  font-family: var(--font-mono);
+  font-size: 0.56rem;
+  letter-spacing: 0.08em;
+  color: var(--color-muted);
+}
+.pl-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1.6em);
+  gap: 4px 6px;
+  margin-top: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.56rem;
+  text-align: right;
+  color: var(--color-muted);
+  opacity: 0.5;
+}
+
+/* Hairline across the screen through the counter */
+.pl-hairline {
+  position: absolute;
+  top: var(--pl-seam);
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: color-mix(in srgb, var(--color-text) 30%, var(--color-border));
+  pointer-events: none;
 }
 
 /* ── Freq label ── */
@@ -172,7 +198,7 @@
 .pl-signal-path {
   fill: none;
   stroke: var(--color-accent);
-  stroke-width: 1.5;
+  stroke-width: 2;
   vector-effect: non-scaling-stroke;
   filter: drop-shadow(0 0 3px var(--color-accent)) drop-shadow(0 0 6px color-mix(in srgb, var(--color-accent) 50%, transparent));
 }
@@ -202,14 +228,14 @@
 /* ── Percentage ── */
 .pl-pct-wrap {
   position: absolute;
-  top: calc(var(--pl-axis) + 28px);
+  top: calc(var(--pl-axis) + 40px);
   left: 0; right: 0;
   display: flex;
   justify-content: center;
 }
 .pl-pct {
   font-family: var(--font-display);
-  font-size: clamp(60px, 10vw, 120px);
+  font-size: clamp(40px, 4vw, 60px);
   font-weight: 700;
   letter-spacing: -0.02em;
   color: var(--color-white, #fff);
@@ -219,8 +245,8 @@
 /* ── Bottom log ── */
 .pl-log {
   position: absolute;
-  bottom: clamp(40px, 12vh, 120px);
-  left: var(--pl-gutter);
+  bottom: 48px;
+  left: 40px;
   display: flex;
   flex-direction: column;
   gap: 7px;
@@ -241,11 +267,13 @@
   letter-spacing: 0.1em;
   color: var(--color-muted);
   opacity: 0;
+  --line-op: max(0.25, calc(1 - var(--age, 0) * 0.12));
   animation: pl-log-in 0.2s ease forwards;
+  transition: opacity 0.3s;
 }
 @keyframes pl-log-in {
   from { opacity: 0; transform: translateX(-4px); }
-  to   { opacity: 1; transform: translateX(0); }
+  to   { opacity: var(--line-op); transform: translateX(0); }
 }
 
 /* ================================================================
@@ -253,7 +281,8 @@
    ================================================================ */
 @media (max-width: 768px) {
   .pl {
-    --pl-scan-half: 55px;
+    --pl-box-up: 70px;
+    --pl-box-down: 140px;
     --pl-gutter: 6vw;
   }
 
@@ -264,7 +293,7 @@
     height: 22px;
   }
   .pl-corner--br {
-    top: calc(var(--pl-axis) + var(--pl-scan-half) - 22px);
+    top: calc(var(--pl-axis) + var(--pl-box-down) - 22px);
   }
 
   /* HUD radar — pull closer to edge so it doesn't eat into center */
@@ -297,12 +326,13 @@
 
   /* Percentage — scale down for mobile proportions */
   .pl-pct {
-    font-size: clamp(48px, 14vw, 80px);
+    font-size: clamp(36px, 10vw, 52px);
   }
 
   /* Log lines — smaller text */
   .pl-log {
-    bottom: clamp(32px, 10vh, 80px);
+    bottom: 32px;
+    left: 20px;
     gap: 5px;
     padding-left: 10px;
   }
@@ -314,7 +344,8 @@
 
 @media (max-width: 480px) {
   .pl {
-    --pl-scan-half: 48px;
+    --pl-box-up: 60px;
+    --pl-box-down: 120px;
     --pl-gutter: 4vw;
   }
 
@@ -324,7 +355,7 @@
     height: 18px;
   }
   .pl-corner--br {
-    top: calc(var(--pl-axis) + var(--pl-scan-half) - 18px);
+    top: calc(var(--pl-axis) + var(--pl-box-down) - 18px);
   }
 
   .pl-hud-tr {
@@ -352,14 +383,15 @@
   }
 
   .pl-pct {
-    font-size: clamp(40px, 16vw, 64px);
+    font-size: clamp(32px, 11vw, 44px);
   }
   .pl-pct-wrap {
-    top: calc(44% + 22px);
+    top: calc(44% + 32px);
   }
 
   .pl-log {
-    bottom: clamp(24px, 8vh, 60px);
+    bottom: 24px;
+    left: 16px;
     gap: 4px;
     padding-left: 8px;
   }
