@@ -6,9 +6,9 @@ import { useLayoutMode } from '../../hooks/useLayoutMode';
 import { EASE_OUT, prefersReducedMotion } from '../../utils/motion';
 import RollText from '../RollText';
 
+// One placeholder row: "more coming", not padding
 const CLASSIFIED_SLOTS = [
   { slug: '__c1', codename: 'CLASSIFIED', tag: 'REDACTED' },
-  { slug: '__c2', codename: 'CLASSIFIED', tag: 'REDACTED' },
 ];
 
 const pad2 = (n) => String(n).padStart(2, '0');
