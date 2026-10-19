@@ -8,9 +8,9 @@
   --color-border:   #1a3322;
   --color-white:    #e8ffe8;
 
-  --font-display: 'Rethink Sans', 'Inter', 'Segoe UI', system-ui, sans-serif;
-  --font-body:    'Rethink Sans', 'Inter', 'Segoe UI', system-ui, sans-serif;
-  --font-mono:    'JetBrains Mono', 'Consolas', monospace;
+  --font-display: 'Geist Variable', 'Segoe UI', system-ui, sans-serif;
+  --font-body:    'Geist Variable', 'Segoe UI', system-ui, sans-serif;
+  --font-mono:    'Geist Mono Variable', 'Consolas', monospace;
 
   /* Motion tokens (same curves are registered for GSAP in utils/motion.js) */
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
