@@ -1,11 +1,14 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from 'lenis';
 import 'lenis/dist/lenis.css';
 import { useSectionContext, SECTIONS } from '../context/SectionContext';
 import { useLayoutMode } from '../hooks/useLayoutMode';
-import { hideEntrance, revealItems, REVEAL_ITEM_SELECTOR } from '../utils/entranceAnimation';
+import { hideEntrance, revealItems, showItems, REVEAL_ITEM_SELECTOR } from '../utils/entranceAnimation';
 import { prefersReducedMotion } from '../utils/motion';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const hasIO = typeof IntersectionObserver !== 'undefined';
 
@@ -33,14 +36,35 @@ export default function ScrollFlow({ sections }) {
     const lenis = new Lenis({ lerp: 0.1, smoothWheel: true });
     lenisRef.current = lenis;
     const tick = (time) => lenis.raf(time * 1000);
+    lenis.on('scroll', ScrollTrigger.update);
     gsap.ticker.add(tick);
     gsap.ticker.lagSmoothing(0);
     return () => {
+      lenis.off('scroll', ScrollTrigger.update);
       gsap.ticker.remove(tick);
       lenis.destroy();
       lenisRef.current = null;
     };
   }, [mode]);
+
+  // Desktop parallax: [data-parallax="N"] drifts N px sideways (from +N to -N) while
+  // its section crosses the screen, tied to the scroll position
+  useEffect(() => {
+    const mm = gsap.matchMedia();
+    mm.add('(min-width: 901px) and (prefers-reduced-motion: no-preference)', () => {
+      refs.current.filter(Boolean).forEach((section) => {
+        section.querySelectorAll('[data-parallax]').forEach((el) => {
+          const n = Number(el.dataset.parallax);
+          gsap.fromTo(el, { x: n }, {
+            x: -n,
+            ease: 'none',
+            scrollTrigger: { trigger: section, start: 'top bottom', end: 'bottom top', scrub: true },
+          });
+        });
+      });
+    });
+    return () => mm.revert();
+  }, []);
 
   // Hold the page still while a project panel is open
   useEffect(() => {
@@ -78,7 +102,7 @@ export default function ScrollFlow({ sections }) {
       pending = pending.filter((item) => !due.includes(item));
       // Items already scrolled past appear instantly; only on-screen ones animate
       const passed = due.filter((item) => item.getBoundingClientRect().bottom <= 0);
-      if (passed.length) gsap.set(passed, { opacity: 1, y: 0, clearProps: 'transform,opacity' });
+      showItems(passed);
       revealItems(due.filter((item) => !passed.includes(item)));
     };
     const schedule = () => { if (!raf) raf = requestAnimationFrame(check); };

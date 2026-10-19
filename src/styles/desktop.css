@@ -251,10 +251,8 @@
 /* ── Desktop press feedback ─────────────────────────────────────── */
 @media (min-width: 901px) and (prefers-reduced-motion: no-preference) {
   html.is-flow .pane-link-btn:active,
-  html.is-flow .contact-bracket-box:active,
-  html.is-flow .overlay-link:active { transform: scale(0.97); }
-  html.is-flow .contact-bracket-box,
-  html.is-flow .overlay-link {
+  html.is-flow .contact-bracket-box:active { transform: scale(0.97); }
+  html.is-flow .contact-bracket-box {
     transition: transform var(--dur-press) var(--ease-out), background-color var(--dur-ui) ease, color var(--dur-ui) ease, border-color var(--dur-ui) ease, box-shadow var(--dur-ui) ease;
   }
 }
@@ -275,4 +273,44 @@
   a:hover > .roll .roll-char,
   button:hover > .roll .roll-char,
   a:focus-visible > .roll .roll-char { transform: translateY(-100%); }
+}
+
+
+/* ── Camera viewfinder (Viewfinder.jsx) ────────────────────────────
+   Small readouts fixed to the four screen corners for the whole page:
+   above the sections, below the project panel (z 10001). */
+.viewfinder { display: none; }
+@media (min-width: 1100px) and (hover: hover) and (pointer: fine) {
+  .viewfinder {
+    display: block;
+    position: fixed;
+    inset: 12px 14px;
+    z-index: 10000;
+    pointer-events: none;
+    font-family: var(--font-mono);
+    font-size: 0.54rem;
+    letter-spacing: 0.12em;
+    color: var(--color-muted);
+    opacity: 0.55;
+  }
+  .viewfinder > span { position: absolute; display: flex; flex-direction: column; gap: 4px; }
+  .viewfinder b { font-weight: 400; }
+  .viewfinder i { font-style: normal; color: color-mix(in srgb, var(--color-accent) 55%, var(--color-muted)); font-size: 0.5rem; }
+  .vf-tl { top: 0; left: 0; }
+  .vf-tr { top: 0; right: 0; align-items: flex-end; }
+  .vf-bl { bottom: 0; left: 0; }
+  .vf-br { bottom: 0; right: 0; align-items: flex-end; }
+  .vf-dot {
+    display: inline-block;
+    width: 5px; height: 5px;
+    margin-right: 8px;
+    border-radius: 50%;
+    background: var(--color-accent);
+    vertical-align: middle;
+    animation: vf-blink 1.6s steps(2, start) infinite;
+  }
+  @keyframes vf-blink { to { visibility: hidden; } }
+}
+@media (prefers-reduced-motion: reduce) {
+  .vf-dot { animation: none; }
 }

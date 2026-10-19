@@ -7,9 +7,11 @@ import { scrambleTo } from '../../utils/scramble';
 const STATUS_WORDS    = ['ON TRACK', 'BUILDING', 'SHIPPING', 'TRAINING', 'COMPILING'];
 const STATUS_HOLD_S   = 2.2;   // seconds each status word stays decoded
 
-const DOS_TERMINAL = [
-  { key: 'BASE',  val: 'IIT GUWAHATI · IND' },
-  { key: 'STACK', val: 'DS · ML · AI SYS' },
+// Case-file scraps pinned around the name on desktop; each leans a little and tilts
+// toward the pointer by its own depth
+const FLOATS = [
+  { id: 'loc',   depth: 1.0, lean: 2.2,  lines: ['LAT: 26.1878 N', 'LON: 91.6916 E', 'SITE_IIT_GUWAHATI'] },
+  { id: 'log',   depth: 1.3, lean: -1.2, lines: ['>> fitting model...', '>> calibrating probs'], status: true },
 ];
 
 export default function IntroSection({ isActive }) {
@@ -67,9 +69,9 @@ export default function IntroSection({ isActive }) {
       const bottombar = root.querySelector('.ihyb-bottombar');
       const nameA = root.querySelector('.ihyb-name-a');
       const nameB = root.querySelector('.ihyb-name-b');
-      const dossier = root.querySelector('.ihyb-dossier');
-      const dossierRows = root.querySelectorAll('.ihyb-dos-row');
-      const targets = [topbar, bottombar, nameA, nameB, dossier, ...dossierRows].filter(Boolean);
+      const tagline = root.querySelector('.ihyb-tagline');
+      const extras = [...root.querySelectorAll('.ihyb-float-in')];
+      const targets = [topbar, bottombar, nameA, nameB, tagline, ...extras].filter(Boolean);
       const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
       gsap.killTweensOf(targets);
@@ -84,25 +86,63 @@ export default function IntroSection({ isActive }) {
         return;
       }
 
-      gsap.set([topbar, bottombar, nameA, nameB, dossier], { autoAlpha: 0 });
-      gsap.set(dossierRows, { autoAlpha: 0, x: 12 });
+      gsap.set([topbar, bottombar, nameA, nameB, tagline, ...extras].filter(Boolean), { autoAlpha: 0 });
 
+      // Cards pop in first, then the stamp fades up, then each name line comes into
+      // focus out of a blur, then the tagline rises (about 2.3s in all)
       gsap.timeline({ defaults: { ease: 'power3.out' } })
-        .fromTo(topbar, { autoAlpha: 0, y: -10 }, { autoAlpha: 1, y: 0, duration: 0.34 }, 0)
-        .fromTo(nameA, { autoAlpha: 0, x: -20 }, { autoAlpha: 1, x: 0, duration: 0.5 }, 0.08)
-        .fromTo(nameB, { autoAlpha: 0, x: 20 }, { autoAlpha: 1, x: 0, duration: 0.5 }, 0.1)
-        .fromTo(
-          dossier,
-          { autoAlpha: 0, x: 18 },
-          { autoAlpha: 1, x: 0, duration: 0.48 },
-          0.34
-        )
-        .to(dossierRows, { autoAlpha: 1, x: 0, stagger: 0.06, duration: 0.28 }, 0.44)
-        .fromTo(bottombar, { autoAlpha: 0, y: 10 }, { autoAlpha: 1, y: 0, duration: 0.34 }, 0.5);
+        .fromTo(extras, { autoAlpha: 0, scale: 0.8, rotation: 4 }, { autoAlpha: 1, scale: 1, rotation: 0, duration: 0.35, stagger: 0.1, clearProps: 'transform' }, 0)
+        .fromTo(topbar, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.45, ease: 'power1.out' }, 0.7)
+        .fromTo([nameA, nameB],
+          { autoAlpha: 0, scale: 0.9, filter: 'blur(20px)' },
+          { autoAlpha: 1, scale: 1, filter: 'blur(0px)', duration: 0.8, stagger: 0.2, ease: 'expo.out', clearProps: 'transform,filter' }, 1.0)
+        .fromTo(tagline, { autoAlpha: 0, y: 20 }, { autoAlpha: 1, y: 0, duration: 0.6, clearProps: 'transform' }, 1.7)
+        .fromTo(bottombar, { autoAlpha: 0, y: 10 }, { autoAlpha: 1, y: 0, duration: 0.34 }, 1.8);
     }, rootRef);
 
     return () => ctx.revert();
   }, [isActive, preloaderDone]);
+
+  // Desktop pointers: the hero sits in the dark and a soft spotlight follows the cursor;
+  // the pinned scraps tilt toward it, each by its own depth
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!preloaderDone || !root || mode !== 'paged') return;
+    if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+    const floats = [...root.querySelectorAll('.ihyb-float')];
+    const still = prefersReducedMotion();
+    const tilts = floats.map((el) => ({
+      depth: Number(el.dataset.depth),
+      rx: gsap.quickTo(el, 'rotationX', { duration: 0.8, ease: 'power3.out' }),
+      ry: gsap.quickTo(el, 'rotationY', { duration: 0.8, ease: 'power3.out' }),
+    }));
+    let raf = 0;
+    let px = window.innerWidth / 2;
+    let py = window.innerHeight / 2;
+    const paint = () => {
+      raf = 0;
+      const r = root.getBoundingClientRect();
+      root.style.setProperty('--sx', `${px - r.left}px`);
+      root.style.setProperty('--sy', `${py - r.top}px`);
+      if (still) return;
+      const nx = (px - window.innerWidth / 2) / (window.innerWidth / 2);
+      const ny = (py - window.innerHeight / 2) / (window.innerHeight / 2);
+      tilts.forEach((t) => { t.ry(nx * 10 * t.depth); t.rx(-ny * 8 * t.depth); });
+    };
+    const schedule = () => { if (!raf) raf = requestAnimationFrame(paint); };
+    const move = (e) => { px = e.clientX; py = e.clientY; schedule(); };
+    // Scrolling moves the hero under a still pointer, so re-aim the light then too
+    window.addEventListener('pointermove', move, { passive: true });
+    window.addEventListener('scroll', schedule, { passive: true });
+    root.classList.add('has-spotlight');
+    paint();
+    return () => {
+      window.removeEventListener('pointermove', move);
+      window.removeEventListener('scroll', schedule);
+      cancelAnimationFrame(raf);
+      root.classList.remove('has-spotlight');
+    };
+  }, [mode, preloaderDone]);
 
   // One size for both lines: AAKASH (the wider word) spans 85% of the content on phones,
   // about half the screen on desktop.
@@ -133,17 +173,31 @@ export default function IntroSection({ isActive }) {
 
   if (!preloaderDone) return <section className="section intro-hero" />;
 
-  const dosRows = DOS_TERMINAL;
-
   return (
     <section ref={rootRef} className="section intro-hero">
+      {/* Darkness with a hole at the pointer (desktop pointers; see has-spotlight) */}
+      <div className="ihyb-spotlight" aria-hidden="true" />
+
+      {/* Scan beam sweeping the hero top to bottom (same beam as the profile scanner) */}
+      <div className="ihyb-scan" aria-hidden="true"><div className="ihyb-scan-beam" /></div>
+
+      {/* Pinned case-file scraps (desktop) */}
+      {FLOATS.map((f) => (
+        <div key={f.id} className={`ihyb-float-in ihyb-float-in-${f.id}`} aria-hidden="true">
+          <div className="ihyb-float" data-depth={f.depth} style={{ '--lean': `${f.lean}deg` }}>
+            {f.lines.map((l) => <span key={l}>{l}</span>)}
+            {f.status && (
+              <span className="ihyb-status-line">
+                &gt;&gt; status: <span className="ihyb-dos-live"><span ref={statusRef} className="ihyb-status-text">{STATUS_WORDS[0]}</span><span className="ihyb-cursor">_</span></span>
+              </span>
+            )}
+          </div>
+        </div>
+      ))}
 
       <header className="ihyb-topbar">
         <div className="ihyb-topbar-left">
-          <span className="intro-dot" />
-          <span className="ihyb-accent">AUTH · ROOT_ACCESS</span>
-          <span className="ihyb-sep">·</span>
-          <span>TERMINAL · ACTIVE</span>
+          <span className="ihyb-accent">TOP SECRET // CASE #2026</span>
         </div>
       </header>
 
@@ -153,20 +207,11 @@ export default function IntroSection({ isActive }) {
           <span className="ihyb-name-b">VIJETA</span>
         </h1>
 
-        <aside className="ihyb-dossier">
-          {dosRows.map((r) => (
-            <div key={r.key} className="ihyb-dos-row">
-              <span className="ihyb-dos-key">{r.key}</span>
-              <span className="ihyb-dos-val">{r.val}</span>
-            </div>
-          ))}
-          <div className="ihyb-dos-row">
-            <span className="ihyb-dos-key">STATUS</span>
-            <span className="ihyb-dos-val ihyb-dos-live">
-              <span ref={statusRef} className="ihyb-status-text">{STATUS_WORDS[0]}</span><span className="ihyb-cursor">_</span>
-            </span>
-          </div>
-        </aside>
+        <p className="ihyb-tagline">
+          Building at the intersection of <em>statistical inference</em> and <em>production engineering</em>.
+          <br />Models that ship, not notebooks that sit.
+        </p>
+
       </div>
 
       <footer className="ihyb-bottombar">

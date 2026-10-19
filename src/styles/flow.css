@@ -41,4 +41,3 @@ html.is-flow .section {
 /* Project panel open: hold the page still behind it */
 html.is-flow.overlay-open,
 html.is-flow.overlay-open body { overflow: hidden; }
-html.is-flow .project-overlay-inner { overscroll-behavior: contain; }
