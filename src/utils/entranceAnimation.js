@@ -1,5 +1,5 @@
 import gsap from 'gsap';
-import { EASE_OUT, prefersReducedMotion } from './motion';
+import { EASE_IN_OUT, EASE_OUT, prefersReducedMotion } from './motion';
 import { scrambleTo } from './scramble';
 
 const ITEM = '.section-enter-item';
@@ -95,9 +95,11 @@ export function revealItems(items) {
     if (lines.length) {
       gsap.to(lines, { yPercent: 0, duration: 0.9, delay: delay + 0.05, stagger: 0.08, ease: EASE_OUT, clearProps: 'transform' });
     }
+    // Rules draw with an even in-out sweep so the travel from left to right reads
+    // (an out-curve covers most of the width in the first few frames)
     const rules = item.querySelectorAll(RULE);
     if (rules.length) {
-      gsap.to(rules, { scaleX: 1, duration: 1.1, delay: delay + 0.1, ease: EASE_OUT, clearProps: 'transform' });
+      gsap.to(rules, { scaleX: 1, duration: 0.8, delay: delay + 0.1, ease: EASE_IN_OUT, clearProps: 'transform' });
     }
     const kids = item.querySelectorAll(CHILD);
     if (kids.length) {

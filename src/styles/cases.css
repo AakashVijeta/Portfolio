@@ -21,6 +21,9 @@ html.is-flow .cases {
   flex-direction: column;
   box-sizing: border-box;
   width: 100%;
+  /* Margin, not padding: the guide lines fill the padding, so only a margin reads as
+     space between the header rule and the grid */
+  margin-top: 40px;
   padding: 24px var(--cases-gutter) 0;
 }
 /* Guide lines: the four columns, drawn edge to edge */
@@ -267,7 +270,7 @@ html.is-flow .cases {
 
 /* ── Phones: rows open their file in place ─────────────────────── */
 @media (max-width: 900px) {
-  .cases-grid { padding-top: 16px; }
+  .cases-grid { margin-top: 24px; padding-top: 16px; }
   .cases-grid::before { display: none; }
   .case-row {
     grid-template-columns: 44px minmax(0, 1fr) auto;

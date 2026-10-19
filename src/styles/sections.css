@@ -1117,8 +1117,13 @@
   align-items: flex-end;
 }
 
-.projects-topbar .profiler-rule {
-  width: 100%;
+/* Header rules run the full width of the screen, past the header's side padding */
+.projects-topbar .profiler-rule,
+.about-profiler .profiler-head .profiler-rule {
+  width: auto;
+  margin-inline: calc(-1 * var(--d-gutter, var(--flow-gutter, 24px)));
+  mask-image: none;
+  -webkit-mask-image: none;
 }
 
 .projects-title {
