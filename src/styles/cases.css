@@ -163,7 +163,7 @@ html.is-flow .cases {
 .case-file-actions :focus-visible { outline: 1px solid var(--color-accent); outline-offset: 4px; }
 @media (min-width: 901px) {
   /* The details sit on the two right-hand guide columns (subgrid), every block inset
-     the same 28px from its line; the buttons stack at full width in the last column */
+     the same 28px from its line; the buttons stack in the last column */
   .case-file-info {
     display: grid;
     grid-template-columns: subgrid;
@@ -176,7 +176,14 @@ html.is-flow .cases {
   .case-file-stat { max-width: none; padding: 0 28px; }
   .case-file-facts { grid-template-columns: subgrid; gap: 14px 0; }
   .case-file-facts > div { padding: 0 16px 0 28px; }
-  .case-file-actions { flex-direction: column; align-items: stretch; padding: 16px 28px 0; }
+  /* One column as wide as the longer label: both buttons match without filling the column */
+  .case-file-actions {
+    display: grid;
+    justify-content: start;
+    align-content: end;
+    gap: 12px;
+    padding: 16px 28px 0;
+  }
   .case-file-actions > * { text-align: center; }
 }
 
