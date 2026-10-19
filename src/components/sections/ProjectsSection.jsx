@@ -71,7 +71,7 @@ function CaseFile({ project, liveStat, open, onOpen }) {
         </button>
         {project.liveDemo && (
           <a className="case-file-live" href={project.liveDemo} target="_blank" rel="noopener noreferrer" aria-label={`${project.title} live demo (opens in a new tab)`}>
-            LIVE DEMO ↗
+            <RollText text="[ LIVE DEMO ↗ ]" />
           </a>
         )}
       </div>

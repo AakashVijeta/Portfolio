@@ -147,27 +147,38 @@ html.is-flow .cases {
   background: var(--color-accent);
   color: var(--color-bg);
 }
+/* Live demo: the same button as OPEN FILE, outlined so OPEN FILE stays the main action */
 .case-file-live {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
+  padding: 9px 16px;
+  border: 1px solid var(--color-accent);
   font-family: var(--font-mono);
-  font-size: 0.66rem;
-  letter-spacing: 0.18em;
+  font-size: 0.7rem;
+  letter-spacing: 0.16em;
   color: var(--color-accent);
   text-decoration: none;
-  text-underline-offset: 4px;
+  white-space: nowrap;
+  transition: background-color var(--dur-ui) ease;
 }
-.case-file-live::before {
-  content: '';
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--color-accent);
-  box-shadow: 0 0 8px var(--color-accent);
-}
-.case-file-live:hover { text-decoration: underline; }
+.case-file-live:hover { background: color-mix(in srgb, var(--color-accent) 12%, transparent); }
 .case-file-actions :focus-visible { outline: 1px solid var(--color-accent); outline-offset: 4px; }
+@media (min-width: 901px) {
+  /* The details sit on the two right-hand guide columns (subgrid), every block inset
+     the same 28px from its line; the buttons stack at full width in the last column */
+  .case-file-info {
+    display: grid;
+    grid-template-columns: subgrid;
+    align-content: start;
+    row-gap: 12px;
+    padding: 4px 0 0;
+  }
+  .case-file-info > * { grid-column: 1 / -1; }
+  .case-file-subtitle,
+  .case-file-stat { max-width: none; padding: 0 28px; }
+  .case-file-facts { grid-template-columns: subgrid; gap: 14px 0; }
+  .case-file-facts > div { padding: 0 16px 0 28px; }
+  .case-file-actions { flex-direction: column; align-items: stretch; padding: 16px 28px 0; }
+  .case-file-actions > * { text-align: center; }
+}
 
 /* ── The list ───────────────────────────────────────────────────── */
 /* A row's file folds open under it */
