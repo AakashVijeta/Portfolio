@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
+import { EASE_IN_OUT, skipPreloader } from '../utils/motion';
 import '../styles/Preloader.css';
 
 const LOG_LINES = [
@@ -20,9 +21,11 @@ const GRID_CELLS = 16;
 const rnd2 = () => String(Math.floor(Math.random() * 100));
 const pad2 = (n) => String(n).padStart(2, '0');
 
-const TOTAL_MS = 2400;
-const EXIT_MS  = 3000;
-const DONE_MS  = 3800;
+// One timeline drives the whole sequence (seconds)
+const SCAN_S   = 2.4;   // the signal flattens while the counter runs to 100
+const HOLD_S   = 0.45;  // ACCESS GRANTED holds long enough to read
+const FADE_S   = 0.25;  // everything but the hairline fades
+const SPLIT_S  = 0.8;   // the two halves slide apart
 const SVG_H    = 60;
 const CY       = SVG_H / 2;          // 30
 const MAX_AMP  = SVG_H - 2;          // 58px — fills the SVG height
@@ -56,10 +59,8 @@ function buildPath(W, amp) {
 }
 
 export default function Preloader() {
-  const [stage, setStage]       = useState(() =>
-    sessionStorage.getItem('preloaded') ? 'done' : 'active'
-  );
-  const [pct, setPct]           = useState(0);
+  const [stage, setStage]       = useState(() => (skipPreloader() ? 'done' : 'active'));
+  const [done, setDone]         = useState(false);
   const [logCount, setLogCount] = useState(0);
   const [freq, setFreq]         = useState(12.4);
   const [lat, setLat]           = useState(LAT_BASE.toFixed(4));
@@ -68,44 +69,60 @@ export default function Preloader() {
   const signalRef   = useRef(null);  // SVG <path> element
   const waveRafRef  = useRef(null);
   const ampRef      = useRef(MAX_AMP); // GSAP tweens this 58 → 0
+  const pctRef      = useRef(null);
   const contentRef  = useRef(null);
   const curtainTRef = useRef(null);
   const curtainBRef = useRef(null);
   const edgeTRef    = useRef(null);
   const edgeBRef    = useRef(null);
 
-  // ── GSAP: amplitude collapse → everything but the hairline fades → the hairline
-  // splits and the two halves slide apart, opening the site between them ─────────
+  // ── GSAP: the signal collapses as the counter and log run → ACCESS GRANTED holds →
+  // everything but the hairline fades → the hairline splits and the two halves slide
+  // apart, opening the site between them ─────────────────────────────────────────
   useEffect(() => {
     if (!signalRef.current) return;
+    const edges = [edgeTRef.current, edgeBRef.current];
+    const count = { v: 0 };
+    const lineStep = (SCAN_S * 0.85) / LOG_LINES.length;
     const ctx = gsap.context(() => {
-      gsap.timeline()
-        .to(ampRef, {
-          current: 0,
-          duration: TOTAL_MS / 1000,
-          ease: 'power2.inOut',
-        })
+      const tl = gsap.timeline({
+        onComplete: () => {
+          sessionStorage.setItem('preloaded', '1');
+          setStage('done');
+        },
+      });
+      tl.to(ampRef, { current: 0, duration: SCAN_S, ease: 'power2.inOut' }, 0)
+        // the counter is written straight to the DOM, so it never re-renders React
+        .to(count, {
+          v: 100,
+          duration: SCAN_S,
+          ease: 'none',
+          onUpdate: () => {
+            if (pctRef.current) pctRef.current.textContent = `${count.v >= 100 ? 100 : pad2(Math.floor(count.v))}%`;
+          },
+        }, 0);
+      LOG_LINES.forEach((_, i) => tl.call(setLogCount, [i + 1], 0.3 + i * lineStep));
+      tl.call(setDone, [true], SCAN_S)
+        .addLabel('exit', `+=${HOLD_S}`)
+        // the hero mounts under the fading HUD and starts unfolding as the halves part
+        .call(() => {
+          setStage('exit');
+          window.dispatchEvent(new CustomEvent('preloader:done', { detail: { openIn: FADE_S } }));
+        }, null, 'exit')
         // the curtain edges sit exactly on the hairline, so swapping them in is invisible
-        .set([edgeTRef.current, edgeBRef.current], { opacity: 1 })
-        .to(contentRef.current, {
-          opacity: 0, duration: 0.3, ease: 'power1.out',
-        }, '+=0.05')
-        .to(curtainTRef.current, {
-          yPercent: -100, duration: 0.7, ease: 'power3.inOut',
-        }, '+=0.05')
-        .to(curtainBRef.current, {
-          yPercent:  100, duration: 0.7, ease: 'power3.inOut',
-        }, '<')
-        .to([edgeTRef.current, edgeBRef.current], {
-          opacity: 0, duration: 0.25, ease: 'power2.in',
-        }, '>-0.2');
+        .set(edges, { opacity: 1 }, 'exit')
+        .to(contentRef.current, { opacity: 0, duration: FADE_S, ease: 'power1.out' }, 'exit')
+        .addLabel('split')
+        .to(curtainTRef.current, { yPercent: -100, duration: SPLIT_S, ease: EASE_IN_OUT }, 'split')
+        .to(curtainBRef.current, { yPercent: 100, duration: SPLIT_S, ease: EASE_IN_OUT }, 'split')
+        .to(edges, { opacity: 0, duration: 0.25, ease: 'power2.in' }, `split+=${SPLIT_S - 0.25}`);
     });
     return () => ctx.revert();
   }, []);
 
-  // ── RAF: rebuild signal every frame ───────────────────────────────────────
+  // ── RAF: rebuild signal every frame (only while the HUD is up) ─────────────
   useEffect(() => {
-    if (stage === 'done' || !signalRef.current) return;
+    if (stage !== 'active' || !signalRef.current) return;
     const W = window.innerWidth;
 
     const tick = () => {
@@ -118,53 +135,20 @@ export default function Preloader() {
     return () => { if (waveRafRef.current) cancelAnimationFrame(waveRafRef.current); };
   }, [stage]);
 
-  // ── Progress + log + freq readout ─────────────────────────────────────────
+  // ── Freq / latitude / noise readouts jitter until the scan locks ───────────
   useEffect(() => {
-    if (stage === 'done') return;
-
-    const lineInterval = (TOTAL_MS * 0.85) / LOG_LINES.length;
-    const timers = LOG_LINES.map((_, i) =>
-      setTimeout(() => setLogCount(i + 1), i * lineInterval + 300)
-    );
-
-    const start = performance.now();
-    let lastFreqUpdate = 0;
-    let pctRaf;
-    const tick = (now) => {
-      const p = Math.min((now - start) / TOTAL_MS, 1);
-      setPct(Math.floor(p * 100));
-      if (now - lastFreqUpdate > 60) {
-        setFreq(+(8 + Math.random() * 18).toFixed(1));
-        setLat((LAT_BASE + Math.random() * 0.01).toFixed(4));
-        setGrid(Array.from({ length: GRID_CELLS }, rnd2));
-        lastFreqUpdate = now;
-      }
-      if (p < 1) pctRaf = requestAnimationFrame(tick);
-      else setPct(100);
-    };
-    pctRaf = requestAnimationFrame(tick);
-
-    const t1 = setTimeout(() => {
-      setStage('exit');
-      window.dispatchEvent(new Event('preloader:done'));
-    }, EXIT_MS);
-    const t2 = setTimeout(() => {
-      setStage('done');
-      sessionStorage.setItem('preloaded', '1');
-    }, DONE_MS);
-
-    return () => {
-      timers.forEach(clearTimeout);
-      clearTimeout(t1);
-      clearTimeout(t2);
-      cancelAnimationFrame(pctRaf);
-    };
-  }, [stage]);
+    if (stage !== 'active' || done) return;
+    const id = setInterval(() => {
+      setFreq(+(8 + Math.random() * 18).toFixed(1));
+      setLat((LAT_BASE + Math.random() * 0.01).toFixed(4));
+      setGrid(Array.from({ length: GRID_CELLS }, rnd2));
+    }, 60);
+    return () => clearInterval(id);
+  }, [stage, done]);
 
   if (stage === 'done') return null;
 
-  const W    = window.innerWidth;
-  const done = pct === 100;
+  const W = window.innerWidth;
 
   return (
     <div className={`pl ${stage === 'exit' ? 'pl--exit' : ''}`}>
@@ -221,7 +205,7 @@ export default function Preloader() {
         </div>
 
         <div className="pl-pct-wrap">
-          <span className="pl-pct">{pct === 100 ? 100 : pad2(pct)}%</span>
+          <span ref={pctRef} className="pl-pct">00%</span>
         </div>
 
         <div className="pl-log">

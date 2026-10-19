@@ -9,3 +9,7 @@ export const EASE_IN_OUT = CustomEase.create('ui-in-out', '0.77, 0, 0.175, 1');
 
 export const prefersReducedMotion = () =>
   window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+// The boot screen plays once per session, and never with reduced motion
+export const skipPreloader = () =>
+  !!sessionStorage.getItem('preloaded') || prefersReducedMotion();

@@ -1,7 +1,7 @@
 import { useLayoutEffect, useRef, useState, useEffect } from 'react';
 import gsap from 'gsap';
 import { useLayoutMode } from '../../hooks/useLayoutMode';
-import { prefersReducedMotion } from '../../utils/motion';
+import { EASE_OUT, prefersReducedMotion, skipPreloader } from '../../utils/motion';
 import { scrambleTo } from '../../utils/scramble';
 
 const STATUS_WORDS    = ['ON TRACK', 'BUILDING', 'SHIPPING', 'TRAINING', 'COMPILING'];
@@ -19,24 +19,25 @@ export default function IntroSection({ isActive }) {
   const nameRef = useRef(null);
   const mode = useLayoutMode();
 
-  const [preloaderDone, setPreloaderDone] = useState(() => !!sessionStorage.getItem('preloaded'));
+  const [preloaderDone, setPreloaderDone] = useState(skipPreloader);
+  // Seconds until the preloader's halves start parting (0 when there was no preloader)
+  const [openIn, setOpenIn] = useState(0);
 
-  const [timeStr, setTimeStr] = useState('00:00:00.000');
+  // Clock written straight to the DOM each frame, so the hero never re-renders for it
+  const clockRef = useRef(null);
   useEffect(() => {
     let reqId;
+    const pad = (n, l = 2) => String(n).padStart(l, '0');
     const update = () => {
       const now = new Date();
-      setTimeStr(
-        String(now.getHours()).padStart(2, '0') + ':' +
-        String(now.getMinutes()).padStart(2, '0') + ':' +
-        String(now.getSeconds()).padStart(2, '0') + '.' +
-        String(now.getMilliseconds()).padStart(3, '0')
-      );
+      if (clockRef.current) {
+        clockRef.current.textContent = `SYS_TIME · ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}.${pad(now.getMilliseconds(), 3)}`;
+      }
       reqId = requestAnimationFrame(update);
     };
     reqId = requestAnimationFrame(update);
     return () => cancelAnimationFrame(reqId);
-  }, []);
+  }, [preloaderDone]);
 
   // STATUS line: scramble-decode from one word to the next, on a loop
   const statusRef = useRef(null);
@@ -53,7 +54,10 @@ export default function IntroSection({ isActive }) {
 
   useEffect(() => {
     if (preloaderDone) return;
-    const handle = () => setPreloaderDone(true);
+    const handle = (e) => {
+      setOpenIn(e.detail?.openIn ?? 0);
+      setPreloaderDone(true);
+    };
     window.addEventListener('preloader:done', handle);
     return () => window.removeEventListener('preloader:done', handle);
   }, [preloaderDone]);
@@ -71,8 +75,8 @@ export default function IntroSection({ isActive }) {
       const nameB = root.querySelector('.ihyb-name-b');
       const tagline = root.querySelector('.ihyb-tagline');
       const extras = [...root.querySelectorAll('.ihyb-float-in')];
+      const stamp = root.querySelector('.ihyb-topbar .ihyb-accent');
       const targets = [topbar, bottombar, nameA, nameB, tagline, ...extras].filter(Boolean);
-      const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
       gsap.killTweensOf(targets);
 
@@ -81,27 +85,36 @@ export default function IntroSection({ isActive }) {
         return;
       }
 
-      if (prefersReduced) {
+      if (prefersReducedMotion()) {
         gsap.set(targets, { autoAlpha: 1, x: 0, y: 0, yPercent: 0 });
         return;
       }
 
-      gsap.set([topbar, bottombar, nameA, nameB, tagline, ...extras].filter(Boolean), { autoAlpha: 0 });
+      gsap.set(targets, { autoAlpha: 0 });
 
-      // Cards pop in first, then the stamp fades up, then each name line comes into
-      // focus out of a blur, then the tagline rises (about 2.3s in all)
-      gsap.timeline({ defaults: { ease: 'power3.out' } })
-        .fromTo(extras, { autoAlpha: 0, scale: 0.8, rotation: 4 }, { autoAlpha: 1, scale: 1, rotation: 0, duration: 0.35, stagger: 0.1, clearProps: 'transform' }, 0)
-        .fromTo(topbar, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.45, ease: 'power1.out' }, 0.7)
-        .fromTo([nameA, nameB],
-          { autoAlpha: 0, scale: 0.9, filter: 'blur(20px)' },
-          { autoAlpha: 1, scale: 1, filter: 'blur(0px)', duration: 0.8, stagger: 0.2, ease: 'expo.out', clearProps: 'transform,filter' }, 1.0)
-        .fromTo(tagline, { autoAlpha: 0, y: 20 }, { autoAlpha: 1, y: 0, duration: 0.6, clearProps: 'transform' }, 1.7)
-        .fromTo(bottombar, { autoAlpha: 0, y: 10 }, { autoAlpha: 1, y: 0, duration: 0.34 }, 1.8);
+      // The two name lines unfold from the seam between them, the same line the
+      // preloader splits along: AAKASH rises out of it, VIJETA drops out of it. Each
+      // line is clipped at that edge only (the other sides leave room for the glow),
+      // and the clip moves with the line so the edge stays put. Then the stamp decodes,
+      // the tagline rises and the pinned scraps settle in (about 1.5s in all).
+      const NAME_S = 1.1;
+      const tl = gsap.timeline({ delay: openIn ? openIn + 0.1 : 0.15, defaults: { ease: EASE_OUT } })
+        .fromTo(nameA,
+          { autoAlpha: 1, yPercent: 100, clipPath: 'inset(-40% -10% 100% -10%)' },
+          { yPercent: 0, clipPath: 'inset(-40% -10% 0% -10%)', duration: NAME_S, clearProps: 'transform,clipPath' }, 0)
+        .fromTo(nameB,
+          { autoAlpha: 1, yPercent: -100, clipPath: 'inset(100% -10% -40% -10%)' },
+          { yPercent: 0, clipPath: 'inset(0% -10% -40% -10%)', duration: NAME_S, clearProps: 'transform,clipPath' }, 0)
+        .fromTo(topbar, { autoAlpha: 0, y: -6 }, { autoAlpha: 1, y: 0, duration: 0.5, clearProps: 'transform' }, 0.3)
+        .fromTo(tagline, { autoAlpha: 0, y: 12 }, { autoAlpha: 1, y: 0, duration: 0.8, clearProps: 'transform' }, 0.5)
+        .fromTo(extras, { autoAlpha: 0, scale: 0.96 }, { autoAlpha: 1, scale: 1, duration: 0.7, stagger: 0.12, clearProps: 'transform' }, 0.7)
+        .fromTo(bottombar, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.4 }, 0.7);
+      const decode = stamp && scrambleTo(stamp, stamp.textContent, { duration: 0.8, revealDelay: 0.25 });
+      if (decode) tl.add(decode, 0.3);
     }, rootRef);
 
     return () => ctx.revert();
-  }, [isActive, preloaderDone]);
+  }, [isActive, preloaderDone, openIn]);
 
   // Desktop pointers: the hero sits in the dark and a soft spotlight follows the cursor;
   // the pinned scraps tilt toward it, each by its own depth
@@ -215,7 +228,7 @@ export default function IntroSection({ isActive }) {
       </div>
 
       <footer className="ihyb-bottombar">
-        <span className="ihyb-clock">SYS_TIME · {timeStr}</span>
+        <span ref={clockRef} className="ihyb-clock">SYS_TIME · 00:00:00.000</span>
         <span className="ihyb-clock">USE ARROW KEYS OR SCROLL TO NAVIGATE</span>
       </footer>
 
