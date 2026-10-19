@@ -256,7 +256,7 @@
   top: 100%;
 }
 @media (min-width: 901px) and (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
-  .roll-char { transition: transform 0.35s var(--ease-in-out); transition-delay: calc(var(--i) * 16ms); }
+  .roll-char { transition: transform 0.5s var(--ease-in-out); transition-delay: calc(var(--i) * 20ms); }
   a:hover > .roll .roll-char,
   button:hover > .roll .roll-char,
   a:focus-visible > .roll .roll-char { transform: translateY(-100%); }
@@ -293,9 +293,9 @@
     border-radius: 50%;
     background: var(--color-accent);
     vertical-align: middle;
-    animation: vf-blink 1.6s steps(2, start) infinite;
+    animation: vf-blink 2.4s ease-in-out infinite;
   }
-  @keyframes vf-blink { to { visibility: hidden; } }
+  @keyframes vf-blink { 50% { opacity: 0.15; } }
 }
 @media (prefers-reduced-motion: reduce) {
   .vf-dot { animation: none; }

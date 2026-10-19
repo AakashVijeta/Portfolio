@@ -9,14 +9,14 @@
   background: var(--color-bg);
   font-family: var(--font-body);
   color: var(--color-text);
-  animation: pv-in 300ms var(--ease-out);
+  animation: pv-in 480ms var(--ease-out);
 }
-@keyframes pv-in { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+@keyframes pv-in { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
 /* Exit mirrors the entrance, a little faster */
-.pv.pv--out { animation: pv-out 200ms var(--ease-out) forwards; }
-@keyframes pv-out { to { opacity: 0; transform: translateY(16px); } }
+.pv.pv--out { animation: pv-out 320ms var(--ease-in-out) forwards; }
+@keyframes pv-out { to { opacity: 0; transform: translateY(12px); } }
 /* Stepping between projects crossfades the file contents */
-.pv-content { animation: pv-swap 220ms var(--ease-out); }
+.pv-content { animation: pv-swap 360ms var(--ease-out); }
 @keyframes pv-swap { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
 .pv-scroll {
   position: absolute;

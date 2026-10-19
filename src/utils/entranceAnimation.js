@@ -36,9 +36,9 @@ const parts = (items, sel) => items.flatMap((item) => [...item.querySelectorAll(
 function fromState(item) {
   const side = item.dataset.enterFrom;
   if (side && window.matchMedia('(min-width: 901px)').matches) {
-    return { opacity: 0, x: side === 'left' ? -40 : 40, y: 0 };
+    return { opacity: 0, x: side === 'left' ? -28 : 28, y: 0 };
   }
-  return { opacity: 0, x: 0, y: item.offsetHeight >= 200 ? 48 : 12 };
+  return { opacity: 0, x: 0, y: item.offsetHeight >= 200 ? 32 : 10 };
 }
 
 // Hide every reveal item inside `el` (they fade up as they enter the screen).
@@ -52,7 +52,7 @@ export function hideEntrance(el) {
   el.querySelectorAll(CHARS).forEach((title) => {
     const split = splits.get(title) ?? SplitText.create(title, { type: 'words,chars' });
     splits.set(title, split);
-    gsap.set(split.chars, { yPercent: 110, rotation: 8, transformOrigin: '0% 100%' });
+    gsap.set(split.chars, { yPercent: 110, rotation: 3, transformOrigin: '0% 100%' });
   });
   const rules = el.querySelectorAll(RULE);
   if (rules.length) gsap.set(rules, { scaleX: 0, transformOrigin: '0% 50%' });
@@ -92,7 +92,7 @@ export function revealItems(items) {
       opacity: 1,
       x: 0,
       y: 0,
-      duration: from.y > 20 || from.x ? 0.85 : 0.65,
+      duration: from.y > 20 || from.x ? 1.1 : 0.9,
       delay,
       ease: EASE_OUT,
       force3D: true,
@@ -104,7 +104,7 @@ export function revealItems(items) {
     item.querySelectorAll(WIPE).forEach((wipe) => {
       gsap.fromTo(wipe, { clipPath: WIPE_HIDDEN }, {
         clipPath: 'inset(0% 0% 0% 0%)',
-        duration: 0.9,
+        duration: 1.2,
         delay: delay + 0.15,
         ease: EASE_OUT,
         onComplete: () => gsap.set(wipe, { clearProps: 'clipPath' }),
@@ -112,7 +112,7 @@ export function revealItems(items) {
     });
     const lines = item.querySelectorAll(LINE);
     if (lines.length) {
-      gsap.to(lines, { yPercent: 0, duration: 0.9, delay: delay + 0.05, stagger: 0.08, ease: EASE_OUT, clearProps: 'transform' });
+      gsap.to(lines, { yPercent: 0, duration: 1.1, delay: delay + 0.05, stagger: 0.1, ease: EASE_OUT, clearProps: 'transform' });
     }
     // Letters lean back as they rise and settle level on landing; a second line starts
     // a beat after the first
@@ -122,9 +122,9 @@ export function revealItems(items) {
       gsap.to(split.chars, {
         yPercent: 0,
         rotation: 0,
-        duration: 0.9,
+        duration: 1.1,
         delay: delay + 0.05 + j * 0.15,
-        stagger: 0.03,
+        stagger: 0.035,
         ease: EASE_OUT,
         onComplete: () => unsplit(title),
       });
@@ -133,18 +133,18 @@ export function revealItems(items) {
     // (an out-curve covers most of the width in the first few frames)
     const rules = item.querySelectorAll(RULE);
     if (rules.length) {
-      gsap.to(rules, { scaleX: 1, duration: 0.8, delay: delay + 0.1, ease: EASE_IN_OUT, clearProps: 'transform' });
+      gsap.to(rules, { scaleX: 1, duration: 1.1, delay: delay + 0.1, ease: EASE_IN_OUT, clearProps: 'transform' });
     }
     const kids = item.querySelectorAll(CHILD);
     if (kids.length) {
-      gsap.to(kids, { opacity: 1, y: 0, duration: 0.5, delay: delay + 0.25, stagger: 0.035, ease: EASE_OUT, clearProps: 'transform,opacity' });
+      gsap.to(kids, { opacity: 1, y: 0, duration: 0.7, delay: delay + 0.25, stagger: 0.05, ease: EASE_OUT, clearProps: 'transform,opacity' });
     }
     item.querySelectorAll(SCRAMBLE).forEach((el) => {
       // Starts with its item, while the item is still transparent, so the real text never flashes first
       scrambleTo(el, el.textContent, { duration: 1.1, revealDelay: 0.35 })?.delay(delay);
     });
     item.querySelectorAll(COUNT).forEach((el) => {
-      countUp(el, { duration: 1.6 })?.delay(delay + 0.3);
+      countUp(el, { duration: 1.8 })?.delay(delay + 0.3);
     });
   });
 }

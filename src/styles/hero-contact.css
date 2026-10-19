@@ -260,9 +260,9 @@ html.is-flow .contact-section { position: relative; isolation: isolate; }
   height: 6px;
   border-radius: 50%;
   background: var(--color-accent);
-  animation: contact-blink 1.6s steps(2, start) infinite;
+  animation: contact-blink 2.4s ease-in-out infinite;
 }
-@keyframes contact-blink { to { visibility: hidden; } }
+@keyframes contact-blink { 50% { opacity: 0.15; } }
 
 .contact-heading {
   margin: 0 0 30px;
@@ -317,7 +317,7 @@ html.is-flow .cm-secondary a {
   letter-spacing: 0.08em;
   color: var(--color-accent);
 }
-.cm-br { display: inline-block; transition: transform 0.3s var(--ease-out); }
+.cm-br { display: inline-block; transition: transform 0.45s var(--ease-out); }
 @media (hover: hover) and (pointer: fine) {
   html.is-flow .cm-secondary a:hover .cm-br:first-child,
   html.is-flow .cm-secondary a:focus-visible .cm-br:first-child { transform: translateX(-5px); }

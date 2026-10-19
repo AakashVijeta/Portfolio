@@ -107,7 +107,7 @@ export default function IntroSection({ isActive }) {
           { yPercent: 0, clipPath: 'inset(0% -10% -40% -10%)', duration: NAME_S, clearProps: 'transform,clipPath' }, 0)
         .fromTo(topbar, { autoAlpha: 0, y: -6 }, { autoAlpha: 1, y: 0, duration: 0.5, clearProps: 'transform' }, 0.3)
         .fromTo(tagline, { autoAlpha: 0, y: 12 }, { autoAlpha: 1, y: 0, duration: 0.8, clearProps: 'transform' }, 0.5)
-        .fromTo(extras, { autoAlpha: 0, scale: 0.96 }, { autoAlpha: 1, scale: 1, duration: 0.7, stagger: 0.12, clearProps: 'transform' }, 0.7)
+        .fromTo(extras, { autoAlpha: 0, scale: 0.98 }, { autoAlpha: 1, scale: 1, duration: 0.7, stagger: 0.12, clearProps: 'transform' }, 0.7)
         .fromTo(bottombar, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.4 }, 0.7);
       const decode = stamp && scrambleTo(stamp, stamp.textContent, { duration: 0.8, revealDelay: 0.25 });
       if (decode) tl.add(decode, 0.3);
@@ -126,14 +126,14 @@ export default function IntroSection({ isActive }) {
     const still = prefersReducedMotion();
     const tilts = floats.map((el) => ({
       depth: Number(el.dataset.depth),
-      rx: gsap.quickTo(el, 'rotationX', { duration: 0.8, ease: 'power3.out' }),
-      ry: gsap.quickTo(el, 'rotationY', { duration: 0.8, ease: 'power3.out' }),
+      rx: gsap.quickTo(el, 'rotationX', { duration: 1.2, ease: 'power2.out' }),
+      ry: gsap.quickTo(el, 'rotationY', { duration: 1.2, ease: 'power2.out' }),
     }));
     // The name sits deeper than the scraps: it drifts a few pixels against the pointer,
     // slower than they tilt
     const name = nameRef.current;
-    const nameX = gsap.quickTo(name, 'x', { duration: 1.4, ease: 'power3.out' });
-    const nameY = gsap.quickTo(name, 'y', { duration: 1.4, ease: 'power3.out' });
+    const nameX = gsap.quickTo(name, 'x', { duration: 1.8, ease: 'power2.out' });
+    const nameY = gsap.quickTo(name, 'y', { duration: 1.8, ease: 'power2.out' });
     let raf = 0;
     let px = window.innerWidth / 2;
     let py = window.innerHeight / 2;

@@ -28,21 +28,22 @@ function CaseFile({ project, liveStat, open, onOpen }) {
     const ctx = gsap.context(() => {
       gsap.set(el, { transformOrigin: '0% 0%' });
       // Held until the drawer has mostly unfolded, so the fall plays in view
-      gsap.set(el, { rotation: -6, opacity: 0 });
-      const tl = gsap.timeline({ delay: 0.16 })
-        .to(el, { opacity: 1, duration: 0.35, ease: 'sine.out' }, 0)
-        .to(el, { rotation: 0, duration: 0.75, ease: 'power2.out', clearProps: 'transform,opacity' }, 0)
-        .fromTo('.case-file-info > *, .case-file-actions', { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.5, stagger: 0.05, ease: EASE_OUT, clearProps: 'transform,opacity' }, 0.25);
+      gsap.set(el, { rotation: -3.5, opacity: 0 });
+      const tl = gsap.timeline({ delay: 0.15 })
+        .to(el, { opacity: 1, duration: 0.45, ease: 'sine.out' }, 0)
+        .to(el, { rotation: 0, duration: 0.95, ease: 'power2.out', clearProps: 'transform,opacity' }, 0)
+        .fromTo('.case-file-media img', { scale: 1.04 }, { scale: 1, duration: 1.35, ease: EASE_OUT, clearProps: 'transform' }, 0)
+        .fromTo('.case-file-info > *, .case-file-actions', { opacity: 0, y: 6 }, { opacity: 1, y: 0, duration: 0.65, stagger: 0.06, ease: EASE_OUT, clearProps: 'transform,opacity' }, 0.25);
       // The headline result counts up as its line arrives
-      const count = countUp(el.querySelector('.case-file-stat-value'), { duration: 1.4 });
+      const count = countUp(el.querySelector('.case-file-stat-value'), { duration: 1.55 });
       if (count) tl.add(count, 0.3);
       return () => count?.restore();
     }, el);
     return () => ctx.revert();
   }, [open]);
 
+  // No DOMAIN: the row right above already names it. STACK runs the full width.
   const facts = [
-    ['DOMAIN', project.tag],
     ['STACK', project.techStack.slice(0, 4).join(' · ')],
     ['MODEL', lead(project.model?.algorithm)],
     ['EVALUATED ON', lead(project.model?.metrics)],
@@ -116,7 +117,7 @@ export default function ProjectsSection() {
   const timer = useRef(0);
   const point = (slug) => {
     clearTimeout(timer.current);
-    timer.current = setTimeout(() => setActive(slug), slug ? 120 : 180);
+    timer.current = setTimeout(() => setActive(slug), slug ? 140 : 220);
   };
   useEffect(() => () => clearTimeout(timer.current), []);
 

@@ -13,10 +13,10 @@
   --font-mono:    'Geist Mono Variable', 'Consolas', monospace;
 
   /* Motion tokens (same curves are registered for GSAP in utils/motion.js) */
-  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
-  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
-  --dur-press: 140ms;
-  --dur-ui: 200ms;
+  --ease-out: cubic-bezier(0.33, 1, 0.68, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-press: 180ms;
+  --dur-ui: 300ms;
 
   --glow: 0 0 8px rgba(0, 255, 65, 0.4);
   --glow-strong: 0 0 16px rgba(0, 255, 65, 0.3), 0 0 32px rgba(0, 255, 65, 0.12);

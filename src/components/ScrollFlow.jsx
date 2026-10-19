@@ -33,7 +33,7 @@ export default function ScrollFlow({ sections }) {
   // Desktop: Lenis smooth scrolling (touch keeps native scrolling; reduced motion opts out)
   useEffect(() => {
     if (mode !== 'paged' || prefersReducedMotion()) return;
-    const lenis = new Lenis({ lerp: 0.1, smoothWheel: true });
+    const lenis = new Lenis({ lerp: 0.08, smoothWheel: true });
     lenisRef.current = lenis;
     const tick = (time) => lenis.raf(time * 1000);
     lenis.on('scroll', ScrollTrigger.update);
@@ -78,7 +78,7 @@ export default function ScrollFlow({ sections }) {
     navigateToRef.current = (i) => {
       const el = refs.current[i];
       if (!el) return;
-      if (lenisRef.current) { lenisRef.current.scrollTo(el, { duration: 1.2 }); return; }
+      if (lenisRef.current) { lenisRef.current.scrollTo(el, { duration: 1.4 }); return; }
       el.scrollIntoView({ behavior: prefersReducedMotion() ? 'auto' : 'smooth', block: 'start' });
     };
     return () => { navigateToRef.current = null; };

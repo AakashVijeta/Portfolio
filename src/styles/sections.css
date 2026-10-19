@@ -51,12 +51,12 @@
 /* ── Intro hero: giant typographic name-mark ───────────────── */
 
 @keyframes intro-blink {
-  0%, 50% {
+  0%, 100% {
     opacity: 1;
   }
 
-  51%, 100% {
-    opacity: 0;
+  50% {
+    opacity: 0.15;
   }
 }
 
@@ -100,7 +100,7 @@
 
 .contact-cursor {
   color: var(--color-accent);
-  animation: intro-blink 1s steps(1) infinite;
+  animation: intro-blink 2s ease-in-out infinite;
 }
 
 :root:not([data-theme="f1"]) .contact-verb {
@@ -250,10 +250,10 @@
   position: relative;
   overflow: hidden;
   transition:
-    border-color 0.28s ease,
-    box-shadow 0.28s ease,
-    transform 0.28s ease,
-    background-color 0.28s ease;
+    border-color 0.4s ease,
+    box-shadow 0.4s ease,
+    transform 0.4s ease,
+    background-color 0.4s ease;
 }
 
 .profiler-module::after {
@@ -263,7 +263,7 @@
   pointer-events: none;
   opacity: 0;
   background: linear-gradient(135deg, transparent 0%, rgba(255, 255, 255, 0.035) 48%, transparent 72%);
-  transition: opacity 0.28s ease;
+  transition: opacity 0.4s ease;
 }
 
 .profiler-module:hover {
@@ -649,7 +649,7 @@
   font-family: var(--font-display);
   font-size: 0.85rem;
   line-height: 1.6;
-  transition: border-color 0.3s, background-color 0.3s, transform 0.3s;
+  transition: border-color 0.4s ease, background-color 0.4s ease, transform 0.4s ease;
 }
 
 .history-item:hover {
@@ -1251,9 +1251,9 @@
   color: var(--color-accent);
   font-family: var(--font-mono);
   margin-left: 2px;
-  animation: ihyb-blink 1s steps(2) infinite;
+  animation: ihyb-blink 2s ease-in-out infinite;
 }
-@keyframes ihyb-blink { 50% { opacity: 0; } }
+@keyframes ihyb-blink { 50% { opacity: 0.15; } }
 
 /* ── Section: flex column, bars in flow, space-between ───────── */
 .intro-hero {

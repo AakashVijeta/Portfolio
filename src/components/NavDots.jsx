@@ -44,7 +44,7 @@ export default function NavDots() {
               width: '40px',
               boxSizing: 'border-box',
               padding: '11px 0',
-              transition: 'gap 0.2s ease',
+              transition: 'gap 0.35s ease',
             }}
           >
             {/* Dot */}
@@ -60,7 +60,7 @@ export default function NavDots() {
               boxShadow: isActive
                 ? '0 0 8px var(--color-accent), 0 0 0 3px rgba(0,0,0,0.8)'
                 : '0 0 0 3px rgba(0,0,0,0.8)',
-              transition: 'all 0.25s',
+              transition: 'all 0.4s ease',
             }} />
 
             {/* Label — slides in below */}
@@ -74,7 +74,7 @@ export default function NavDots() {
               maxHeight: isHovered ? '20px' : '0px',
               opacity: isHovered ? 1 : 0,
               overflow: 'hidden',
-              transition: 'max-height 0.22s ease, opacity 0.18s ease',
+              transition: 'max-height 0.35s ease, opacity 0.3s ease',
               pointerEvents: 'none',
               whiteSpace: 'nowrap',
               // Grows leftward from the column's edge so long labels never leave the screen

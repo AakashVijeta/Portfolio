@@ -28,8 +28,8 @@ export default function ContactSection({ isActive }) {
       const offs = [...root.querySelectorAll('.cm-primary, .cm-secondary a')].map((el) => {
         // GSAP owns transform here; the site-wide link transition would trail every frame
         el.style.transitionProperty = 'color, background-color, border-color, box-shadow, opacity';
-        const x = gsap.quickTo(el, 'x', { duration: 0.5, ease: 'power3.out' });
-        const y = gsap.quickTo(el, 'y', { duration: 0.5, ease: 'power3.out' });
+        const x = gsap.quickTo(el, 'x', { duration: 0.9, ease: 'power2.out' });
+        const y = gsap.quickTo(el, 'y', { duration: 0.9, ease: 'power2.out' });
         const reach = el.matches('.cm-primary') ? 6 : 4;
         const move = (e) => {
           const r = el.getBoundingClientRect();

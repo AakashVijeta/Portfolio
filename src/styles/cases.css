@@ -179,28 +179,41 @@ html.is-flow .cases {
   .case-file-stat { max-width: none; padding: 0 28px; }
   .case-file-facts { grid-template-columns: subgrid; gap: 14px 0; }
   .case-file-facts > div { padding: 0 16px 0 28px; }
-  /* One column as wide as the longer label: both buttons match without filling the column */
+  .case-file-facts > div:first-child { grid-column: 1 / -1; }
+  /* The buttons sit side by side across both detail columns, level with the image's
+     foot and inset like the text above them */
   .case-file-actions {
-    display: grid;
-    justify-content: start;
+    grid-column: 3 / 5;
+    align-items: end;
     align-content: end;
     gap: 12px;
     padding: 16px 28px 0;
   }
-  .case-file-actions > * { text-align: center; }
 }
 
 /* ── The list ───────────────────────────────────────────────────── */
-/* A row's file folds open under it */
+/* A row's file folds open under it. Closing has its own, gentler curve: the ease-out
+   that snaps a file open would slam the last one shut while the pointer moves on to
+   the next row. Its contents fade as it folds instead of being clipped away. */
 .case-drawer {
   display: grid;
   grid-template-rows: 0fr;
-  transition: grid-template-rows 0.42s var(--ease-out);
+  transition: grid-template-rows 0.65s var(--ease-in-out);
 }
-.case-drawer.is-open { grid-template-rows: 1fr; }
-.case-drawer-inner { min-height: 0; overflow: hidden; }
+.case-drawer.is-open {
+  grid-template-rows: 1fr;
+  transition: grid-template-rows 0.55s var(--ease-out);
+}
+.case-drawer-inner {
+  min-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+.case-drawer.is-open .case-drawer-inner { opacity: 1; transition-duration: 0s; }
 @media (prefers-reduced-motion: reduce) {
-  .case-drawer { transition: none; }
+  .case-drawer,
+  .case-drawer-inner { transition: none; }
 }
 
 .cases-list {
@@ -220,7 +233,7 @@ html.is-flow .cases {
   width: 100%;
   min-height: 86px;
   cursor: pointer;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.4s ease;
 }
 .case-row > span { position: relative; z-index: 1; padding-right: 16px; }
 .case-row-title {
@@ -234,7 +247,7 @@ html.is-flow .cases {
   justify-self: end;
   font-family: var(--font-mono);
   color: var(--color-muted);
-  transition: color var(--dur-ui) ease, transform 0.35s var(--ease-out);
+  transition: color var(--dur-ui) ease, transform 0.45s var(--ease-out);
 }
 .case-row.is-active .case-row-title { color: var(--color-white); }
 .case-row.is-active .case-row-go { color: var(--color-accent); }
@@ -251,12 +264,12 @@ html.is-flow .cases {
   pointer-events: none;
   background: color-mix(in srgb, var(--color-text) 5%, transparent);
   clip-path: inset(0 100% 0 0);
-  transition: clip-path 0.3s var(--ease-out);
+  transition: clip-path 0.45s var(--ease-out);
 }
 @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
   .cases-list.is-pointing .case-row.is-active::before {
     clip-path: inset(0 0 0 0);
-    transition-duration: 0.6s;
+    transition-duration: 0.75s;
   }
   .cases-list.is-pointing .case-row.is-active .case-row-go { transform: translateX(-6px); }
 }
