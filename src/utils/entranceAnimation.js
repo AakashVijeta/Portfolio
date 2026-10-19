@@ -1,5 +1,5 @@
 import gsap from 'gsap';
-import { EASE_IN_OUT, EASE_OUT, prefersReducedMotion } from './motion';
+import { EASE_IN_OUT, EASE_OUT, countUp, prefersReducedMotion } from './motion';
 import { scrambleTo } from './scramble';
 
 const ITEM = '.section-enter-item';
@@ -14,6 +14,8 @@ const RULE = '.reveal-rule';
 const CHILD = '.reveal-child';
 // Text that scramble-decodes into place
 const SCRAMBLE = '.reveal-scramble';
+// Text whose number counts up from zero
+const COUNT = '.reveal-count';
 
 const parts = (items, sel) => items.flatMap((item) => [...item.querySelectorAll(sel)]);
 
@@ -106,7 +108,11 @@ export function revealItems(items) {
       gsap.to(kids, { opacity: 1, y: 0, duration: 0.5, delay: delay + 0.25, stagger: 0.035, ease: EASE_OUT, clearProps: 'transform,opacity' });
     }
     item.querySelectorAll(SCRAMBLE).forEach((el) => {
-      scrambleTo(el, el.textContent, { duration: 1.1, revealDelay: 0.35 })?.delay(delay + 0.1);
+      // Starts with its item, while the item is still transparent, so the real text never flashes first
+      scrambleTo(el, el.textContent, { duration: 1.1, revealDelay: 0.35 })?.delay(delay);
+    });
+    item.querySelectorAll(COUNT).forEach((el) => {
+      countUp(el, { duration: 1.6 })?.delay(delay + 0.3);
     });
   });
 }

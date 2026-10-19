@@ -1,5 +1,7 @@
-import { useLayoutEffect, useRef } from 'react';
+import { useEffect, useLayoutEffect, useRef } from 'react';
+import gsap from 'gsap';
 import { useLayoutMode } from '../../hooks/useLayoutMode';
+import { prefersReducedMotion } from '../../utils/motion';
 import RollText from '../RollText';
 
 
@@ -15,6 +17,40 @@ export default function ContactSection({ isActive }) {
   useLayoutEffect(() => {
     if (!isActive) return;
   }, [isActive]);
+
+  // Desktop pointers: the send button and the bracket links lean a few pixels toward
+  // the pointer while it is over them, and settle back when it leaves
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!root || prefersReducedMotion()) return;
+    if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+    const ctx = gsap.context(() => {
+      const offs = [...root.querySelectorAll('.cm-primary, .cm-secondary a')].map((el) => {
+        // GSAP owns transform here; the site-wide link transition would trail every frame
+        el.style.transitionProperty = 'color, background-color, border-color, box-shadow, opacity';
+        const x = gsap.quickTo(el, 'x', { duration: 0.5, ease: 'power3.out' });
+        const y = gsap.quickTo(el, 'y', { duration: 0.5, ease: 'power3.out' });
+        const reach = el.matches('.cm-primary') ? 6 : 4;
+        const move = (e) => {
+          const r = el.getBoundingClientRect();
+          const cx = r.left + r.width / 2 - gsap.getProperty(el, 'x');
+          const cy = r.top + r.height / 2 - gsap.getProperty(el, 'y');
+          x(gsap.utils.clamp(-1, 1, (e.clientX - cx) / (r.width / 2)) * reach);
+          y(gsap.utils.clamp(-1, 1, (e.clientY - cy) / (r.height / 2)) * reach);
+        };
+        const leave = () => { x(0); y(0); };
+        el.addEventListener('pointermove', move);
+        el.addEventListener('pointerleave', leave);
+        return () => {
+          el.removeEventListener('pointermove', move);
+          el.removeEventListener('pointerleave', leave);
+          el.style.removeProperty('transition-property');
+        };
+      });
+      return () => offs.forEach((off) => off());
+    }, root);
+    return () => ctx.revert();
+  }, []);
 
   return (
     <section

@@ -129,6 +129,11 @@ export default function IntroSection({ isActive }) {
       rx: gsap.quickTo(el, 'rotationX', { duration: 0.8, ease: 'power3.out' }),
       ry: gsap.quickTo(el, 'rotationY', { duration: 0.8, ease: 'power3.out' }),
     }));
+    // The name sits deeper than the scraps: it drifts a few pixels against the pointer,
+    // slower than they tilt
+    const name = nameRef.current;
+    const nameX = gsap.quickTo(name, 'x', { duration: 1.4, ease: 'power3.out' });
+    const nameY = gsap.quickTo(name, 'y', { duration: 1.4, ease: 'power3.out' });
     let raf = 0;
     let px = window.innerWidth / 2;
     let py = window.innerHeight / 2;
@@ -141,6 +146,8 @@ export default function IntroSection({ isActive }) {
       const nx = (px - window.innerWidth / 2) / (window.innerWidth / 2);
       const ny = (py - window.innerHeight / 2) / (window.innerHeight / 2);
       tilts.forEach((t) => { t.ry(nx * 10 * t.depth); t.rx(-ny * 8 * t.depth); });
+      nameX(-nx * 8);
+      nameY(-ny * 5);
     };
     const schedule = () => { if (!raf) raf = requestAnimationFrame(paint); };
     const move = (e) => { px = e.clientX; py = e.clientY; schedule(); };
@@ -154,6 +161,8 @@ export default function IntroSection({ isActive }) {
       window.removeEventListener('scroll', schedule);
       cancelAnimationFrame(raf);
       root.classList.remove('has-spotlight');
+      gsap.killTweensOf(name);
+      gsap.set(name, { clearProps: 'transform' });
     };
   }, [mode, preloaderDone]);
 

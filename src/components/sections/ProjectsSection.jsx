@@ -3,7 +3,7 @@ import gsap from 'gsap';
 import { projectDetails } from '../../data/projects';
 import { useSectionContext } from '../../context/SectionContext';
 import { useLayoutMode } from '../../hooks/useLayoutMode';
-import { EASE_OUT, prefersReducedMotion } from '../../utils/motion';
+import { EASE_OUT, countUp, prefersReducedMotion } from '../../utils/motion';
 import RollText from '../RollText';
 
 // One placeholder row: "more coming", not padding
@@ -29,10 +29,14 @@ function CaseFile({ project, liveStat, open, onOpen }) {
       gsap.set(el, { transformOrigin: '0% 0%' });
       // Held until the drawer has mostly unfolded, so the fall plays in view
       gsap.set(el, { rotation: -6, opacity: 0 });
-      gsap.timeline({ delay: 0.16 })
+      const tl = gsap.timeline({ delay: 0.16 })
         .to(el, { opacity: 1, duration: 0.35, ease: 'sine.out' }, 0)
         .to(el, { rotation: 0, duration: 0.75, ease: 'power2.out', clearProps: 'transform,opacity' }, 0)
         .fromTo('.case-file-info > *, .case-file-actions', { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.5, stagger: 0.05, ease: EASE_OUT, clearProps: 'transform,opacity' }, 0.25);
+      // The headline result counts up as its line arrives
+      const count = countUp(el.querySelector('.case-file-stat-value'), { duration: 1.4 });
+      if (count) tl.add(count, 0.3);
+      return () => count?.restore();
     }, el);
     return () => ctx.revert();
   }, [open]);
@@ -215,9 +219,9 @@ export default function ProjectsSection() {
                       onFocus={() => { if (!inline) point(project.slug); }}
                       onClick={() => select(project)}
                     >
-                      <span className="case-row-id">#{pad2(idx + 1)}</span>
+                      <span className="case-row-id reveal-scramble">{`#${pad2(idx + 1)}`}</span>
                       <span className="case-row-title"><RollText text={project.title} /></span>
-                      <span className="case-row-tag">{project.tag}</span>
+                      <span className="case-row-tag reveal-scramble">{project.tag}</span>
                       <span className="case-row-go" aria-hidden="true">{inline ? (isActive ? '−' : '+') : '→'}</span>
                     </button>
                     <div className={`case-drawer ${isActive ? 'is-open' : ''}`} inert={!isActive}>

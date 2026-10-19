@@ -111,7 +111,7 @@ export default function AboutSection({ isActive }) {
                 <div className="ft-corner-profile ft-br" />
               </div>
               <div className="scan-data-profile data-top-profile">REC_ACTIVE [●]</div>
-              <div className="scan-data-profile data-bot-profile">ISO_FACE_ID: 99.9%</div>
+              <div className="scan-data-profile data-bot-profile reveal-count">ISO_FACE_ID: 99.9%</div>
             </div>
             <div className="scan-beam-track">
               <div className="scan-beam" />
