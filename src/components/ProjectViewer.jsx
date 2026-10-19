@@ -5,7 +5,7 @@ import { prefersReducedMotion } from '../utils/motion';
 
 const pad = (n) => String(n).padStart(2, '0');
 
-// Mobile (flow mode) project file: a full-screen "case file" with prev/next between projects.
+// Project file at every width: a full-screen "case file" with prev/next between projects.
 export default function ProjectViewer() {
   const { overlayProject, setOverlayProject } = useSectionContext();
   const scrollRef = useRef(null);
@@ -46,9 +46,7 @@ export default function ProjectViewer() {
 
   return (
     <div className={`pv ${closing ? 'pv--out' : ''}`} role="dialog" aria-modal="true" aria-label={p.title} onAnimationEnd={onAnimationEnd}>
-      {p.image && <img className="pv-bg" src={p.image} alt="" aria-hidden="true" />}
-
-      <div className="pv-scroll" ref={scrollRef}>
+      <div className="pv-scroll" ref={scrollRef} data-lenis-prevent>
         <button type="button" className="pv-close" onClick={close}>
           [ CLOSE FILE ]
         </button>

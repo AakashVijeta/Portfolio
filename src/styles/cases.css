@@ -1,0 +1,233 @@
+/* ================================================================
+   EVIDENCE BOARD — case-study layout (after Linie)
+   A four-column grid with faint guide lines; one file on show, the
+   list of files below. Quiet type, no cards: only the row you point
+   at changes.
+   ================================================================ */
+html.is-flow .cases {
+  height: auto;
+  overflow: visible;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  min-height: 0;
+  padding: 0;
+}
+
+.cases-grid {
+  --cases-gutter: var(--d-gutter, var(--flow-gutter, 20px));
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 24px var(--cases-gutter) 0;
+}
+/* Guide lines: the four columns, drawn edge to edge */
+.cases-grid::before {
+  content: '';
+  position: absolute;
+  inset: 0 var(--cases-gutter);
+  pointer-events: none;
+  background-image: linear-gradient(to right, var(--color-border) 1px, transparent 1px);
+  background-size: 25% 100%;
+  border-right: 1px solid var(--color-border);
+  opacity: 0.45;
+}
+
+/* ── The file on show ───────────────────────────────────────────── */
+.case-file {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-rows: 1fr auto;
+  min-height: clamp(360px, 44vh, 420px);
+  padding: 8px 0 32px;
+}
+.case-file-media {
+  grid-column: 1 / 3;
+  grid-row: 1 / 3;
+  position: relative;
+  overflow: hidden;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+}
+.case-file-media img {
+  /* Fills the frame; the screenshot's own shape never sets the file's height */
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.case-file-info {
+  grid-column: 3 / 5;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+  padding: 4px 0 0 28px;
+}
+.case-row-id,
+.case-row-tag,
+.case-file-facts dt {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+.case-file-subtitle {
+  margin: 0;
+  max-width: 52ch;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  line-height: 1.55;
+  letter-spacing: 0.01em;
+  color: var(--color-text);
+  opacity: 0.8;
+}
+.case-file-facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px 24px;
+  margin: 6px 0 0;
+  padding-top: 14px;
+  border-top: 1px solid var(--color-border);
+}
+.case-file-facts dd {
+  margin: 4px 0 0;
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  line-height: 1.4;
+  color: var(--color-text);
+}
+.case-file-actions {
+  grid-column: 4;
+  grid-row: 2;
+  display: flex;
+  padding: 16px 0 0 28px;
+}
+.case-file-actions button {
+  all: unset;
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.16em;
+  color: var(--color-muted);
+  transition: color var(--dur-ui) ease;
+}
+.case-file-actions .case-file-open {
+  padding: 10px 16px;
+  background: var(--color-accent);
+  color: var(--color-bg);
+}
+.case-file-actions :focus-visible { outline: 1px solid var(--color-accent); outline-offset: 4px; }
+
+/* ── The list ───────────────────────────────────────────────────── */
+/* A row's file folds open under it */
+.case-drawer {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.42s var(--ease-out);
+}
+.case-drawer.is-open { grid-template-rows: 1fr; }
+.case-drawer-inner { min-height: 0; overflow: hidden; }
+@media (prefers-reduced-motion: reduce) {
+  .case-drawer { transition: none; }
+}
+
+.cases-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+/* Mid-scroll: rows passing under the pointer don't count as pointed at (ProjectsSection) */
+.cases-list[data-scrolling] { pointer-events: none; }
+.case-row {
+  all: unset;
+  box-sizing: border-box;
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: center;
+  width: 100%;
+  min-height: 86px;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+}
+.case-row > span { position: relative; z-index: 1; padding-right: 16px; }
+.case-row-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.15rem, 1.65vw, 1.5rem);
+  font-weight: 400;
+  color: var(--color-text);
+  transition: color var(--dur-ui) ease;
+}
+.case-row-go {
+  justify-self: end;
+  font-family: var(--font-mono);
+  color: var(--color-muted);
+  transition: color var(--dur-ui) ease, transform 0.35s var(--ease-out);
+}
+.case-row.is-active .case-row-title { color: var(--color-white); }
+.case-row.is-active .case-row-go { color: var(--color-accent); }
+.case-row:focus-visible { outline: 1px solid var(--color-accent); outline-offset: -1px; }
+.case-row.is-classified { cursor: default; opacity: 0.35; }
+.case-row.is-classified .case-row-title { font-style: italic; }
+
+/* Pointing at a row: the others step back slightly, a faint fill grows behind it */
+.cases-list.is-pointing .case-row:not(.is-active):not(.is-classified) { opacity: 0.75; }
+.case-row::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: color-mix(in srgb, var(--color-text) 5%, transparent);
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 0.3s var(--ease-out);
+}
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .cases-list.is-pointing .case-row.is-active::before {
+    clip-path: inset(0 0 0 0);
+    transition-duration: 0.6s;
+  }
+  .cases-list.is-pointing .case-row.is-active .case-row-go { transform: translateX(-6px); }
+}
+/* Row names roll letter by letter on hover, like the buttons (RollText, desktop.css).
+   The hover covers the whole entry (row and its open file), so the name stays rolled
+   until the pointer leaves the project altogether. */
+@media (min-width: 901px) and (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .cases-list > li:hover .case-row .roll-char,
+  .cases-list > li:focus-within .case-row .roll-char { transform: translateY(-100%); }
+}
+
+/* ── Phones: rows open their file in place ─────────────────────── */
+@media (max-width: 900px) {
+  .cases-grid { padding-top: 16px; }
+  .cases-grid::before { display: none; }
+  .case-row {
+    grid-template-columns: 44px minmax(0, 1fr) auto;
+    grid-template-areas: 'id title go' 'id tag go';
+    row-gap: 4px;
+    min-height: 0;
+    padding: 18px 0;
+  }
+  .case-row-id { grid-area: id; align-self: start; padding-top: 4px; }
+  .case-row-title { grid-area: title; font-size: 1.2rem; }
+  .case-row-tag { grid-area: tag; }
+  .case-row-go { grid-area: go; font-size: 1.1rem; padding-right: 0 !important; }
+  .case-row:active { background: rgba(var(--alert-rgb, 61, 255, 122), 0.05); }
+
+  .case-file {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    padding: 0 0 24px 44px;
+  }
+  .case-file-media { aspect-ratio: 16 / 10; }
+  .case-file-info { padding: 18px 0 0; }
+  .case-file-facts { grid-template-columns: minmax(0, 1fr); }
+  .case-file-actions { padding: 16px 0 0; }
+}

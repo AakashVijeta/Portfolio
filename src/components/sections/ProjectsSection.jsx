@@ -6,275 +6,202 @@ import { useLayoutMode } from '../../hooks/useLayoutMode';
 import { EASE_OUT, prefersReducedMotion } from '../../utils/motion';
 import RollText from '../RollText';
 
-const isTouch = () => window.matchMedia('(hover: none)').matches;
-
-
 const CLASSIFIED_SLOTS = [
   { slug: '__c1', codename: 'CLASSIFIED', tag: 'REDACTED' },
   { slug: '__c2', codename: 'CLASSIFIED', tag: 'REDACTED' },
 ];
 
-export default function ProjectsSection({ isActive }) {
-  const mode = useLayoutMode();
-  const rootRef = useRef(null);
-  const paneRef = useRef(null);
-  const { setOverlayProject } = useSectionContext();
-  const cards = [...projectDetails, ...CLASSIFIED_SLOTS];
+const pad2 = (n) => String(n).padStart(2, '0');
+// First clause of a long spec line: "LightGBM (LGBMClassifier) + ..." -> "LightGBM"
+const lead = (s = '') => s.split(/ \(|[;.,]| \+ /)[0].trim();
 
-  const [activeProject, setActiveProject] = useState(null);
-  const [displayProject, setDisplayProject] = useState(null);
-  const [isHovered, setIsHovered] = useState(false);
-  const [animKey, setAnimKey] = useState(0);
+// The file for one project: image left, details right (two columns each of the grid),
+// the open button at the foot of the fourth column
+function CaseFile({ project, open, onOpen }) {
+  const ref = useRef(null);
 
-  const handleMouseEnter = (project) => {
-    if (isHovered && activeProject?.slug === project.slug) return;
-    setIsHovered(true);
-    setActiveProject(project);
-    setDisplayProject(project);
-    setAnimKey(k => k + 1);
-  };
-
-  const handleMouseLeave = () => {
-    setIsHovered(false);
-  };
-
+  // Opening a file: pinned at its top-left corner, it starts with the right side swung
+  // up and lowers gently until level.
   useLayoutEffect(() => {
-    if (!displayProject || !paneRef.current) return;
-    if (prefersReducedMotion()) return;
-
-    const pane = paneRef.current;
+    const el = ref.current;
+    if (!open || !el || prefersReducedMotion()) return;
     const ctx = gsap.context(() => {
-      const tl = gsap.timeline({ defaults: { ease: EASE_OUT, force3D: true } });
-
-      tl.from(pane, { opacity: 0, x: 24, duration: 0.4, clearProps: 'transform,opacity' });
-      tl.from('.pane-title',    { y: 10, opacity: 0, duration: 0.3, clearProps: 'transform,opacity' }, '<0.08');
-      tl.from('.pane-subtitle', { y: 8, opacity: 0, duration: 0.28, clearProps: 'transform,opacity' }, '<0.06');
-      tl.from('.pane-link-btn', { y: 8,  opacity: 0, stagger: 0.06, duration: 0.24, clearProps: 'transform,opacity' }, '<0.05');
-      tl.from('.pane-tag',      { scale: 0.95, opacity: 0, stagger: 0.03, duration: 0.2, clearProps: 'transform,opacity' }, '<0.04');
-      tl.from('.pane-heading',  { opacity: 0, duration: 0.26, clearProps: 'opacity' }, '<0.08');
-      tl.from('.pane-feature',  { x: 10, opacity: 0, stagger: 0.05, duration: 0.28, clearProps: 'transform,opacity' }, '<0.04');
-    }, pane);
-
+      gsap.set(el, { transformOrigin: '0% 0%' });
+      // Held until the drawer has mostly unfolded, so the fall plays in view
+      gsap.set(el, { rotation: -6, opacity: 0 });
+      gsap.timeline({ delay: 0.16 })
+        .to(el, { opacity: 1, duration: 0.35, ease: 'sine.out' }, 0)
+        .to(el, { rotation: 0, duration: 0.75, ease: 'power2.out', clearProps: 'transform,opacity' }, 0)
+        .fromTo('.case-file-info > *, .case-file-actions', { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.5, stagger: 0.05, ease: EASE_OUT, clearProps: 'transform,opacity' }, 0.25);
+    }, el);
     return () => ctx.revert();
-  }, [displayProject, animKey]);
+  }, [open]);
 
-  // Leaving the section clears any hover state left behind
-  useEffect(() => {
-    if (!isActive) return;
-    return () => setIsHovered(false);
-  }, [isActive]);
-
-  useEffect(() => {
-    projectDetails.forEach(p => {
-      if (!p.image) return;
-      const img = new Image();
-      img.src = p.image;
-      if (img.decode) img.decode().catch(() => {});
-    });
-
-    const dummy = { v: 0 };
-    gsap.to(dummy, { v: 1, duration: 0.01, onComplete: () => gsap.killTweensOf(dummy) });
-  }, []);
-
-  // Flow mode: swipeable card slider (native scroll-snap) with prev/next arrows.
-  const trackRef = useRef(null);
-  const [slide, setSlide] = useState(0);
-
-  const goTo = (i) => {
-    const track = trackRef.current;
-    const card = track?.children[i];
-    if (!card) return;
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    track.scrollTo({ left: card.offsetLeft - (track.clientWidth - card.offsetWidth) / 2, behavior: reduced ? 'auto' : 'smooth' });
-  };
-
-  const onTrackScroll = () => {
-    const track = trackRef.current;
-    if (!track) return;
-    const centre = track.scrollLeft + track.clientWidth / 2;
-    let best = 0;
-    [...track.children].forEach((c, i) => {
-      const d = Math.abs(c.offsetLeft + c.offsetWidth / 2 - centre);
-      const bd = Math.abs(track.children[best].offsetLeft + track.children[best].offsetWidth / 2 - centre);
-      if (d < bd) best = i;
-    });
-    if (best !== slide) setSlide(best);
-  };
-
-  const pad2 = (n) => String(n).padStart(2, '0');
+  const facts = [
+    ['DOMAIN', project.tag],
+    ['STACK', project.techStack.slice(0, 4).join(' · ')],
+    ['MODEL', lead(project.model?.algorithm)],
+    ['EVALUATED ON', lead(project.model?.metrics)],
+  ];
 
   return (
-    <section
-      ref={rootRef}
-      className="section section-stripe projects-section"
-      data-enter-stagger="0.09"
-      style={mode === 'paged' ? { flexDirection: 'column', alignItems: 'stretch', padding: 0, overflow: 'hidden' } : undefined}
-    >
+    <div ref={ref} className="case-file">
+      <div className="case-file-media">
+        {project.image && (
+          <img src={project.image} alt={`${project.title} — ${project.tag} project screenshot`} decoding="async" />
+        )}
+      </div>
+      <div className="case-file-info">
+        <p className="case-file-subtitle">{project.subtitle}</p>
+        <dl className="case-file-facts">
+          {facts.map(([k, v]) => (
+            <div key={k}><dt>{k}</dt><dd>{v}</dd></div>
+          ))}
+        </dl>
+      </div>
+      <div className="case-file-actions">
+        <button type="button" className="case-file-open" onClick={() => onOpen(project)} aria-label={`Open ${project.title} file`}>
+          <RollText text="[ OPEN FILE → ]" />
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// Evidence board in Linie's case-study style: a quiet list on a four-column grid.
+// A row's file opens in place under it: on desktop while the row is pointed at,
+// on phones by tapping the row.
+export default function ProjectsSection() {
+  const mode = useLayoutMode();
+  const { setOverlayProject } = useSectionContext();
+  const [active, setActive] = useState(null);
+  const rows = [...projectDetails, ...CLASSIFIED_SLOTS];
+  const inline = mode === 'flow';
+
+  // Desktop hover intent: a row opens only once the pointer settles on it, so sweeping
+  // across the list doesn't open every file on the way past
+  const timer = useRef(0);
+  const point = (slug) => {
+    clearTimeout(timer.current);
+    timer.current = setTimeout(() => setActive(slug), slug ? 120 : 180);
+  };
+  useEffect(() => () => clearTimeout(timer.current), []);
+
+  // Scrolling slides rows under a still pointer, which the browser counts as hovering.
+  // While the page scrolls the list ignores the pointer (no opening, no letter roll);
+  // the next real pointer move hands it back. The open file closes as soon as scrolling
+  // carries it out from under the pointer. The flag is a data attribute, not a class:
+  // that close re-renders the list's className, which would wipe a class mid-scroll.
+  const listRef = useRef(null);
+  useEffect(() => {
+    const list = listRef.current;
+    if (inline || !list) return;
+    let held = false;
+    let px = -1;
+    let py = -1;
+    let frame = 0;
+    const closeIfLeft = () => {
+      frame = 0;
+      const entry = list.querySelector('.case-row.is-active')?.closest('li');
+      if (!entry) return;
+      const r = entry.getBoundingClientRect();
+      if (px < r.left || px > r.right || py < r.top || py > r.bottom) {
+        clearTimeout(timer.current);
+        setActive(null);
+      }
+    };
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(closeIfLeft);
+      if (held) return;
+      held = true;
+      list.dataset.scrolling = '';
+    };
+    const onMove = (e) => {
+      px = e.clientX;
+      py = e.clientY;
+      if (!held) return;
+      held = false;
+      delete list.dataset.scrolling;
+      if (!list.contains(document.elementFromPoint(e.clientX, e.clientY))) point(null);
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('pointermove', onMove, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('pointermove', onMove);
+      cancelAnimationFrame(frame);
+      delete list.dataset.scrolling;
+    };
+  }, [inline]);
+
+  const select = (project) => {
+    if (inline) setActive((cur) => (cur === project.slug ? null : project.slug));
+    else setOverlayProject(project);
+  };
+
+  return (
+    <section className="section section-stripe projects-section cases" data-enter-stagger="0.07">
       <header className="projects-topbar section-enter-item">
         <div className="projects-topbar-row">
-          <div className="projects-title">
-            <span className="scramble-title">EVIDENCE BOARD</span>
+          <div className="projects-title" data-parallax="24">
+            <span className="scramble-title reveal-line"><span>EVIDENCE BOARD</span></span>
           </div>
           <div className="projects-topmeta">
             <div>// FIELD_RECORDS</div>
           </div>
         </div>
-        <hr className="profiler-rule" />
+        <hr className="profiler-rule reveal-rule" />
       </header>
 
-      {mode === 'flow' ? (
-        <div className="pm-slider">
-          <div className="pm-track" ref={trackRef} onScroll={onTrackScroll}>
-            {projectDetails.map((project, idx) => (
-              <button
-                type="button"
+      <div className="cases-grid">
+        <ul
+          ref={listRef}
+          className={`cases-list ${active ? 'is-pointing' : ''}`}
+          onMouseLeave={(e) => { if (!inline && !('scrolling' in e.currentTarget.dataset)) point(null); }}
+          onBlur={(e) => { if (!inline && !e.currentTarget.contains(e.relatedTarget)) point(null); }}
+        >
+          {rows.map((project, idx) => {
+            const classified = project.slug.startsWith('__');
+            const isActive = active === project.slug;
+            return (
+              <li
                 key={project.slug}
-                className="pm-card section-enter-item"
-                onClick={() => setOverlayProject(project)}
-                aria-label={`Open ${project.title}`}
+                className="section-enter-item"
+                onMouseEnter={() => { if (!inline) point(classified ? null : project.slug); }}
               >
-                {project.image && (
-                  <img
-                    className="pm-card-img"
-                    src={project.image}
-                    alt={`${project.title} — ${project.tag} project screenshot`}
-                    loading="lazy"
-                    decoding="async"
-                  />
-                )}
-                <span className="pm-card-num" aria-hidden="true">{pad2(idx + 1)}</span>
-                <span className="pm-card-body">
-                  <span className="pm-card-id">EVIDENCE #{pad2(idx + 1)}</span>
-                  <span className="pm-card-title">{project.title}</span>
-                  <span className="pm-card-tag">{project.tag}</span>
-                  <span className="pm-card-cta">[ OPEN FILE <span aria-hidden="true">→</span> ]</span>
-                </span>
-              </button>
-            ))}
-          </div>
-          <div className="pm-controls">
-            <button type="button" className="pm-arrow pm-arrow-prev" disabled={slide === 0} onClick={() => goTo(slide - 1)} aria-label="Previous project">‹</button>
-            <span className="pm-count" aria-live="polite">{pad2(slide + 1)} / {pad2(projectDetails.length)}</span>
-            <button type="button" className="pm-arrow pm-arrow-next" disabled={slide === projectDetails.length - 1} onClick={() => goTo(slide + 1)} aria-label="Next project">›</button>
-          </div>
-        </div>
-      ) : (
-      <div
-        className={`projects-layout ${isHovered && activeProject ? 'is-active' : ''}`}
-        onMouseLeave={handleMouseLeave}
-      >
-        <div className="projects-stack-col">
-          <div className="projects-stack">
-            {cards.map((project, idx) => {
-              const isClassified = project.slug.startsWith('__');
-              const isProjActive = isHovered && activeProject?.slug === project.slug;
-
-              return (
-                <div
-                  key={project.slug}
-                  className={`project-bar section-enter-item ${isClassified ? 'project-bar-classified' : ''} ${isProjActive ? 'is-active' : ''}`}
-                  onMouseEnter={() => !isClassified && !isTouch() && handleMouseEnter(project)}
-                  onMouseMove={() => !isClassified && !isTouch() && handleMouseEnter(project)}
-                  onClick={() => !isClassified && isTouch() && setOverlayProject(project)}
-                  style={{ '--idx': idx }}
-                >
-                  <div className="project-bar-inner">
-                    {!isClassified && project.image && (
-                      <img
-                        src={project.image}
-                        alt={`${project.title} — ${project.tag} project screenshot`}
-                        className="bg-img"
-                        loading="eager"
-                        decoding="async"
-                        fetchPriority="high"
-                      />
-                    )}
-                    <div className="strip-content">
-                      <div className="strip-left">
-                        {(!isHovered || isProjActive) ? (
-                          <>
-                            <span className="strip-id">
-                              {isClassified ? 'EVIDENCE ///' : `EVIDENCE #${String(projectDetails.findIndex(p => p.slug === project.slug) + 1).padStart(2, '0')}`}
-                            </span>
-                            <h3 className="strip-title">{isClassified ? project.codename : project.title}</h3>
-                          </>
-                        ) : (
-                          <div className="strip-single-line">
-                            <span className="strip-id-inline">
-                              {isClassified ? 'EVIDENCE ///' : `EVIDENCE #${String(projectDetails.findIndex(p => p.slug === project.slug) + 1).padStart(2, '0')}`}
-                            </span>
-                            <span className="strip-title-inline">{isClassified ? project.codename : project.title}</span>
-                          </div>
-                        )}
-                      </div>
-                      <div className="strip-right">
-                        <span className="strip-tag">
-                          {project.tag} <span className="strip-dot">•</span>
-                        </span>
+                {classified ? (
+                  <div className="case-row is-classified" aria-label="Classified file">
+                    <span className="case-row-id">///</span>
+                    <span className="case-row-title">{project.codename}</span>
+                    <span className="case-row-tag">{project.tag}</span>
+                    <span className="case-row-go" aria-hidden="true">—</span>
+                  </div>
+                ) : (
+                  <>
+                    <button
+                      type="button"
+                      className={`case-row ${isActive ? 'is-active' : ''}`}
+                      aria-expanded={isActive}
+                      aria-label={`${project.title}, ${project.tag}`}
+                      onFocus={() => { if (!inline) point(project.slug); }}
+                      onClick={() => select(project)}
+                    >
+                      <span className="case-row-id">#{pad2(idx + 1)}</span>
+                      <span className="case-row-title"><RollText text={project.title} /></span>
+                      <span className="case-row-tag">{project.tag}</span>
+                      <span className="case-row-go" aria-hidden="true">{inline ? (isActive ? '−' : '+') : '→'}</span>
+                    </button>
+                    <div className={`case-drawer ${isActive ? 'is-open' : ''}`} inert={!isActive}>
+                      <div className="case-drawer-inner">
+                        <CaseFile project={project} open={isActive} onOpen={setOverlayProject} />
                       </div>
                     </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-
-        <div className="projects-details-col">
-          {displayProject && !displayProject.slug.startsWith('__') && (
-            <div
-              ref={paneRef}
-              className="project-details-pane custom-scrollbar"
-            >
-               <h2 className="pane-title">{displayProject.title}</h2>
-               <p className="pane-subtitle">{displayProject.subtitle}</p>
-
-               <div className="pane-links">
-                 {displayProject.liveDemo && (
-                   <a href={displayProject.liveDemo} target="_blank" rel="noreferrer" className="pane-link-btn" aria-label="Launch App">
-                     <RollText text="Launch App" /> <span className="arrow" aria-hidden="true">↗</span>
-                   </a>
-                 )}
-                 {displayProject.repos?.map(repo => (
-                   <a key={repo.label} href={repo.href} target="_blank" rel="noreferrer" className="pane-link-btn pane-link-btn-secondary" aria-label={repo.label}>
-                     <RollText text={repo.label} /> <span className="arrow" aria-hidden="true">↗</span>
-                   </a>
-                 ))}
-               </div>
-
-               <div className="pane-tech">
-                 {displayProject.techStack.map(t => <span key={t} className="pane-tag">{t}</span>)}
-               </div>
-
-               <div className="pane-section">
-                 <h4 className="pane-heading">KEY FEATURES</h4>
-                 <div className="pane-features">
-                   {displayProject.features?.slice(0, 3).map((f, i) => {
-                      const parts = f.split('.');
-                      const title = parts[0];
-                      const desc = parts.slice(1).join('.');
-                      return (
-                        <div key={i} className="pane-feature">
-                          <strong>{title}.</strong> {desc.trim()}
-                        </div>
-                      );
-                   })}
-                 </div>
-               </div>
-            </div>
-          )}
-        </div>
-      </div>
-      )}
-
-      <div className="projects-bottombar section-enter-item">
-        <hr className="profiler-rule" />
-        <div className="projects-bottombar-inner">
-          <span>{projectDetails.length.toString().padStart(2, '0')} ACTIVE · {CLASSIFIED_SLOTS.length.toString().padStart(2, '0')} CLASSIFIED</span>
-          {mode === 'paged' && (
-            <span>{window.matchMedia('(hover: none)').matches ? '◁  SWIPE · TAP TO VIEW  ▷' : '◁  HOVER · NAVIGATE  ▷'}</span>
-          )}
-        </div>
+                  </>
+                )}
+              </li>
+            );
+          })}
+        </ul>
       </div>
     </section>
   );
