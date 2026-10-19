@@ -22,13 +22,11 @@
 
   /* Like mobile: footers only on the last section */
   html.is-flow .ihyb-bottombar,
-  html.is-flow .projects-bottombar,
   html.is-flow .about-profiler .profiler-foot { display: none; }
 
   /* ── Header bars ───────────────────────────────────────────── */
   html.is-flow .projects-topbar,
-  html.is-flow .about-profiler .profiler-head,
-  html.is-flow .contact-topbar {
+  html.is-flow .about-profiler .profiler-head {
     flex: 0 0 auto;
     height: var(--d-head-h);
     min-height: var(--d-head-h);
@@ -39,8 +37,7 @@
 
   /* ── Section titles ────────────────────────────────────────── */
   html.is-flow .projects-title,
-  html.is-flow .about-profiler .profiler-title,
-  html.is-flow .contact-title-main {
+  html.is-flow .about-profiler .profiler-title {
     font-family: var(--font-display);
     font-size: clamp(1.6rem, 2.7vw, 2.4rem);
     font-weight: 300;
@@ -50,8 +47,7 @@
 
   /* ── Header meta (right-hand labels) ───────────────────────── */
   html.is-flow .projects-topmeta,
-  html.is-flow .about-profiler .profiler-head-meta,
-  html.is-flow .contact-topmeta {
+  html.is-flow .about-profiler .profiler-head-meta {
     font-family: var(--font-display);
     font-size: var(--d-chrome-font);
     letter-spacing: var(--d-chrome-ls);
@@ -71,7 +67,6 @@
 
   /* ── Footer bars ───────────────────────────────────────────── */
   html.is-flow .ihyb-bottombar,
-  html.is-flow .projects-bottombar,
   html.is-flow .about-profiler .profiler-foot,
   html.is-flow .contact-bottombar {
     flex: 0 0 auto;
@@ -248,15 +243,6 @@
   }
 }
 
-/* ── Desktop press feedback ─────────────────────────────────────── */
-@media (min-width: 901px) and (prefers-reduced-motion: no-preference) {
-  html.is-flow .pane-link-btn:active,
-  html.is-flow .contact-bracket-box:active { transform: scale(0.97); }
-  html.is-flow .contact-bracket-box {
-    transition: transform var(--dur-press) var(--ease-out), background-color var(--dur-ui) ease, color var(--dur-ui) ease, border-color var(--dur-ui) ease, box-shadow var(--dur-ui) ease;
-  }
-}
-
 /* ── Letter roll on buttons (desktop pointers) ─────────────────────
    Each character slides up and is replaced by its copy from below,
    staggered left to right; it rolls back on leave. */
@@ -274,7 +260,6 @@
   button:hover > .roll .roll-char,
   a:focus-visible > .roll .roll-char { transform: translateY(-100%); }
 }
-
 
 /* ── Camera viewfinder (Viewfinder.jsx) ────────────────────────────
    Small readouts fixed to the four screen corners for the whole page:

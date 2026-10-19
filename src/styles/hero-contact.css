@@ -1,10 +1,3 @@
-/* ================================================================
-   HERO + CONTACT (all widths)
-   One centred composition on desktop and mobile (modelled on the
-   reference portfolio's hero and contact): bordered status stamp,
-   name, details block; contact actions centred in a 480px column.
-   ================================================================ */
-
 /* ── Intro: one centred block (stamp, name, dossier) filling the first screen ── */
 html.is-flow .intro-hero {
   height: auto;
@@ -54,19 +47,6 @@ html.is-flow .ihyb-name-b {
   margin-top: 0;
 }
 
-html.is-flow .ihyb-dossier {
-  width: 100%;
-  font-size: clamp(0.66rem, 2.9vw, 0.82rem);
-  letter-spacing: 0.08em;
-  padding-top: 14px;
-}
-html.is-flow .ihyb-dossier::before {
-  left: 0; right: 0;
-  top: 0; bottom: auto;
-  width: auto; height: 1px;
-}
-html.is-flow .ihyb-dos-row { padding: 8px 0; }
-
 /* ── Contact: closing screen, CTAs in thumb reach ─────────────── */
 html.is-flow .contact-main {
   flex: 1;
@@ -81,15 +61,6 @@ html.is-flow .contact-content-inner {
   flex-direction: column;
   align-items: center;
   text-align: center;
-}
-html.is-flow .contact-topbar { align-items: center; }
-html.is-flow .contact-topbar-row { align-items: center; text-align: center; }
-html.is-flow .contact-topmeta { text-align: center; }
-html.is-flow .contact-title-wrap {
-  font-size: clamp(0.72rem, 3.4vw, 0.95rem) !important;
-  letter-spacing: 0.32em !important;
-  margin-bottom: 24px !important;
-  white-space: nowrap;
 }
 html.is-flow .contact-command {
   font-size: clamp(0.95rem, 4.6vw, 1.5rem);
@@ -138,19 +109,13 @@ html.is-flow .cm-secondary a {
 html.is-flow .cm-secondary a:active { border-color: var(--color-accent); color: var(--color-accent); }
 html.is-flow .cm-primary:focus-visible,
 html.is-flow .cm-secondary a:focus-visible { outline: 1px solid var(--color-accent); outline-offset: 3px; }
-
-html.is-flow .contact-dossier { margin-top: var(--space-block, 56px) !important; padding-left: 0; border-left: 0; }
-html.is-flow .contact-dossier .intro-dossier-line { justify-content: center; }
-html.is-flow .contact-dossier .intro-dossier-line { gap: 16px; font-size: 0.7rem; letter-spacing: 0.18em; }
 html.is-flow .contact-bottombar { padding-bottom: max(24px, env(safe-area-inset-bottom)); }
 
 /* Desktop sizing of the shared composition */
 @media (min-width: 901px) {
   html.is-flow .ihyb-topbar { font-size: 0.7rem; padding: 10px 18px; }
-  html.is-flow .ihyb-dossier { max-width: 560px; align-self: center; font-size: 0.82rem; }
   html.is-flow .contact-main { justify-content: center; padding-bottom: 40px; }
 }
-
 
 /* ── Hero dressing (desktop pointers): darkness + spotlight, pinned
    case-file scraps, metallic name, tagline ─────────────────── */
@@ -198,7 +163,6 @@ html.is-flow .ihyb-name-b {
     pointer-events: none;
     background: radial-gradient(circle at var(--sx, 50%) var(--sy, 45%), transparent 0 120px, color-mix(in srgb, var(--color-bg) 45%, transparent) 330px, color-mix(in srgb, var(--color-bg) 86%, transparent) 640px);
   }
-
 
   /* Pinned scraps: each leans a little; JS tilts them toward the pointer */
   .ihyb-float-in {

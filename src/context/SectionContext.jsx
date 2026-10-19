@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components -- context, hook and constants live together */
 import { createContext, useContext, useState, useCallback, useRef } from 'react';
 
 const SectionContext = createContext(null);
