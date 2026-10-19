@@ -98,7 +98,7 @@ export const projectDetails = [
       { label: "Frontend", href: "https://github.com/AakashVijeta/NiftyEdge" },
     ],
     liveDemo: "https://niftyedge.netlify.app",
-    stat: { value: "+22.4%", label: "backtested return, after costs" },
+    stat: { value: "+22.4%", label: "backtested return" },
     overview: [
       "NiftyEdge scores every Nifty 50 constituent each morning on a single question: what is the probability it closes at least 1.5% higher within the next five trading days? An XGBoost classifier — validated with rolling six-month walk-forward folds and filtered at a 0.55 confidence threshold — emits the day's shortlist before markets open.",
       "The UI is a Bloomberg-terminal-inspired command center: ultra-flat cards, sharp borders, Inter + IBM Plex Mono on near-black with Bloomberg-orange highlights. A ranked signals table, a high-conviction Spotlight Pick with RSI / volatility / Bollinger breakdown, a sector momentum heatmap, and a Liquid-Metal AI Analyst chat panel — all powered by a stabilized motion engine for zero-flicker, GPU-accelerated state transitions.",

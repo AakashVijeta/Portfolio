@@ -60,7 +60,7 @@ function CaseFile({ project, liveStat, open, onOpen }) {
         {project.stat && (
           <p className="case-file-stat">
             <span className="case-file-stat-value">{liveStat ?? project.stat.value}</span>
-            <span className="case-file-stat-label">{project.stat.label}{liveStat && ' · live'}</span>
+            <span className="case-file-stat-label">{project.stat.label}{liveStat && ''}</span>
           </p>
         )}
         <dl className="case-file-facts">
