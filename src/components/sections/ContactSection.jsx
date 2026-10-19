@@ -75,8 +75,8 @@ export default function ContactSection({ isActive }) {
           </div>
 
           <h2 className="section-enter-item contact-heading">
-            <span className="reveal-line"><span>Got an idea?</span></span>
-            <span className="reveal-line"><span>Let&apos;s build it.</span></span>
+            <span className="reveal-line"><span className="reveal-chars">Got an idea?</span></span>
+            <span className="reveal-line"><span className="reveal-chars">Let&apos;s build it.</span></span>
           </h2>
 
           <div className="section-enter-item contact-command">

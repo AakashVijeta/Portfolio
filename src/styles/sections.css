@@ -26,6 +26,9 @@
   margin-bottom: -0.12em;
 }
 .reveal-line > span { display: inline-block; }
+/* Titles that rise letter by letter: no kerning, so the split letters and the
+   rejoined text after the reveal sit in exactly the same places */
+.reveal-chars { font-kerning: none; }
 
 /* ── Shared rules and keyframes ─────────────────────────────── */
 

@@ -86,7 +86,7 @@ export default function AboutSection({ isActive }) {
     >
       <header className="profiler-head section-enter-item">
         <div className="profiler-head-row">
-          <h2 className="profiler-title" data-parallax="24"><span className="reveal-line"><span>SUBJECT PROFILE</span></span></h2>
+          <h2 className="profiler-title" data-parallax="24"><span className="reveal-line"><span className="reveal-chars">SUBJECT PROFILE</span></span></h2>
           <div className="profiler-head-meta">
             <div>STATUS: ACTIVE DEVELOPMENT</div>
           </div>

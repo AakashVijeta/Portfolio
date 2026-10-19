@@ -40,8 +40,9 @@
   html.is-flow .about-profiler .profiler-title {
     font-family: var(--font-display);
     font-size: clamp(1.6rem, 2.7vw, 2.4rem);
-    font-weight: 300;
-    letter-spacing: 0.14em;
+    /* Heavier than the body chrome, a step under the hero name; tighter tracking to match */
+    font-weight: 600;
+    letter-spacing: 0.06em;
     line-height: 1;
   }
 

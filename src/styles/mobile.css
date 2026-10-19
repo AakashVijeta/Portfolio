@@ -48,7 +48,8 @@
   html.is-flow .projects-title,
   html.is-flow .profiler-title {
     font-size: clamp(1.6rem, 8vw, 2.4rem);
-    letter-spacing: 0.1em;
+    font-weight: 600;
+    letter-spacing: 0.06em;
   }
   html.is-flow .projects-topbar-row {
     flex-direction: column;

@@ -1,13 +1,24 @@
 import gsap from 'gsap';
+import { SplitText } from 'gsap/SplitText';
 import { EASE_IN_OUT, EASE_OUT, countUp, prefersReducedMotion } from './motion';
 import { scrambleTo } from './scramble';
+
+gsap.registerPlugin(SplitText);
 
 const ITEM = '.section-enter-item';
 // Media inside a reveal item that uncovers bottom to top as the item comes in
 const WIPE = '.reveal-wipe';
 const WIPE_HIDDEN = 'inset(100% 0% 0% 0%)';
 // Heading lines that rise out of a mask (.reveal-line > span)
-const LINE = '.reveal-line > span';
+const LINE = '.reveal-line > span:not(.reveal-chars)';
+// Titles whose letters rise one after another inside that mask (split while hidden,
+// rejoined once they land)
+const CHARS = '.reveal-chars';
+const splits = new WeakMap();
+const unsplit = (title) => {
+  splits.get(title)?.revert();
+  splits.delete(title);
+};
 // Hairline rules that draw left to right
 const RULE = '.reveal-rule';
 // Small pieces (chips, log entries) that follow their item in, one after another
@@ -38,6 +49,11 @@ export function hideEntrance(el) {
   if (wipes.length) gsap.set(wipes, { clipPath: WIPE_HIDDEN });
   const lines = el.querySelectorAll(LINE);
   if (lines.length) gsap.set(lines, { yPercent: 105 });
+  el.querySelectorAll(CHARS).forEach((title) => {
+    const split = splits.get(title) ?? SplitText.create(title, { type: 'words,chars' });
+    splits.set(title, split);
+    gsap.set(split.chars, { yPercent: 110, rotation: 8, transformOrigin: '0% 100%' });
+  });
   const rules = el.querySelectorAll(RULE);
   if (rules.length) gsap.set(rules, { scaleX: 0, transformOrigin: '0% 50%' });
   const kids = el.querySelectorAll(CHILD);
@@ -52,6 +68,7 @@ export function showItems(items) {
   if (wipes.length) gsap.set(wipes, { clearProps: 'clipPath' });
   const rest = parts(items, `${LINE}, ${RULE}, ${CHILD}`);
   if (rest.length) gsap.set(rest, { clearProps: 'transform,opacity' });
+  parts(items, CHARS).forEach(unsplit);
 }
 
 // Soft reveal for a batch of items entering together: fade up (or in from the side),
@@ -97,6 +114,21 @@ export function revealItems(items) {
     if (lines.length) {
       gsap.to(lines, { yPercent: 0, duration: 0.9, delay: delay + 0.05, stagger: 0.08, ease: EASE_OUT, clearProps: 'transform' });
     }
+    // Letters lean back as they rise and settle level on landing; a second line starts
+    // a beat after the first
+    item.querySelectorAll(CHARS).forEach((title, j) => {
+      const split = splits.get(title);
+      if (!split) return;
+      gsap.to(split.chars, {
+        yPercent: 0,
+        rotation: 0,
+        duration: 0.9,
+        delay: delay + 0.05 + j * 0.15,
+        stagger: 0.03,
+        ease: EASE_OUT,
+        onComplete: () => unsplit(title),
+      });
+    });
     // Rules draw with an even in-out sweep so the travel from left to right reads
     // (an out-curve covers most of the width in the first few frames)
     const rules = item.querySelectorAll(RULE);

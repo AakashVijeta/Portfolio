@@ -177,7 +177,7 @@ export default function ProjectsSection() {
       <header className="projects-topbar section-enter-item">
         <div className="projects-topbar-row">
           <div className="projects-title" data-parallax="24">
-            <span className="scramble-title reveal-line"><span>EVIDENCE BOARD</span></span>
+            <span className="scramble-title reveal-line"><span className="reveal-chars">EVIDENCE BOARD</span></span>
           </div>
           <div className="projects-topmeta">
             <div>// FIELD_RECORDS</div>
