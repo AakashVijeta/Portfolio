@@ -19,10 +19,11 @@ html.is-flow .intro-hero {
 html.is-flow .ihyb-topbar {
   align-self: center;
   justify-content: center;
-  padding: 9px 14px;
+  padding: 7px 16px;
   border: 1px solid var(--color-accent);
-  font-size: 0.56rem;
-  letter-spacing: 0.18em;
+  font-size: clamp(0.62rem, 2.6vw, 0.8rem);
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
   color: var(--color-accent);
 }
 html.is-flow .ihyb-topbar::after { content: none; }
@@ -150,3 +151,226 @@ html.is-flow .contact-bottombar { padding-bottom: max(24px, env(safe-area-inset-
   html.is-flow .contact-main { justify-content: center; padding-bottom: 40px; }
 }
 
+
+/* ── Hero dressing (desktop pointers): darkness + spotlight, pinned
+   case-file scraps, metallic name, tagline ─────────────────── */
+html.is-flow .intro-hero { position: relative; isolation: isolate; }
+
+/* Name lines read like brushed metal: a vertical sheen inside the letters */
+html.is-flow .ihyb-name-a,
+html.is-flow .ihyb-name-b {
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  text-shadow: none;
+}
+html.is-flow .ihyb-name-a {
+  background-image: linear-gradient(180deg, var(--color-white) 25%, color-mix(in srgb, var(--color-text) 55%, var(--color-bg)) 115%);
+}
+html.is-flow .ihyb-name-b {
+  background-image: linear-gradient(180deg, color-mix(in srgb, var(--color-accent) 70%, var(--color-white)) 10%, color-mix(in srgb, var(--color-accent) 60%, var(--color-bg)) 115%);
+  filter: drop-shadow(0 0 22px color-mix(in srgb, var(--color-accent) 22%, transparent));
+}
+
+/* Tagline under the name; key phrases in the accent */
+.ihyb-tagline {
+  margin: 0 auto;
+  max-width: 40ch;
+  text-align: center;
+  font-family: var(--font-body);
+  font-size: clamp(0.92rem, 1.2vw, 1.12rem);
+  line-height: 1.6;
+  letter-spacing: 0.01em;
+  color: var(--color-muted);
+}
+.ihyb-tagline em { font-style: normal; color: var(--color-accent); }
+
+.ihyb-spotlight,
+.ihyb-float-in { display: none; }
+
+@media (min-width: 1100px) and (hover: hover) and (pointer: fine) {
+  /* Everything outside a soft circle around the pointer sinks into the dark */
+  .intro-hero.has-spotlight .ihyb-spotlight {
+    display: block;
+    position: absolute;
+    inset: 0;
+    z-index: 30;
+    pointer-events: none;
+    background: radial-gradient(circle at var(--sx, 50%) var(--sy, 45%), transparent 0 120px, color-mix(in srgb, var(--color-bg) 45%, transparent) 330px, color-mix(in srgb, var(--color-bg) 86%, transparent) 640px);
+  }
+
+
+  /* Pinned scraps: each leans a little; JS tilts them toward the pointer */
+  .ihyb-float-in {
+    display: block;
+    position: absolute;
+    z-index: 5;
+    perspective: 700px;
+    pointer-events: none;
+  }
+  .ihyb-float-in-loc   { top: 22%; left: 9%; }
+  .ihyb-float-in-log   { bottom: 21%; right: 13%; }
+  .ihyb-float {
+    rotate: var(--lean);
+    transform-style: preserve-3d;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    padding: 10px 12px;
+    border: 1px solid color-mix(in srgb, var(--color-accent) 16%, transparent);
+    background: color-mix(in srgb, var(--color-surface) 80%, transparent);
+    font-family: var(--font-mono);
+    font-size: 0.64rem;
+    letter-spacing: 0.04em;
+    color: var(--color-muted);
+  }
+  .ihyb-float-in-log .ihyb-float { color: var(--color-accent); }
+  .ihyb-status-line { white-space: nowrap; }
+}
+
+/* Scan beam: the profile scanner's line, sweeping the whole hero top to bottom and
+   starting again from the top. The track is hero-tall and slides down its own height,
+   carrying the beam from the top edge to the bottom edge. */
+.ihyb-scan {
+  position: absolute;
+  inset: 0;
+  /* Above the spotlight darkness, so the beam reads across the full width */
+  z-index: 32;
+  pointer-events: none;
+  animation: ihyb-scan-move 7s linear infinite;
+}
+.ihyb-scan-beam {
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--color-accent) 20%, var(--color-accent) 80%, transparent);
+  box-shadow: 0 0 10px var(--color-accent), 0 0 24px var(--color-accent);
+  opacity: 0.32;
+  animation: ihyb-scan-fade 7s linear infinite;
+}
+@keyframes ihyb-scan-move {
+  from { transform: translateY(0); }
+  to   { transform: translateY(100%); }
+}
+@keyframes ihyb-scan-fade {
+  0%   { opacity: 0; }
+  8%   { opacity: 0.32; }
+  88%  { opacity: 0.32; }
+  100% { opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ihyb-scan { display: none; }
+}
+
+/* ── Contact, case-file style: line-open label, big question, outlined
+   send button, bracket links, a faint tilted line of text behind ───── */
+html.is-flow .contact-section { position: relative; isolation: isolate; }
+
+.contact-ghost {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: -1;
+  translate: -50% -50%;
+  rotate: -8deg;
+  white-space: nowrap;
+  pointer-events: none;
+  font-family: var(--font-display);
+  font-size: clamp(7rem, 15vw, 13.5rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: color-mix(in srgb, var(--color-text) 3%, transparent);
+}
+
+.contact-line {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 26px;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  color: var(--color-accent);
+}
+.contact-line-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  animation: contact-blink 1.6s steps(2, start) infinite;
+}
+@keyframes contact-blink { to { visibility: hidden; } }
+
+.contact-heading {
+  margin: 0 0 30px;
+  font-family: var(--font-display);
+  font-size: clamp(2.3rem, 4.6vw, 4rem);
+  font-weight: 300;
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+  color: var(--color-white);
+  text-align: center;
+  /* Wider than the 480px action column, so the question breaks only where written */
+  width: max-content;
+  max-width: calc(100vw - 2 * var(--flow-gutter, var(--d-gutter, 24px)));
+}
+
+/* Where the viewfinder holds the screen corners, the old bottom bar would collide
+   with it; the signature line under the links takes its place */
+@media (min-width: 1100px) and (hover: hover) and (pointer: fine) {
+  html.is-flow .contact-bottombar { display: none; }
+}
+
+html.is-flow .contact-command { font-size: clamp(0.85rem, 3.8vw, 1rem); color: var(--color-accent); }
+
+/* Outlined send button: lights up on hover */
+html.is-flow .cm-actions { align-items: center; gap: 30px; margin-top: 32px; }
+html.is-flow .cm-primary {
+  width: min(100%, 290px);
+  min-height: 72px;
+  font-size: 0.86rem;
+  font-weight: 400;
+  color: var(--color-white);
+  background: transparent;
+  border: 1px solid color-mix(in srgb, var(--color-text) 22%, transparent);
+  transition: background-color var(--dur-ui) ease, border-color var(--dur-ui) ease, color var(--dur-ui) ease;
+}
+html.is-flow .cm-primary:hover,
+html.is-flow .cm-primary:focus-visible {
+  background: color-mix(in srgb, var(--color-accent) 10%, transparent);
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+/* Bracket links: the brackets step apart on hover */
+html.is-flow .cm-secondary { display: flex; justify-content: center; gap: 28px; }
+html.is-flow .cm-secondary a {
+  min-height: 44px;
+  gap: 6px;
+  border: 0;
+  font-family: var(--font-mono);
+  font-size: 0.86rem;
+  letter-spacing: 0.08em;
+  color: var(--color-accent);
+}
+.cm-br { display: inline-block; transition: transform 0.3s var(--ease-out); }
+@media (hover: hover) and (pointer: fine) {
+  html.is-flow .cm-secondary a:hover .cm-br:first-child,
+  html.is-flow .cm-secondary a:focus-visible .cm-br:first-child { transform: translateX(-5px); }
+  html.is-flow .cm-secondary a:hover .cm-br:last-child,
+  html.is-flow .cm-secondary a:focus-visible .cm-br:last-child { transform: translateX(5px); }
+}
+
+.contact-sign {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  margin-top: 56px;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  color: var(--color-muted);
+}
+@media (prefers-reduced-motion: reduce) {
+  .contact-line-dot { animation: none; }
+}

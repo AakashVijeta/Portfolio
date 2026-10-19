@@ -28,51 +28,44 @@ export default function ContactSection({ isActive }) {
       } : undefined}
     >
 
-      {/* Center: command + target */}
+      {/* A huge, barely-there line of text tilted behind everything */}
+      <div className="contact-ghost" aria-hidden="true" data-parallax="120">LET&apos;S BUILD // OPEN TO WORK // LET&apos;S BUILD //</div>
+
       <div className="contact-main">
         <div className="contact-content-inner">
-          <div className="section-enter-item contact-title-wrap" style={{
-            fontFamily: 'var(--font-display)',
-            fontSize: '1rem',
-            letterSpacing: '0.45em',
-            color: 'var(--color-accent)',
-            textTransform: 'uppercase',
-            marginBottom: '24px',
-          }}>
-            <span className="contact-title">Initiate Contact</span>
+          <div className="section-enter-item contact-line">
+            <span className="contact-line-dot" />LINE OPEN
           </div>
+
+          <h2 className="section-enter-item contact-heading">
+            <span className="reveal-line"><span>Got an idea?</span></span>
+            <span className="reveal-line"><span>Let&apos;s build it.</span></span>
+          </h2>
 
           <div className="section-enter-item contact-command">
             <span className="contact-prompt">&gt;</span>
             <span className="contact-verb">send</span>
-            <span className="contact-target">{EMAIL}</span>
+            <span className="contact-target reveal-scramble">{EMAIL}</span>
             <span className="contact-cursor">_</span>
           </div>
 
           <div className="section-enter-item cm-actions">
             <a href={`mailto:${EMAIL}`} className="cm-primary" aria-label="Send email"><RollText text="[ SEND EMAIL → ]" /></a>
             <div className="cm-secondary">
-              <a href={GITHUB} target="_blank" rel="noopener noreferrer" aria-label="GitHub"><RollText text="[ GITHUB ]" /></a>
-              <a href={LINKEDIN} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><RollText text="[ LINKEDIN ]" /></a>
+              <a href={GITHUB} target="_blank" rel="noopener noreferrer" aria-label="GitHub"><span className="cm-br">[</span>GITHUB<span className="cm-br">]</span></a>
+              <a href={LINKEDIN} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><span className="cm-br">[</span>LINKEDIN<span className="cm-br">]</span></a>
             </div>
           </div>
 
-          <div className="section-enter-item contact-dossier" style={{ marginTop: '48px' }}>
-            <div className="intro-dossier-line">
-              <span>RESPONSE</span>
-              <span>&lt; 24H</span>
-            </div>
-            <div className="intro-dossier-line">
-              <span>TIMEZONE</span>
-              <span>UTC+05:30 · IST</span>
-            </div>
+          <div className="section-enter-item contact-sign">
+            <span>© 2026 AAKASH VIJETA</span>
           </div>
         </div>
       </div>
 
       {/* Bottom meta */}
       <footer className="contact-bottombar section-enter-item">
-        <hr className="profiler-rule" />
+        <hr className="profiler-rule reveal-rule" />
         <div className="contact-bottombar-inner">
           <span>END · TRANSMISSION</span>
           <span>PROTOCOL · SMTP</span>

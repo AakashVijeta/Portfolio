@@ -86,22 +86,22 @@ export default function AboutSection({ isActive }) {
     >
       <header className="profiler-head section-enter-item">
         <div className="profiler-head-row">
-          <h2 className="profiler-title">SUBJECT PROFILE</h2>
+          <h2 className="profiler-title" data-parallax="24"><span className="reveal-line"><span>SUBJECT PROFILE</span></span></h2>
           <div className="profiler-head-meta">
             <div>STATUS: ACTIVE DEVELOPMENT</div>
           </div>
         </div>
-        <hr className="profiler-rule" />
+        <hr className="profiler-rule reveal-rule" />
       </header>
 
       <div className="profiler-main-scroll custom-scrollbar section-scroll">
         <div className="profiler-container">
 
         {/* LEFT — IDENTITY */}
-        <div className="profiler-module col-identity section-enter-item">
+        <div className="profiler-module col-identity section-enter-item" data-enter-from="left">
           <div className="identity-name">AAKASH VIJETA</div>
 
-          <div className="fingerprint-scanner">
+          <div className="fingerprint-scanner reveal-wipe">
             <div className="scanner-frame-profile">
               <div className="scanner-grid-overlay-profile" />
               <div className="face-target-box-profile">
@@ -144,7 +144,7 @@ export default function AboutSection({ isActive }) {
               <div className="history-block">
                 <h4 className="history-block-title">// ACADEMIC_LOG [EDUCATION]</h4>
                 {EDUCATION.map((e) => (
-                  <div className="history-item" key={e.org}>
+                  <div className="history-item reveal-child" key={e.org}>
                     <div className="history-header">
                       <span className="history-date">[{e.org}]</span>
                       <span className="history-period">{e.range}</span>
@@ -156,7 +156,7 @@ export default function AboutSection({ isActive }) {
               <div className="history-block">
                 <h4 className="history-block-title">// FIELD_OPERATIONS [EXPERIENCE]</h4>
                 {EXPERIENCES.map((x) => (
-                  <div className="history-item" key={x.org}>
+                  <div className="history-item reveal-child" key={x.org}>
                     <div className="history-header">
                       <span className="history-date">{x.org}</span>
                       <span className="history-period">{x.range}</span>
@@ -170,7 +170,7 @@ export default function AboutSection({ isActive }) {
         </div>
 
         {/* RIGHT — CAPABILITIES */}
-        <div className="col-capabilities-wrapper section-enter-item">
+        <div className="col-capabilities-wrapper section-enter-item" data-enter-from="right">
           <div className="profiler-module cap-top">
             <div className="cap-inv-label">EQUIPMENT_INVENTORY</div>
 
@@ -179,12 +179,12 @@ export default function AboutSection({ isActive }) {
               <hr className="cat-rule" />
               <div className="chips-primary">
                 {CORE_PRIMARY.map((s) => (
-                  <div className="tech-chip tech-chip-primary" key={s}>{s}</div>
+                  <div className="tech-chip tech-chip-primary reveal-child" key={s}>{s}</div>
                 ))}
               </div>
               <div className="chips-grid">
                 {CORE_REST.map((s) => (
-                  <div className="tech-chip" key={s}>{s}</div>
+                  <div className="tech-chip reveal-child" key={s}>{s}</div>
                 ))}
               </div>
             </div>
@@ -194,12 +194,12 @@ export default function AboutSection({ isActive }) {
               <hr className="cat-rule" />
               <div className="chips-primary">
                 {SOFT_PRIMARY.map((s) => (
-                  <div className="tech-chip tech-chip-primary" key={s}>{s}</div>
+                  <div className="tech-chip tech-chip-primary reveal-child" key={s}>{s}</div>
                 ))}
               </div>
               <div className="chips-grid">
                 {SOFT_REST.map((s) => (
-                  <div className="tech-chip" key={s}>{s}</div>
+                  <div className="tech-chip reveal-child" key={s}>{s}</div>
                 ))}
               </div>
             </div>
@@ -212,7 +212,7 @@ export default function AboutSection({ isActive }) {
       </div>
 
       <footer className="profiler-foot section-enter-item">
-        <hr className="profiler-rule" />
+        <hr className="profiler-rule reveal-rule" />
         <div className="profiler-foot-inner">
           <div className="foot-version">SYSTEMS_REPORT_V.2.0.46</div>
           <div className="profiler-head-meta">S/N: 2005-10-11-AAK</div>

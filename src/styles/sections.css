@@ -18,6 +18,14 @@
   will-change: opacity, transform;
   backface-visibility: hidden;
 }
+/* Heading line mask: the inner span rises into view (padding keeps descenders unclipped) */
+.reveal-line {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.12em;
+  margin-bottom: -0.12em;
+}
+.reveal-line > span { display: inline-block; }
 
 /* ── Intro: classification bar + dossier rail ─────────────── */
 .intro-top-bar,
@@ -3241,47 +3249,6 @@
 /* ── Small phones: IHYB feed log grid overflow fix ────────────── */
 /* Fixed 148px timestamp col overflows on phones narrower than ~375px.
    Hide the decorative timestamp; remap 3-col to 2-col. */
-
-/* ── Project Overlay links ───────────────────────────────────────── */
-.overlay-links {
-  margin-top: 0;
-  display: flex;
-  gap: 12px;
-  margin-bottom: 20px;
-}
-
-.overlay-link {
-  font-family: var(--font-display);
-  font-size: 0.72rem;
-  letter-spacing: 0.2em;
-  text-decoration: none;
-  text-transform: uppercase;
-  padding: 10px 20px;
-  min-height: 44px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  transition: background 0.2s, color 0.2s, border-color 0.2s;
-}
-
-.overlay-link-secondary {
-  color: var(--color-accent);
-  border: 1px solid var(--color-accent);
-}
-
-.overlay-link-secondary:hover {
-  background: rgba(var(--accent-rgb, 61, 255, 122), 0.1);
-}
-
-.overlay-link-primary {
-  color: var(--color-white);
-  border: 1px solid var(--color-white);
-  font-weight: 700;
-}
-
-.overlay-link-primary:hover {
-  background: rgba(255, 255, 255, 0.08);
-}
 
 /* ── Desktop: breathing room between section chrome bars and viewport edges ── */
 /* padding-top on flex-end containers has no visual effect (content anchors to
