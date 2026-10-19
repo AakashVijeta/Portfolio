@@ -17,7 +17,7 @@ const lead = (s = '') => s.split(/ \(|[;.,]| \+ /)[0].trim();
 
 // The file for one project: image left, details right (two columns each of the grid),
 // the open button at the foot of the fourth column
-function CaseFile({ project, open, onOpen }) {
+function CaseFile({ project, liveStat, open, onOpen }) {
   const ref = useRef(null);
 
   // Opening a file: pinned at its top-left corner, it starts with the right side swung
@@ -53,6 +53,12 @@ function CaseFile({ project, open, onOpen }) {
       </div>
       <div className="case-file-info">
         <p className="case-file-subtitle">{project.subtitle}</p>
+        {project.stat && (
+          <p className="case-file-stat">
+            <span className="case-file-stat-value">{liveStat ?? project.stat.value}</span>
+            <span className="case-file-stat-label">{project.stat.label}{liveStat && ' · live'}</span>
+          </p>
+        )}
         <dl className="case-file-facts">
           {facts.map(([k, v]) => (
             <div key={k}><dt>{k}</dt><dd>{v}</dd></div>
@@ -63,6 +69,11 @@ function CaseFile({ project, open, onOpen }) {
         <button type="button" className="case-file-open" onClick={() => onOpen(project)} aria-label={`Open ${project.title} file`}>
           <RollText text="[ OPEN FILE → ]" />
         </button>
+        {project.liveDemo && (
+          <a className="case-file-live" href={project.liveDemo} target="_blank" rel="noopener noreferrer" aria-label={`${project.title} live demo (opens in a new tab)`}>
+            LIVE DEMO ↗
+          </a>
+        )}
       </div>
     </div>
   );
@@ -77,6 +88,24 @@ export default function ProjectsSection() {
   const [active, setActive] = useState(null);
   const rows = [...projectDetails, ...CLASSIFIED_SLOTS];
   const inline = mode === 'flow';
+
+  // Headline stats with a live source replace their baked-in value once it answers;
+  // any failure (asleep, offline, slow) just keeps the fallback
+  const [liveStats, setLiveStats] = useState({});
+  useEffect(() => {
+    const ctrl = new AbortController();
+    const timeout = setTimeout(() => ctrl.abort(), 8000);
+    projectDetails.filter((p) => p.stat?.live).forEach(({ slug, stat }) => {
+      fetch(stat.live.url, { signal: ctrl.signal })
+        .then((r) => (r.ok ? r.json() : null))
+        .then((d) => {
+          const value = d && stat.live.pick(d);
+          if (value) setLiveStats((cur) => ({ ...cur, [slug]: value }));
+        })
+        .catch(() => {});
+    });
+    return () => { clearTimeout(timeout); ctrl.abort(); };
+  }, []);
 
   // Desktop hover intent: a row opens only once the pointer settles on it, so sweeping
   // across the list doesn't open every file on the way past
@@ -193,7 +222,7 @@ export default function ProjectsSection() {
                     </button>
                     <div className={`case-drawer ${isActive ? 'is-open' : ''}`} inert={!isActive}>
                       <div className="case-drawer-inner">
-                        <CaseFile project={project} open={isActive} onOpen={setOverlayProject} />
+                        <CaseFile project={project} liveStat={liveStats[project.slug]} open={isActive} onOpen={setOverlayProject} />
                       </div>
                     </div>
                   </>

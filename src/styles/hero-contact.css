@@ -306,7 +306,7 @@ html.is-flow .cm-primary:focus-visible {
 }
 
 /* Bracket links: the brackets step apart on hover */
-html.is-flow .cm-secondary { display: flex; justify-content: center; gap: 28px; }
+html.is-flow .cm-secondary { display: flex; flex-wrap: wrap; justify-content: center; gap: 0 clamp(16px, 5vw, 28px); }
 html.is-flow .cm-secondary a {
   min-height: 44px;
   gap: 6px;

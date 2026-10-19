@@ -1,3 +1,6 @@
 {
-  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+  "rewrites": [
+    { "source": "/api/f1/:path*", "destination": "https://api.aakashvijeta.me/:path*" },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
 }

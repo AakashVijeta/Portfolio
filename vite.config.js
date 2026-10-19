@@ -76,6 +76,7 @@ function fallbackHtml() {
         <article>
           <h3>${escapeHtml(p.title)}</h3>
           <p><strong>${escapeHtml(p.tag)}</strong> — ${escapeHtml(p.subtitle)}</p>
+          ${p.stat ? `<p>${escapeHtml(p.stat.value)} ${escapeHtml(p.stat.label)}.</p>` : ''}
           <p>Built with ${escapeHtml(p.techStack.join(', '))}.</p>
           <p>${links.join(' · ')}</p>
         </article>`
@@ -109,7 +110,19 @@ function seo() {
 }
 
 // https://vite.dev/config/
+// The F1 scoreboard API sends no CORS headers, so the site reaches it same-origin
+// through /api/f1 (this proxy locally, the rewrite in vercel.json in production)
+const f1Proxy = {
+  '/api/f1': {
+    target: 'https://api.aakashvijeta.me',
+    changeOrigin: true,
+    rewrite: (path) => path.replace(/^\/api\/f1/, ''),
+  },
+}
+
 export default defineConfig({
   plugins: [react(), seo()],
-   base: '/',
+  base: '/',
+  server: { proxy: f1Proxy },
+  preview: { proxy: f1Proxy },
 })

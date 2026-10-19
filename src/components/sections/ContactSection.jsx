@@ -6,6 +6,7 @@ import RollText from '../RollText';
 const EMAIL = 'aakashvijeta2@gmail.com';
 const GITHUB = 'https://github.com/AakashVijeta';
 const LINKEDIN = 'https://www.linkedin.com/in/aakash-vijeta-1bb42b2b9';
+const RESUME = '/Aakash_Vijeta_Resume.pdf';
 
 export default function ContactSection({ isActive }) {
   const mode = useLayoutMode();
@@ -54,6 +55,7 @@ export default function ContactSection({ isActive }) {
             <div className="cm-secondary">
               <a href={GITHUB} target="_blank" rel="noopener noreferrer" aria-label="GitHub"><span className="cm-br">[</span>GITHUB<span className="cm-br">]</span></a>
               <a href={LINKEDIN} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><span className="cm-br">[</span>LINKEDIN<span className="cm-br">]</span></a>
+              <a href={RESUME} target="_blank" rel="noopener" aria-label="Résumé (PDF)"><span className="cm-br">[</span>RÉSUMÉ<span className="cm-br">]</span></a>
             </div>
           </div>
 

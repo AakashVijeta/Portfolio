@@ -27,6 +27,16 @@ export const projectDetails = [
       { label: "API Docs", href: "https://api.aakashvijeta.me/docs" },
     ],
     liveDemo: "https://f1.aakashvijeta.me",
+    // Headline result on the project's row. `live` refreshes it from the season scoreboard
+    // (proxied same-origin: vercel.json, vite.config.js); `value` is the fallback.
+    stat: {
+      value: "11/17",
+      label: "2026 race winners called",
+      live: {
+        url: "/api/f1/accuracy/2026",
+        pick: (d) => (d.rounds_analyzed > 0 ? `${d.winner_correct}/${d.rounds_analyzed}` : null),
+      },
+    },
     overview: [
       "Every Grand Prix weekend, the app answers a single question: given the qualifying grid, which three drivers will finish on the podium? A LightGBM classifier — tuned with Optuna and calibrated so its probabilities are interpretable rather than just rankable — produces a PodiumProbability for every driver, fused with a dedicated winner model into a CombinedScore, and a React dashboard puts it side-by-side with the official result the moment the chequered flag drops.",
       "What makes this non-trivial is timing. FastF1 serves partial data for up to 1.5 hours after qualifying, races get red-flagged, and the service occasionally goes to sleep mid-season. A race-lifecycle state machine on the backend absorbs all of that: it polls for complete qualifying data (with a ≥18-driver completeness guard), caches predictions as immutable, updates results in place, and retroactively fills any race that happened while the service was offline.",
@@ -88,6 +98,7 @@ export const projectDetails = [
       { label: "Frontend", href: "https://github.com/AakashVijeta/NiftyEdge" },
     ],
     liveDemo: "https://niftyedge.netlify.app",
+    stat: { value: "+22.4%", label: "backtested return, after costs" },
     overview: [
       "NiftyEdge scores every Nifty 50 constituent each morning on a single question: what is the probability it closes at least 1.5% higher within the next five trading days? An XGBoost classifier — validated with rolling six-month walk-forward folds and filtered at a 0.55 confidence threshold — emits the day's shortlist before markets open.",
       "The UI is a Bloomberg-terminal-inspired command center: ultra-flat cards, sharp borders, Inter + IBM Plex Mono on near-black with Bloomberg-orange highlights. A ranked signals table, a high-conviction Spotlight Pick with RSI / volatility / Bollinger breakdown, a sector momentum heatmap, and a Liquid-Metal AI Analyst chat panel — all powered by a stabilized motion engine for zero-flicker, GPU-accelerated state transitions.",
@@ -149,6 +160,7 @@ export const projectDetails = [
       "GitHub Actions",
     ],
     image: BASE + "assets/racing-line.webp",
+    stat: { value: "48/50", label: "unseen tracks finished" },
     repos: [
       { label: "GitHub", href: "https://github.com/AakashVijeta/racing-line-optimization" },
       { label: "Lap Video", href: "https://github.com/AakashVijeta/racing-line-optimization/releases/download/models-v1/suzuka_lap.mp4" },
