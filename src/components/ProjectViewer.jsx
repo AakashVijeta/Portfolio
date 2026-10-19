@@ -2,20 +2,64 @@ import { useEffect, useRef, useState } from 'react';
 import { useSectionContext } from '../context/SectionContext';
 import { projectDetails } from '../data/projects';
 import { prefersReducedMotion } from '../utils/motion';
+import RollText from './RollText';
 
 const pad = (n) => String(n).padStart(2, '0');
+const projectFromHash = () =>
+  projectDetails.find((d) => d.slug === decodeURIComponent(window.location.hash.slice(1))) ?? null;
 
 // Project file at every width: a full-screen "case file" with prev/next between projects.
 export default function ProjectViewer() {
   const { overlayProject, setOverlayProject } = useSectionContext();
   const scrollRef = useRef(null);
   const [closing, setClosing] = useState(false);
+  const [copied, setCopied] = useState(false);
   const p = overlayProject;
 
   // Exit the way it entered (fade + slight drop), then unmount
   const close = () => {
     if (prefersReducedMotion()) { setOverlayProject(null); return; }
     setClosing(true);
+  };
+  const closeRef = useRef(() => {});
+  useEffect(() => {
+    closeRef.current = () => { if (p) close(); };
+  });
+
+  // Each open file has its own address (#slug): a shared link opens it, and back/forward
+  // open and close files like pages
+  useEffect(() => {
+    const sync = () => {
+      const next = projectFromHash();
+      if (next) setOverlayProject(next);
+      else closeRef.current();
+    };
+    if (projectFromHash()) sync();
+    window.addEventListener('hashchange', sync);
+    return () => window.removeEventListener('hashchange', sync);
+  }, [setOverlayProject]);
+
+  useEffect(() => {
+    const onFile = !!projectFromHash();
+    if (p) {
+      if (projectFromHash()?.slug === p.slug) return;
+      // Opening adds a history entry (so back closes it); prev/next just swaps the address
+      if (onFile) window.history.replaceState(window.history.state, '', `#${p.slug}`);
+      else window.history.pushState({ projectFile: true }, '', `#${p.slug}`);
+    } else if (onFile) {
+      // Closed in the page: undo our entry, or drop the hash if the visit started on it
+      if (window.history.state?.projectFile) window.history.back();
+      else window.history.replaceState(null, '', window.location.pathname + window.location.search);
+    }
+  }, [p]);
+
+  useEffect(() => {
+    if (!copied) return;
+    const t = setTimeout(() => setCopied(false), 1800);
+    return () => clearTimeout(t);
+  }, [copied]);
+  const copyLink = () => {
+    navigator.clipboard?.writeText(window.location.href).then(() => setCopied(true), () => {});
   };
   const onAnimationEnd = (e) => {
     if (closing && e.target === e.currentTarget) {
@@ -48,7 +92,7 @@ export default function ProjectViewer() {
     <div className={`pv ${closing ? 'pv--out' : ''}`} role="dialog" aria-modal="true" aria-label={p.title} onAnimationEnd={onAnimationEnd}>
       <div className="pv-scroll" ref={scrollRef} data-lenis-prevent>
         <button type="button" className="pv-close" onClick={close}>
-          [ CLOSE FILE ]
+          <RollText text="[ CLOSE FILE ]" />
         </button>
 
         {/* Keyed by project so stepping prev/next crossfades the file */}
@@ -78,6 +122,9 @@ export default function ProjectViewer() {
               [ {r.label} <span aria-hidden="true">↗</span> ]
             </a>
           ))}
+          <button type="button" className="pv-link pv-copy" onClick={copyLink} aria-live="polite">
+            {copied ? '[ LINK COPIED ]' : '[ COPY LINK ]'}
+          </button>
         </div>
 
         <section className="pv-panel">

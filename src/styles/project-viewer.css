@@ -110,6 +110,8 @@
   color: var(--color-text);
   text-decoration: none;
 }
+/* Copy link is a button styled as one of the links */
+.pv-copy { background: none; padding: 0; cursor: pointer; }
 .pv-link-primary {
   background: var(--color-accent);
   border-color: var(--color-accent);
