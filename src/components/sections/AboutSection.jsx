@@ -1,5 +1,8 @@
-import { useLayoutEffect, useRef } from 'react';
+import { lazy, Suspense, useLayoutEffect, useRef } from 'react';
 import { useLayoutMode } from '../../hooks/useLayoutMode';
+
+// The bench figure carries ~130 KB of SVG, so it loads after the first paint
+const SignalScope = lazy(() => import('../figures/SignalScope'));
 
 
 const CORE_PRIMARY = ['Python', 'FastAPI'];
@@ -204,7 +207,9 @@ export default function AboutSection({ isActive }) {
               </div>
             </div>
 
-
+            <Suspense fallback={null}>
+              <SignalScope />
+            </Suspense>
           </div>
         </div>
 

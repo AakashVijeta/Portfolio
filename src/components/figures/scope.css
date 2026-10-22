@@ -1,0 +1,77 @@
+/* Signal-averager figure: the anatomy kit's tokens retuned to the site's phosphor greens */
+.sc-card.iso {
+  --anatomy-paper: #050805;
+  --anatomy-face: #0b130c;
+  --anatomy-top: #0d160e;
+  --anatomy-shade-0: #070c07;
+  --anatomy-shade-1: #091009;
+  --anatomy-shade-2: #0b130b;
+  --anatomy-shade-3: #0d160d;
+  --anatomy-lit-top: #13221a;
+  --anatomy-lit-shade: #0f1b13;
+  --anatomy-hi: #b7f5c3;
+  --anatomy-mid: #4f7a5c;
+  --anatomy-lo: #2b4634;
+  --anatomy-faint: #182b1e;
+  --anatomy-lit: #3dff7a;
+  --anatomy-halo: #000000;
+  --anatomy-halo-opacity: 0.85;
+  --anatomy-dot: #b7f5c3;
+  --anatomy-mono: var(--font-mono, ui-monospace, monospace);
+  background: var(--anatomy-paper);
+}
+
+.sc-stage {
+  aspect-ratio: 400 / 290;
+  outline: none;
+  cursor: ew-resize;
+  touch-action: pan-y;
+}
+.sc-stage:focus-visible {
+  box-shadow: 0 0 0 1px var(--color-accent, #3dff7a);
+}
+
+.sc-well { fill: var(--anatomy-shade-1); }
+.sc-bezel { fill: var(--anatomy-shade-2); }
+.sc-glass { fill: #030803; }
+.sc-glow { fill: var(--anatomy-lit); opacity: 0.05; filter: blur(5px); }
+.sc-grid { fill: none; stroke: #133a20; stroke-width: 0.45px; vector-effect: non-scaling-stroke; }
+.sc-axis { fill: none; stroke: #1f5a33; stroke-width: 0.5px; vector-effect: non-scaling-stroke; }
+.sc-truth { fill: none; stroke: #b7f5c3; stroke-width: 0.5px; stroke-dasharray: 1.2 2.4; opacity: 0.28; vector-effect: non-scaling-stroke; }
+.sc-trace { fill: none; stroke: #3dff7a; stroke-width: 1px; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+.sc-trace-halo { fill: none; stroke: #3dff7a; stroke-width: 3px; opacity: 0.22; filter: blur(1.2px); vector-effect: non-scaling-stroke; }
+.sc-cap { fill: var(--anatomy-lit-top); stroke: var(--anatomy-lo); stroke-width: 0.5px; vector-effect: non-scaling-stroke; }
+
+/* The figure's frame in the equipment inventory */
+.scope-figure {
+  margin: auto 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.scope-head,
+.scope-foot {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  color: var(--color-muted);
+  text-transform: uppercase;
+}
+.scope-head {
+  justify-content: flex-start;
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: 6px;
+}
+.sc-card.iso { border: 1px solid var(--color-border); }
+.scope-readout {
+  display: flex;
+  gap: 6px;
+  color: var(--color-text);
+  font-variant-numeric: tabular-nums;
+  text-transform: none;
+  white-space: nowrap;
+}
+.scope-sep { color: var(--color-muted); }
