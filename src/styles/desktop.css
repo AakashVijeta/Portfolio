@@ -191,15 +191,12 @@
   /* Capabilities: each category a two-column grid of equal chips */
   html.is-flow .about-profiler .cap-top { display: flex; flex-direction: column; gap: 32px; }
   html.is-flow .about-profiler .cap-inv-label { font-size: 0.7rem; text-align: left; }
-  /* As many equal columns as fit; each category sets its own minimum box width so no
-     label is ever cut off (short hard-skill names pair up, longer soft skills may stack) */
+  /* Always two equal columns at every width; long labels wrap rather than get cut off */
   html.is-flow .about-profiler .tech-category {
-    --chip-min: 104px;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(var(--chip-min), 1fr));
+    grid-template-columns: 1fr 1fr;
     gap: 10px;
   }
-  html.is-flow .about-profiler .tech-category:last-child { --chip-min: 134px; }
   html.is-flow .about-profiler .tech-category > .cat-title,
   html.is-flow .about-profiler .tech-category > .cat-rule { grid-column: 1 / -1; margin: 0; }
   html.is-flow .about-profiler .tech-category > .cat-rule { margin-bottom: 4px; }
@@ -213,27 +210,24 @@
     box-sizing: border-box;
     width: 100%;
     min-width: 0;
-    height: 38px;
-    min-height: 0;
+    min-height: 38px;
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
-    padding: 0 10px;
+    padding: 6px 10px;
     font-size: 0.8rem;
     font-weight: 400;
     letter-spacing: 0.02em;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    line-height: 1.25;
   }
-  /* Every skill box looks the same: no special treatment for the first two */
-  html.is-flow .about-profiler .tech-chip-primary {
+  /* Every skill box looks the same: no special treatment for the first two (hover included) */
+  html.is-flow .about-profiler .tech-chip-primary:not(:hover) {
     color: var(--color-text);
     border-color: var(--color-border);
     background: rgba(0, 0, 0, 0.3);
-    font-weight: 400;
   }
+  html.is-flow .about-profiler .tech-chip-primary { font-weight: 400; }
 }
 
 /* Profile on narrower desktops: give the middle report more of the width */

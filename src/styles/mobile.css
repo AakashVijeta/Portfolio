@@ -234,6 +234,7 @@
     padding: 6px 10px;
     transform: none !important;
   }  /* Every skill box looks the same */
-  html.is-flow .tech-chip-primary { font-weight: 400; color: var(--color-text); border-color: var(--color-border); }
+  html.is-flow .tech-chip-primary { font-weight: 400; }
+  html.is-flow .tech-chip-primary:not(:hover) { color: var(--color-text); border-color: var(--color-border); }
 
 }
