@@ -9,7 +9,7 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "figures": "node scripts/figures/scope.build.mjs"
+    "figures": "node scripts/figures/hdd.build.mjs && node scripts/figures/props.build.mjs"
   },
   "dependencies": {
     "@fontsource-variable/geist": "^5.3.0",

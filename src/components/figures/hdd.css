@@ -1,0 +1,79 @@
+/* Open-hard-drive figure: the anatomy kit's tokens retuned to the site's phosphor greens */
+.hdd-card.iso {
+  --anatomy-paper: #050805;
+  --anatomy-face: #0b130c;
+  --anatomy-top: #0d160e;
+  --anatomy-shade-0: #070c07;
+  --anatomy-shade-1: #091009;
+  --anatomy-shade-2: #0b130b;
+  --anatomy-shade-3: #0d160d;
+  --anatomy-lit-top: #13221a;
+  --anatomy-lit-shade: #0f1b13;
+  --anatomy-hi: #b7f5c3;
+  --anatomy-mid: #4f7a5c;
+  --anatomy-lo: #2b4634;
+  --anatomy-faint: #182b1e;
+  --anatomy-lit: #3dff7a;
+  --anatomy-halo: #000000;
+  --anatomy-halo-opacity: 0.85;
+  --anatomy-dot: #b7f5c3;
+  --anatomy-mono: var(--font-mono, ui-monospace, monospace);
+  background: var(--anatomy-paper);
+}
+
+.hdd-stage {
+  aspect-ratio: 400 / 300;
+  outline: none;
+  cursor: ew-resize;
+  touch-action: pan-y;
+}
+.hdd-stage:focus-visible { box-shadow: 0 0 0 1px var(--color-accent, #3dff7a); }
+
+.hdd-wall { fill: var(--anatomy-shade-0); }
+.hdd-floor { fill: #040704; }
+.hdd-sheen { fill: #b7f5c3; opacity: 0.06; }
+.hdd-wedge { fill: none; stroke: #1f3a28; stroke-width: 0.45px; vector-effect: non-scaling-stroke; }
+.hdd-track { fill: none; stroke: #3dff7a; stroke-width: 0.9px; vector-effect: non-scaling-stroke; transition: opacity 120ms linear; }
+.hdd-screws circle { fill: var(--anatomy-lo); }
+.hdd-arm-edge { fill: var(--anatomy-shade-0); stroke: var(--anatomy-lo); stroke-width: 0.5px; vector-effect: non-scaling-stroke; }
+.hdd-arm-top { fill: var(--anatomy-lit-top); stroke: #3dff7a; stroke-width: 0.6px; vector-effect: non-scaling-stroke; }
+.hdd-hole { fill: var(--anatomy-shade-0); stroke: var(--anatomy-lo); stroke-width: 0.45px; vector-effect: non-scaling-stroke; }
+.hdd-flex { fill: var(--anatomy-mid); }
+.hdd-slider { fill: #3dff7a; }
+.hdd-ribbon { fill: none; stroke: #6d5a1e; stroke-width: 2.4px; stroke-linecap: round; vector-effect: non-scaling-stroke; opacity: 0.8; }
+[data-part="led-on"] .iso-top,
+[data-part="led-on"] .iso-shade { fill: #3dff7a; }
+
+/* The figure's frame in the equipment inventory */
+.hdd-figure {
+  margin: auto 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.hdd-head,
+.hdd-foot {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  color: var(--color-muted);
+  text-transform: uppercase;
+}
+.hdd-head {
+  justify-content: flex-start;
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: 6px;
+}
+.hdd-card.iso { border: 1px solid var(--color-border); }
+.hdd-readout {
+  display: flex;
+  gap: 6px;
+  color: var(--color-text);
+  font-variant-numeric: tabular-nums;
+  text-transform: none;
+  white-space: nowrap;
+}
+.hdd-sep { color: var(--color-muted); }
