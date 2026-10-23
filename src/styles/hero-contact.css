@@ -172,8 +172,8 @@ html.is-flow .ihyb-name-b {
     perspective: 700px;
     pointer-events: none;
   }
-  .ihyb-float-in-loc   { top: 22%; left: 9%; }
-  .ihyb-float-in-log   { bottom: 21%; right: 13%; }
+  .ihyb-float-in-sbc    { top: 21%; left: 9%; }
+  .ihyb-float-in-cpu    { bottom: 19%; right: 15%; }
   .ihyb-float {
     rotate: var(--lean);
     transform-style: preserve-3d;
@@ -181,15 +181,31 @@ html.is-flow .ihyb-name-b {
     flex-direction: column;
     gap: 3px;
     padding: 10px 12px;
-    border: 1px solid color-mix(in srgb, var(--color-accent) 16%, transparent);
-    background: color-mix(in srgb, var(--color-surface) 80%, transparent);
+    border: 1px solid color-mix(in srgb, var(--color-accent) 10%, transparent);
+    background: color-mix(in srgb, var(--color-surface) 60%, transparent);
     font-family: var(--font-mono);
     font-size: 0.64rem;
     letter-spacing: 0.04em;
     color: var(--color-muted);
   }
-  .ihyb-float-in-log .ihyb-float { color: var(--color-accent); }
+  .ihyb-float span { color: var(--color-accent); }
+  .ihyb-float .pr-card { width: 200px; margin: -4px -6px 6px; background: transparent; }
+  .ihyb-float-in-cpu .pr-card { width: 142px; }
+  /* Depth: each card casts a shadow that grows with how close it sits, and the far
+     exhibit's art is smaller, dimmer and a little soft. The tags stay identical */
+  .ihyb-float {
+    opacity: 0.8;
+    filter: drop-shadow(0 calc(var(--depth, 1) * 10px) calc(var(--depth, 1) * 14px) rgba(0, 0, 0, 0.55));
+  }
+  .ihyb-float .pr-card {
+    opacity: calc(0.5 + var(--depth, 1) * 0.3);
+    scale: calc(0.86 + var(--depth, 1) * 0.1);
+    filter: blur(calc((1.3 - var(--depth, 1)) * 1.1px));
+  }
   .ihyb-status-line { white-space: nowrap; }
+  /* The status word gets the width of the longest one (COMPILING), so the card
+     doesn't grow and shrink as the words scramble from one to the next */
+  .ihyb-status-text { display: inline-block; min-width: 9ch; }
 }
 
 /* Scan beam: the profile scanner's line, sweeping the whole hero top to bottom and

@@ -3,15 +3,19 @@ import gsap from 'gsap';
 import { useLayoutMode } from '../../hooks/useLayoutMode';
 import { EASE_OUT, prefersReducedMotion, skipPreloader } from '../../utils/motion';
 import { scrambleTo } from '../../utils/scramble';
+import { SBC_SVG, CPU_SVG } from '../figures/propsArt';
+import '../figures/iso.css';
+import '../figures/props.css';
 
 const STATUS_WORDS    = ['ON TRACK', 'BUILDING', 'SHIPPING', 'TRAINING', 'COMPILING'];
 const STATUS_HOLD_S   = 2.2;   // seconds each status word stays decoded
 
-// Case-file scraps pinned around the name on desktop; each leans a little and tilts
-// toward the pointer by its own depth
+// Evidence pinned around the name on desktop: an isometric prop with its exhibit tag.
+// Each leans a little and sits at its own depth: nearer ones tilt and shift more with
+// the pointer and drift faster as the hero scrolls away
 const FLOATS = [
-  { id: 'loc',   depth: 1.0, lean: 2.2,  lines: ['LAT: 26.1878 N', 'LON: 91.6916 E', 'SITE_IIT_GUWAHATI'] },
-  { id: 'log',   depth: 1.3, lean: -1.2, lines: ['>> fitting model...', '>> calibrating probs'], status: true },
+  { id: 'sbc',    depth: 1.3, lean: 2.2,  art: SBC_SVG,    lines: ['EXHIBIT A · SBC-4 · 4 GB', 'SITE_IIT_GUWAHATI'] },
+  { id: 'cpu',    depth: 1.3, lean: -1.2, art: CPU_SVG,    lines: ['EXHIBIT B · AV-2005', '>> fitting model...'], status: true },
 ];
 
 export default function IntroSection({ isActive }) {
@@ -128,12 +132,9 @@ export default function IntroSection({ isActive }) {
       depth: Number(el.dataset.depth),
       rx: gsap.quickTo(el, 'rotationX', { duration: 1.2, ease: 'power2.out' }),
       ry: gsap.quickTo(el, 'rotationY', { duration: 1.2, ease: 'power2.out' }),
+      x: gsap.quickTo(el, 'x', { duration: 1.4, ease: 'power2.out' }),
+      y: gsap.quickTo(el, 'y', { duration: 1.4, ease: 'power2.out' }),
     }));
-    // The name sits deeper than the scraps: it drifts a few pixels against the pointer,
-    // slower than they tilt
-    const name = nameRef.current;
-    const nameX = gsap.quickTo(name, 'x', { duration: 1.8, ease: 'power2.out' });
-    const nameY = gsap.quickTo(name, 'y', { duration: 1.8, ease: 'power2.out' });
     let raf = 0;
     let px = window.innerWidth / 2;
     let py = window.innerHeight / 2;
@@ -145,9 +146,15 @@ export default function IntroSection({ isActive }) {
       if (still) return;
       const nx = (px - window.innerWidth / 2) / (window.innerWidth / 2);
       const ny = (py - window.innerHeight / 2) / (window.innerHeight / 2);
-      tilts.forEach((t) => { t.ry(nx * 10 * t.depth); t.rx(-ny * 8 * t.depth); });
-      nameX(-nx * 8);
-      nameY(-ny * 5);
+      // parallax: each exhibit follows the pointer and the scroll by its depth, so the
+      // near one travels further than the far one
+      const lift = Math.max(0, -r.top);
+      tilts.forEach((t) => {
+        t.ry(nx * 10 * t.depth);
+        t.rx(-ny * 8 * t.depth);
+        t.x(nx * 16 * t.depth);
+        t.y(ny * 10 * t.depth - lift * 0.18 * t.depth);
+      });
     };
     const schedule = () => { if (!raf) raf = requestAnimationFrame(paint); };
     const move = (e) => { px = e.clientX; py = e.clientY; schedule(); };
@@ -161,8 +168,6 @@ export default function IntroSection({ isActive }) {
       window.removeEventListener('scroll', schedule);
       cancelAnimationFrame(raf);
       root.classList.remove('has-spotlight');
-      gsap.killTweensOf(name);
-      gsap.set(name, { clearProps: 'transform' });
     };
   }, [mode, preloaderDone]);
 
@@ -206,7 +211,8 @@ export default function IntroSection({ isActive }) {
       {/* Pinned case-file scraps (desktop) */}
       {FLOATS.map((f) => (
         <div key={f.id} className={`ihyb-float-in ihyb-float-in-${f.id}`} aria-hidden="true">
-          <div className="ihyb-float" data-depth={f.depth} style={{ '--lean': `${f.lean}deg` }}>
+          <div className="ihyb-float" data-depth={f.depth} style={{ '--lean': `${f.lean}deg`, '--depth': f.depth }}>
+            <div className="pr-card iso" dangerouslySetInnerHTML={{ __html: f.art }} />
             {f.lines.map((l) => <span key={l}>{l}</span>)}
             {f.status && (
               <span className="ihyb-status-line">

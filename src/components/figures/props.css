@@ -1,0 +1,23 @@
+/* Open-hard-drive figure: the anatomy kit's tokens retuned to the site's phosphor greens */
+.pr-card.iso {
+  --anatomy-paper: #050805;
+  --anatomy-face: #0b130c;
+  --anatomy-top: #0d160e;
+  --anatomy-shade-0: #070c07;
+  --anatomy-shade-1: #091009;
+  --anatomy-shade-2: #0b130b;
+  --anatomy-shade-3: #0d160d;
+  --anatomy-lit-top: #13221a;
+  --anatomy-lit-shade: #0f1b13;
+  --anatomy-hi: #b7f5c3;
+  --anatomy-mid: #4f7a5c;
+  --anatomy-lo: #2b4634;
+  --anatomy-faint: #182b1e;
+  --anatomy-lit: #3dff7a;
+  --anatomy-halo: #000000;
+  --anatomy-halo-opacity: 0.85;
+  --anatomy-dot: #b7f5c3;
+  --anatomy-mono: var(--font-mono, ui-monospace, monospace);
+  background: var(--anatomy-paper);
+}
+.pr-dark { fill: #030803; }
