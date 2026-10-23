@@ -27,7 +27,7 @@ A single-page portfolio with a **"Cinematic Tech-Noir"** look: phosphor-green te
 *   **⚡ GSAP Motion System:** Reveals start as an element scrolls into view. Headings rise letter by letter (SplitText), hairline rules draw left to right, numbers count up, labels decode with ScrambleText, and media uncovers from the bottom. The curves are shared CSS/GSAP tokens (`--ease-out`, `--ease-in-out`).
 *   **🧭 Smooth Scroll, Two Designs:** The page is one natural-scroll document at every width. Desktop (≥ 901px) adds Lenis smooth scrolling, side nav dots, viewfinder corner readouts and a custom cursor with live X/Y coordinates. Mobile (≤ 900px) keeps native touch scrolling with a lighter design and drops effects that are expensive on iOS.
 *   **🔎 SEO Without SSR:** A Vite plugin injects JSON-LD (Person, ProfilePage, projects) and a static HTML fallback built from the project data. Crawlers and link-preview bots get real content, and React replaces it on mount.
-*   **🎨 Branding Details:** A waveform favicon (SVG, ICO and Apple touch icon), an accent scrollbar that stays hidden during the preloader, and a large Open Graph preview image.
+*   **🎨 Branding Details:** A Lissajous-figure favicon, the 1:2 trace an oscilloscope draws (SVG, ICO and Apple touch icon), an accent scrollbar that stays hidden during the preloader, and a large Open Graph preview image.
 
 ---
 
